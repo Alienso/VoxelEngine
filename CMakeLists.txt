@@ -6,8 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-parameter -g -O0")
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-link_directories(${PROJECT_SOURCE_DIR}/lib/GLFW/lib-mingw-w64)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
+
+if (WIN32)
+    link_directories(${PROJECT_SOURCE_DIR}/lib/GLFW/lib-mingw-w64)
+endif(WIN32)
 
 add_executable(Voxel main.cpp
         include/imgui/imgui.cpp include/imgui/imgui.h
@@ -45,7 +48,12 @@ add_executable(Voxel main.cpp
         source/core/world/Chunk.cpp source/core/world/Chunk.h
         source/core/world/Block.cpp source/core/world/Block.h source/core/world/Blocks.h source/core/entity/LightSource.cpp source/core/entity/LightSource.h source/InputHandler.cpp source/InputHandler.h source/core/render/Mesh.cpp source/core/render/Mesh.h)
 
-target_link_libraries(Voxel glfw3 gdi32 opengl32)
+if (WIN32)
+    target_link_libraries(Voxel glfw3 gdi32 opengl32)
+endif(WIN32)
+if (UNIX)
+    target_link_libraries(Voxel glfw3 GL X11)
+endif(UNIX)
 
 add_custom_command(TARGET Voxel PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

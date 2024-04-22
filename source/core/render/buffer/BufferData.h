@@ -13,7 +13,7 @@
 class BufferData{
 public:
     explicit BufferData();
-    BufferData(float* vertices, size_t length);
+    BufferData(float* vertices, std::size_t length);
 
     ~BufferData(){
         delete va;

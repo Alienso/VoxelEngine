@@ -5,6 +5,8 @@
 #include "BufferData.h"
 #include "../../../Global.h"
 
+using namespace std;
+
 BufferData::BufferData() {
     vb = new VertexBuffer(&(Global::cubeVertices[0]), sizeof(Global::cubeVertices));
     layout = new VertexBufferLayout();

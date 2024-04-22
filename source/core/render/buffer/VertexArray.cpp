@@ -4,6 +4,8 @@
 
 #include "VertexArray.h"
 
+using namespace std;
+
 VertexArray::VertexArray() {
     glGenVertexArrays(1,&renderedID);
 }
