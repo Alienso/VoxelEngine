@@ -14,6 +14,7 @@
 #include "Global.h"
 #include "Configuration.h"
 #include "util/Profiler.h"
+#include "core/world/Blocks.h"
 
 #include <iostream>
 
@@ -92,9 +93,12 @@ void AppName::init() {
 
     glEnable( GL_DEBUG_OUTPUT );
     glDebugMessageCallback( glErrorCallback, nullptr );
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     srand((unsigned int)glfwGetTime());
 
     initAssets();
+    Blocks::init();
+    Global::init();
     world = new World();
 }
 

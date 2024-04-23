@@ -11,14 +11,22 @@
 
 class Material {
 public:
-    Material(Shader& shader, Texture& texture) : shader(shader), texture(texture) {}
+    Material(Shader& shader, Texture& texture) : shader(shader), texture(texture) {
+        //TODO
+        ambientStrength = 0.1;
+        specularStrength = 0.5;
+        shininess = 2;
+    }
     Shader& shader;
     Texture& texture;
 
-private:
     //TODO
+    float ambientStrength;
     float specularStrength;
-    float shininess;
+    int shininess;
+
+private:
+
 };
 
 

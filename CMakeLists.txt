@@ -46,7 +46,7 @@ add_executable(Voxel main.cpp
         source/core/render/buffer/BufferData.cpp
         source/core/world/World.cpp source/core/world/World.h
         source/core/world/Chunk.cpp source/core/world/Chunk.h
-        source/core/world/Block.cpp source/core/world/Block.h source/core/world/Blocks.h source/core/entity/LightSource.cpp source/core/entity/LightSource.h source/InputHandler.cpp source/InputHandler.h source/core/render/Mesh.cpp source/core/render/Mesh.h)
+        source/core/world/Block.cpp source/core/world/Block.h source/core/world/Blocks.h source/core/entity/LightSource.cpp source/core/entity/LightSource.h source/InputHandler.cpp source/InputHandler.h source/core/render/Mesh.cpp source/core/render/Mesh.h source/core/world/Blocks.cpp)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

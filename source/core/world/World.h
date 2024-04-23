@@ -37,15 +37,9 @@ private:
 
     void renderTerrain();
 
+    Material* grassMat = nullptr; //TODO Temp
     std::unordered_map<glm::u32vec3, Chunk*, KeyFuncs, KeyFuncs> chunkMap;
-    std::vector<LightSource> lightSources;
-
-    std::unordered_map<uint16_t, Mesh*> terrainMeshes; //TODO memory managment
-
-    //TODO MOVE
-    float ambientStrength = 0.1;
-    float specularStrength = 0.5;
-    int shininess = 32;
+    std::unordered_map<uint16_t, Mesh*> terrainMeshes; //TODO memory management
 };
 
 

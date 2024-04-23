@@ -3,6 +3,13 @@
 //
 
 #include "LightSource.h"
+#include "../render/buffer/BufferData.h"
+#include "../../Global.h"
+
+LightSource::LightSource(glm::vec3 pos, glm::vec3 color) : Entity(*Global::materialManager.getAsset(Materials::LIGHT)),
+                                                           pos(pos), color(color) {
+
+}
 
 void LightSource::onUpdate(float deltaTime) {
     Entity::onUpdate(deltaTime);
@@ -11,7 +18,7 @@ void LightSource::onUpdate(float deltaTime) {
 void LightSource::render() {
     material.texture.bind();
     material.shader.use();
-    bufferData.va->bind();
+    bufferData->va->bind();
 
     glm::mat4 model= Global::currentFrame.model;
 

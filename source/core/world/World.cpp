@@ -6,14 +6,16 @@
 #include "../../InputHandler.h"
 #include "../../Configuration.h"
 #include "Blocks.h"
+#include "../../Global.h"
 
 #include <imgui/imgui.h>
 #include "glm/ext/matrix_clip_space.hpp"
 
+
 World::World() {
     chunkMap[{0,0,0}] = new Chunk(0,0,0);
-    lightSources.emplace_back(glm::vec3{1,1,1},glm::vec3{1,1,1});
-    terrainMeshes[1] = Mesh::fromRawData(Global::cubeVertices, sizeof(Global::cubeVertices));
+    terrainMeshes[1] = Mesh::fromRawData(Global::cubeVertices, sizeof(Global::cubeVertices) / sizeof(float));
+    grassMat = &(Material&)(Blocks::GRASS->getMaterial());
 }
 
 World::~World() {
@@ -24,7 +26,6 @@ World::~World() {
 
 void World::onRender() {
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     Global::currentFrame.projection = glm::perspective(glm::radians(Configuration::fov), (float)Configuration::wWidth/(float)Configuration::wHeight,
@@ -32,7 +33,7 @@ void World::onRender() {
     Global::currentFrame.view = glm::lookAt(Global::camera.pos, Global::camera.pos + Global::camera.front, Global::camera.up);
     Global::currentFrame.model = glm::mat4(1.0f);
 
-    lightSources[0].render();
+    Global::sun->render();
     renderTerrain();
 
 }
@@ -58,11 +59,11 @@ void World::onImGuiRender() {
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-    ImGui::SliderFloat3("LightPos", &lightSources[0].pos.x, -5, 5);
-    ImGui::SliderFloat3("LightColor", &lightSources[0].color.x, 0, 1);
-    ImGui::SliderInt("Shininess", &shininess, 0, 64);
-    ImGui::SliderFloat("AmbientStrength", &ambientStrength, 0, 1);
-    ImGui::SliderFloat("SpecularStrength", &specularStrength, 0, 1);
+    ImGui::SliderFloat3("LightPos", &Global::sun->pos.x, -5, 5);
+    ImGui::SliderFloat3("LightColor", &Global::sun->color.x, 0, 1);
+    ImGui::SliderInt("Shininess", &grassMat->shininess, 0, 64);
+    ImGui::SliderFloat("AmbientStrength", &grassMat->ambientStrength, 0, 1);
+    ImGui::SliderFloat("SpecularStrength", &grassMat->specularStrength, 0, 1);
 
     ImGui::End();
 }

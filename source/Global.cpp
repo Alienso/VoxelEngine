@@ -12,7 +12,11 @@ AssetManager<Texture> Global::textureManager;
 AssetManager<Material> Global::materialManager;
 AssetManager<Shader> Global::shaderManager;
 
+LightSource* Global::sun = nullptr;
 
+void Global::init() {
+    sun = new LightSource(glm::vec3{1,1,1},glm::vec3{1,1,1});
+}
 
 float Global::cubeVertices[288] =  {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,

@@ -3,8 +3,9 @@
 //
 
 #include "Entity.h"
+#include "../render/buffer/BufferData.h"
 
-Entity::Entity(Material &material) : material(material), bufferData(BufferData()) {}
+Entity::Entity(Material &material) : material(material), bufferData(new BufferData()) {}
 
 Entity::~Entity() = default;
 

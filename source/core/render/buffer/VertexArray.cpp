@@ -3,6 +3,7 @@
 //
 
 #include "VertexArray.h"
+#include "VertexBufferLayout.h"
 
 using namespace std;
 

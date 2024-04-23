@@ -6,10 +6,12 @@
 #include "../entity/Entity.h"
 #include "../../Global.h"
 
+#include "buffer/BufferData.h"
+
 void EntityRenderer::render(const Entity& entity) {
     entity.material.texture.bind();
     entity.material.shader.use();
-    entity.bufferData.va->bind();
+    entity.bufferData->va->bind();
 
     entity.material.shader.setMat4("projection", Global::currentFrame.projection);
     entity.material.shader.setMat4("view", Global::currentFrame.view);

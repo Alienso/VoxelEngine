@@ -3,6 +3,11 @@
 //
 
 #include "BufferData.h"
+
+#include "VertexBufferLayout.h"
+
+#include "VertexBuffer.h"
+#include "VertexArray.h"
 #include "../../../Global.h"
 
 using namespace std;
@@ -25,4 +30,10 @@ BufferData::BufferData(float *vertices, size_t length) {
     layout->push<float>(2);
     va = new VertexArray();
     va->addBuffer(*vb, *layout);
+}
+
+BufferData::~BufferData() {
+    delete va;
+    delete vb;
+    delete layout;
 }

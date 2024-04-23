@@ -4,7 +4,6 @@
 
 #include "Block.h"
 #include "./../source/Global.h"
-#include "../../Asset.h"
 #include "Blocks.h"
 
 #include <string>

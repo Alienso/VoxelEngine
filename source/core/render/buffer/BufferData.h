@@ -2,24 +2,19 @@
 // Created by Alienson on 28.5.2023..
 //
 
-#include "VertexBufferLayout.h"
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-
 #ifndef INC_3DTEST_BUFFERDATA_H
 #define INC_3DTEST_BUFFERDATA_H
+
+#include "VertexArray.h"
+
+#include "typeinfo"
 
 class BufferData{
 public:
     explicit BufferData();
     BufferData(float* vertices, std::size_t length);
 
-    ~BufferData(){
-        delete va;
-        delete vb;
-        delete layout;
-    }
+    ~BufferData();
 
     VertexArray* va;
     VertexBuffer* vb;

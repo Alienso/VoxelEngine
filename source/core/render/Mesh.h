@@ -6,10 +6,11 @@
 #define VOXEL_MESH_H
 
 #include "glm/glm.hpp"
-#include "buffer/BufferData.h"
 #include "Material.h"
 
 #include <vector>
+
+class BufferData;
 
 struct Vertex{
     glm::vec3 pos;
@@ -28,7 +29,7 @@ public:
 
 private:
     std::vector<Vertex> vertices;
-    BufferData bufferData;
+    BufferData* bufferData; //TODO use non pointer
 };
 
 

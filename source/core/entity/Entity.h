@@ -9,8 +9,8 @@
 #include "../../util/AxisAlignedBB.h"
 #include "../render/EntityRenderer.h"
 #include "../render/Material.h"
-#include "../render/buffer/BufferData.h"
 
+class BufferData;
 
 class Entity {
 
@@ -34,7 +34,7 @@ public:
 
 protected:
     Material& material;
-    BufferData bufferData;
+    BufferData* bufferData; //TODO make this not a pointer
     glm::mat4 modelMatrix = glm::mat4(1.0f); //TODO ?
 
 };

@@ -7,7 +7,8 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
-#include "VertexBufferLayout.h"
+
+class VertexBufferLayout;
 
 class VertexArray {
 

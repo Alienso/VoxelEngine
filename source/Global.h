@@ -12,6 +12,7 @@
 #include "core/render/AssetManager.h"
 #include "core/render/Texture.h"
 #include "core/render/Material.h"
+#include "core/entity/LightSource.h"
 
 #include <vector>
 
@@ -28,12 +29,16 @@ public:
     static GLFWwindow* window;
     static Camera camera;
     static CurrentFrame currentFrame;
+    static LightSource* sun;
 
     static AssetManager<Texture> textureManager;
     static AssetManager<Material> materialManager;
     static AssetManager<Shader> shaderManager;
 
     static float cubeVertices[288];
+
+public:
+    static void init();
 };
 
 

@@ -6,12 +6,15 @@
 #define VOXEL_BLOCKS_H
 
 #include "Block.h"
+#include <vector>
 
 class Blocks{
 public:
-    static inline Block AIR{"air",0};
-    static inline Block GRASS{"grass",1};
-    static inline Block DIRT{"dirt",2};
+    static inline Block* AIR = nullptr;
+    static inline Block* GRASS = nullptr;
+    static inline Block* DIRT = nullptr;
+
+    static void init();
 
     static Block &getById(const uint16_t id) {
         return *blocks[id];
