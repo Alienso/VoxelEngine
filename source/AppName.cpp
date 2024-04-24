@@ -59,7 +59,7 @@ void AppName::initGlfw(){
         exit(-1);
     }
 
-    //glEnable(GL_CULL_FACE); TODO
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glfwSetScrollCallback(Global::window, scrollCallback);
     glfwSetInputMode(Global::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

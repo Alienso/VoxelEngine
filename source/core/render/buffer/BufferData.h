@@ -5,14 +5,16 @@
 #ifndef INC_3DTEST_BUFFERDATA_H
 #define INC_3DTEST_BUFFERDATA_H
 
+#include <vector>
 #include "VertexArray.h"
 
 #include "typeinfo"
 
 class BufferData{
 public:
-    explicit BufferData();
+    BufferData();
     BufferData(float* vertices, std::size_t length);
+    BufferData(float* vertices, std::size_t length, std::vector<int>& layout);
 
     ~BufferData();
 

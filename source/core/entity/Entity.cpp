@@ -3,9 +3,10 @@
 //
 
 #include "Entity.h"
-#include "../render/buffer/BufferData.h"
 
-Entity::Entity(Material &material) : material(material), bufferData(new BufferData()) {}
+Entity::Entity(Material &material) : material(material) {}
+
+Entity::Entity(Material &material, float* vertices, size_t length) : material(material), bufferData(BufferData(vertices, length)) {}
 
 Entity::~Entity() = default;
 

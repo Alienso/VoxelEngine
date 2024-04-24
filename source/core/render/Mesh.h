@@ -7,6 +7,7 @@
 
 #include "glm/glm.hpp"
 #include "Material.h"
+#include "core/render/buffer/BufferData.h"
 
 #include <vector>
 
@@ -29,7 +30,7 @@ public:
 
 private:
     std::vector<Vertex> vertices;
-    BufferData* bufferData; //TODO use non pointer
+    BufferData bufferData;
 };
 
 

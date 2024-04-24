@@ -13,6 +13,7 @@
 #include "core/render/Texture.h"
 #include "core/render/Material.h"
 #include "core/entity/LightSource.h"
+#include "core/entity/Skybox.h"
 
 #include <vector>
 
@@ -30,6 +31,7 @@ public:
     static Camera camera;
     static CurrentFrame currentFrame;
     static LightSource* sun;
+    static Skybox* skybox;
 
     static AssetManager<Texture> textureManager;
     static AssetManager<Material> materialManager;

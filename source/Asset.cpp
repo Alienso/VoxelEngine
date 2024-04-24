@@ -10,12 +10,16 @@
 
 void AppName::initAssets(){
 
-    Shader& shader = Global::shaderManager.createAsset(Shaders::BASE, "3D.vs", "3D.fs");
+    [[maybe_unused]] Shader& basicShader = Global::shaderManager.createAsset(Shaders::BASE, "3D.vs", "3D.fs");
     Shader& lightSourceShader = Global::shaderManager.createAsset(Shaders::LIGHT_SOURCE, "lightSource.vs", "lightSource.fs");
+    Shader& skyboxShader = Global::shaderManager.createAsset(Shaders::SKYBOX, "skybox.vs", "skybox.fs");
 
-    Texture& texture = Global::textureManager.createAsset(Textures::MOUNTAINS,"Background.jpg", GL_RGB);
+    Texture& baseTexture = Global::textureManager.createAsset(Textures::MOUNTAINS, "Background.jpg", GL_RGB);
+    Texture* skyboxTexture = Texture::generateCubeMap(Skybox::resourcePath, GL_RGB);
+    Global::textureManager.registerAsset(Textures::SKYBOX, skyboxTexture);
 
-    Material& base = Global::materialManager.createAsset(Materials::BASE, lightSourceShader, texture);
-    Material& light = Global::materialManager.createAsset(Materials::LIGHT, lightSourceShader, texture);
+    [[maybe_unused]] Material& base = Global::materialManager.createAsset(Materials::BASE, lightSourceShader, baseTexture);
+    [[maybe_unused]] Material& light = Global::materialManager.createAsset(Materials::LIGHT, lightSourceShader, baseTexture);
+    [[maybe_unused]] Material& skybox = Global::materialManager.createAsset(Materials::SKYBOX, skyboxShader, *skyboxTexture);
 
 }

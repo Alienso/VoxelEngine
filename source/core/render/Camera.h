@@ -21,6 +21,8 @@ public:
     float yaw;
     float pitch;
     glm::mat4x4 transformationMatrix = glm::identity<glm::mat4x4>();
+
+    glm::mat4 getViewMatrix();
 };
 
 

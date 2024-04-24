@@ -9,19 +9,10 @@
 #include "Chunk.h"
 #include "../entity/LightSource.h"
 #include "../render/Mesh.h"
+#include "gen/WorldGen.h"
+#include "gen/CullMesher.h"
 
 #include <unordered_map>
-
-struct KeyFuncs
-{
-    size_t operator()(const glm::u32vec3& k) const {
-        return std::hash<uint32_t>()(k.x) ^ std::hash<uint32_t>()(k.y) ^ std::hash<uint32_t>()(k.z);
-    }
-
-    bool operator()(const glm::u32vec3& a, const glm::u32vec3& b) const {
-        return a.x == b.x && a.y == b.y && a.z == b.z;
-    }
-};
 
 class World {
 public:
@@ -37,8 +28,11 @@ private:
 
     void renderTerrain();
 
+    WorldGen worldGen;
+    CullMesher cullMesher;
+
     Material* grassMat = nullptr; //TODO Temp
-    std::unordered_map<glm::u32vec3, Chunk*, KeyFuncs, KeyFuncs> chunkMap;
+    std::unordered_map<glm::u32vec3, Chunk*, GlmVec3Functions, GlmVec3Functions> chunkMap;
     std::unordered_map<uint16_t, Mesh*> terrainMeshes; //TODO memory management
 };
 

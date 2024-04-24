@@ -11,16 +11,16 @@ Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     for (size_t i = 0; i < length; i+=8){
         mesh->vertices.emplace_back(glm::vec3{vertexData[i], vertexData[i+1], vertexData[i+2]},
                                     glm::vec3{vertexData[i+3], vertexData[i+4], vertexData[i+5]},
-                                    glm::vec2{vertexData[6], vertexData[i+7]});
+                                    glm::vec2{vertexData[i+6], vertexData[i+7]});
     }
-    mesh->bufferData = new BufferData(vertexData, length);
+    mesh->bufferData = BufferData(vertexData, length);
     return mesh;
 }
 
 void Mesh::render(const Material &material) {
     material.texture.bind();
     material.shader.use();
-    bufferData->va->bind();
+    bufferData.va->bind();
 
     glm::mat4 model = Global::currentFrame.model;
 
@@ -39,5 +39,5 @@ void Mesh::render(const Material &material) {
     material.shader.setInt("shininess", material.shininess);
 
 
-    glDrawArrays(GL_TRIANGLES, 0, 36); //TODO
+    glDrawArrays(GL_TRIANGLES, 0, (int)vertices.size()); //@Danger
 }

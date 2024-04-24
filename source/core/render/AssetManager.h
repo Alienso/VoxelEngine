@@ -36,6 +36,10 @@ public:
         return *asset;
     }
 
+    void registerAsset(const char* id, T* asset){
+        assetsMap[id] = asset;
+    }
+
 private:
     std::unordered_map<const char*, T*> assetsMap;
 };

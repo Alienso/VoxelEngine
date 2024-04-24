@@ -13,8 +13,9 @@
 
 
 World::World() {
-    chunkMap[{0,0,0}] = new Chunk(0,0,0);
-    terrainMeshes[1] = Mesh::fromRawData(Global::cubeVertices, sizeof(Global::cubeVertices) / sizeof(float));
+    Chunk* chunk = worldGen.generateChunk(0,0,0);
+    chunkMap[{0,0,0}] = chunk;
+    cullMesher.generateMeshes(terrainMeshes, chunkMap);
     grassMat = &(Material&)(Blocks::GRASS->getMaterial());
 }
 
@@ -36,6 +37,7 @@ void World::onRender() {
     Global::sun->render();
     renderTerrain();
 
+    Global::skybox->render();
 }
 
 void World::renderTerrain() {

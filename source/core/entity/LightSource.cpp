@@ -3,12 +3,11 @@
 //
 
 #include "LightSource.h"
-#include "../render/buffer/BufferData.h"
 #include "../../Global.h"
 
-LightSource::LightSource(glm::vec3 pos, glm::vec3 color) : Entity(*Global::materialManager.getAsset(Materials::LIGHT)),
+LightSource::LightSource(glm::vec3 pos, glm::vec3 color) : Entity(*Global::materialManager.getAsset(Materials::LIGHT),
+                                                                  &Global::cubeVertices[0], sizeof(Global::cubeVertices) / sizeof(float)),
                                                            pos(pos), color(color) {
-
 }
 
 void LightSource::onUpdate(float deltaTime) {
@@ -18,7 +17,7 @@ void LightSource::onUpdate(float deltaTime) {
 void LightSource::render() {
     material.texture.bind();
     material.shader.use();
-    bufferData->va->bind();
+    bufferData.va->bind();
 
     glm::mat4 model= Global::currentFrame.model;
 
@@ -28,5 +27,5 @@ void LightSource::render() {
 
     material.shader.setVec3("lightColor", color);
 
-    glDrawArrays(GL_TRIANGLES, 0, 36); //TODO
+    glDrawArrays(GL_TRIANGLES, 0, 36); //@DANGER
 }

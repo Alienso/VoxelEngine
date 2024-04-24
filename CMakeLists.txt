@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-parameter -g -O0")
 
+include_directories(${PROJECT_SOURCE_DIR}/source)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
@@ -46,7 +47,15 @@ add_executable(Voxel main.cpp
         source/core/render/buffer/BufferData.cpp
         source/core/world/World.cpp source/core/world/World.h
         source/core/world/Chunk.cpp source/core/world/Chunk.h
-        source/core/world/Block.cpp source/core/world/Block.h source/core/world/Blocks.h source/core/entity/LightSource.cpp source/core/entity/LightSource.h source/InputHandler.cpp source/InputHandler.h source/core/render/Mesh.cpp source/core/render/Mesh.h source/core/world/Blocks.cpp)
+        source/core/world/Block.cpp source/core/world/Block.h
+        source/core/world/Blocks.h source/core/world/Blocks.cpp
+        source/core/entity/LightSource.cpp source/core/entity/LightSource.h
+        source/InputHandler.cpp source/InputHandler.h
+        source/core/render/Mesh.cpp source/core/render/Mesh.h
+        source/core/world/gen/WorldGen.cpp source/core/world/gen/WorldGen.h
+        source/core/world/gen/CullMesher.cpp source/core/world/gen/CullMesher.h
+        source/core/world/gen/PerlinNoise.cpp source/core/world/gen/PerlinNoise.h
+        source/util/Util.cpp source/core/entity/Skybox.cpp source/core/entity/Skybox.h)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

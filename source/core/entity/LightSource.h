@@ -12,7 +12,6 @@
 class LightSource : public Entity{
 
 public:
-
     LightSource(glm::vec3 pos, glm::vec3 color);
 
     void onUpdate(float deltaTime) override;

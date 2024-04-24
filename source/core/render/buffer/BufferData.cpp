@@ -8,18 +8,13 @@
 
 #include "VertexBuffer.h"
 #include "VertexArray.h"
-#include "../../../Global.h"
 
 using namespace std;
 
 BufferData::BufferData() {
-    vb = new VertexBuffer(&(Global::cubeVertices[0]), sizeof(Global::cubeVertices));
-    layout = new VertexBufferLayout();
-    layout->push<float>(3);
-    layout->push<float>(3);
-    layout->push<float>(2);
-    va = new VertexArray();
-    va->addBuffer(*vb, *layout);
+    vb = nullptr;
+    layout = nullptr;
+    va = nullptr;
 }
 
 BufferData::BufferData(float *vertices, size_t length) {
@@ -32,8 +27,20 @@ BufferData::BufferData(float *vertices, size_t length) {
     va->addBuffer(*vb, *layout);
 }
 
+BufferData::BufferData(float *vertices, std::size_t length, std::vector<int>& layoutFormat) {
+    vb = new VertexBuffer(vertices, length * sizeof(float));
+    layout = new VertexBufferLayout();
+
+    for (int i : layoutFormat){
+        layout->push<float>(i);
+    }
+
+    va = new VertexArray();
+    va->addBuffer(*vb, *layout);
+}
+
 BufferData::~BufferData() {
-    delete va;
-    delete vb;
-    delete layout;
+    if (!va) delete va;
+    if (!vb) delete vb;
+    if (!layout) delete layout;
 }

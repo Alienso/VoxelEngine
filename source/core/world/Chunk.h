@@ -18,11 +18,13 @@ public:
         blocks[0] = 1;
     };
 
-private:
     const int x, y, z;
-    uint16_t blocks[4096];
     int heightMap[256];
     bool loaded;
+    uint16_t blocks[4096];
+
+    static glm::vec3 posFromIndex(int i);
+
 };
 
 

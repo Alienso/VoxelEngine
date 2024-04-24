@@ -4,14 +4,23 @@
 
 #include "Material.h"
 
-/*Material::Material(const char *shaderPath, const char *texturePath, unsigned int textureType) {
+Material::Material(Shader &shader, Texture &texture) : shader(shader), texture(texture) {
+    ambientStrength = 0.1;
+    specularStrength = 0.5;
+    shininess = 2;
+}
 
-    char vertexPath[128];
-    char fragmentPath[128];
+Material &Material::withAmbientStrength(float a) {
+    ambientStrength = a;
+    return *this;
+}
 
-    sprintf(vertexPath,"%s.vs", shaderPath);
-    sprintf(fragmentPath, "%s.fs", shaderPath);
+Material &Material::withSpecularStrength(float s) {
+    specularStrength = s;
+    return *this;
+}
 
-    shader = new Shader(vertexPath, fragmentPath);
-    texture = TextureManager::getInstance()->create(texturePath, textureType);
-}*/
+Material &Material::withShininess(int s) {
+    shininess = s;
+    return *this;
+}

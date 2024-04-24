@@ -6,6 +6,7 @@
 #define GRASSTERRAIN_TEXTURE_H
 
 #include <string>
+#include <vector>
 
 class Texture {
 public:
@@ -13,9 +14,13 @@ public:
     ~Texture();
 
     void bind(unsigned int slot = 0) const;
+    void bindCubeMap(unsigned int slot = 0) const;
     void unbind() const;
 
+    static Texture* generateCubeMap(std::vector<const char*> faces, int type);
+
 private:
+    Texture();
     unsigned int textureId;
     std::string filePath;
     int width, height, bytesPerPixel;

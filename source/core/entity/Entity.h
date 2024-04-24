@@ -10,12 +10,15 @@
 #include "../render/EntityRenderer.h"
 #include "../render/Material.h"
 
+#include "../render/buffer/BufferData.h"
+
 class BufferData;
 
 class Entity {
 
 public:
     Entity(Material& material);
+    Entity(Material &material, float* vertices, size_t length);
     virtual ~Entity();
 
     virtual void onUpdate(float deltaTime);
@@ -31,10 +34,9 @@ public:
     glm::vec3 prevScale = glm::vec3(1.0f);
 
     friend class EntityRenderer;
-
 protected:
     Material& material;
-    BufferData* bufferData; //TODO make this not a pointer
+    BufferData bufferData;
     glm::mat4 modelMatrix = glm::mat4(1.0f); //TODO ?
 
 };
