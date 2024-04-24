@@ -55,7 +55,8 @@ add_executable(Voxel main.cpp
         source/core/world/gen/WorldGen.cpp source/core/world/gen/WorldGen.h
         source/core/world/gen/CullMesher.cpp source/core/world/gen/CullMesher.h
         source/core/world/gen/PerlinNoise.cpp source/core/world/gen/PerlinNoise.h
-        source/util/Util.cpp source/core/entity/Skybox.cpp source/core/entity/Skybox.h)
+        source/util/Util.cpp source/util/Util.h
+        source/core/entity/Skybox.cpp source/core/entity/Skybox.h)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

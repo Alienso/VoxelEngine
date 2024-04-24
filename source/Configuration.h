@@ -13,6 +13,9 @@ public:
     static float fov;
     static float fovMax;
 
+    static int shadowWidth;
+    static int shadowHeight;
+
     Configuration()= default;
 };
 

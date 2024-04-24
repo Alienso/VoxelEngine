@@ -10,7 +10,7 @@
 #include "../../render/Mesh.h"
 #include "../Chunk.h"
 
-#include "../../../util/Util.cpp"
+#include "../../../util/Util.h"
 
 class CullMesher {
 public:

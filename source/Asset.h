@@ -16,6 +16,8 @@ public:
     static inline const char* BASE = "base";
     static inline const char* LIGHT_SOURCE = "lightSource";
     static inline const char* SKYBOX = "skybox";
+    static inline const char* SHADOW = "shadow";
+    static inline const char* TEXTURE = "texture";
 };
 
 class Materials{

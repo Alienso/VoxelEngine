@@ -7,3 +7,6 @@ int Configuration:: wWidth = 1600;
 int Configuration:: wHeight = 900;
 float Configuration::fov = 60.0f;
 float Configuration::fovMax = 100.0f;
+
+int Configuration::shadowWidth = 1600;
+int Configuration::shadowHeight = 900;

@@ -17,6 +17,7 @@ World::World() {
     chunkMap[{0,0,0}] = chunk;
     cullMesher.generateMeshes(terrainMeshes, chunkMap);
     grassMat = &(Material&)(Blocks::GRASS->getMaterial());
+    shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
 }
 
 World::~World() {
@@ -27,16 +28,24 @@ World::~World() {
 
 void World::onRender() {
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     Global::currentFrame.projection = glm::perspective(glm::radians(Configuration::fov), (float)Configuration::wWidth/(float)Configuration::wHeight,
-                                            0.01f, 1000.0f);
+                                                       0.01f, 1000.0f);
     Global::currentFrame.view = glm::lookAt(Global::camera.pos, Global::camera.pos + Global::camera.front, Global::camera.up);
     Global::currentFrame.model = glm::mat4(1.0f);
 
+    //renderShadows();
+
+    //scene render
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glViewport(0, 0, Configuration::wWidth,  Configuration::wHeight);
+    renderScene();
+
+    //Util::renderTexture(1);
+}
+
+void World::renderScene() {
     Global::sun->render();
     renderTerrain();
-
     Global::skybox->render();
 }
 
@@ -78,4 +87,24 @@ Chunk &World::getChunk(int x, int y, int z) {
     auto* chunk = new Chunk(x,y,z);
     chunkMap[{x,y,z}] = chunk;
     return *chunk;
+}
+
+void World::renderShadows() {
+    /*float near_plane = 1.0f, far_plane = 7.5f;
+    glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+    glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
+                                      glm::vec3( 0.0f, 0.0f,  0.0f),
+                                      glm::vec3( 0.0f, 1.0f,  0.0f));
+    glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+
+    //shadow render
+    glViewport(0, 0, Configuration::shadowWidth,  Configuration::shadowWidth);
+    shadowBuffer.bind();
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    shadowShader->use();
+    shadowShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+    renderScene();
+    shadowBuffer.unbind();*/
 }

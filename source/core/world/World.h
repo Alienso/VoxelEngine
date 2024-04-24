@@ -11,6 +11,7 @@
 #include "../render/Mesh.h"
 #include "gen/WorldGen.h"
 #include "gen/CullMesher.h"
+#include "core/render/buffer/FrameBuffer.h"
 
 #include <unordered_map>
 
@@ -27,9 +28,13 @@ public:
 private:
 
     void renderTerrain();
+    void renderScene();
+    void renderShadows();
 
     WorldGen worldGen;
     CullMesher cullMesher;
+    FrameBuffer shadowBuffer{FRAME_BUFFER_SHADOW};
+    Shader* shadowShader;
 
     Material* grassMat = nullptr; //TODO Temp
     std::unordered_map<glm::u32vec3, Chunk*, GlmVec3Functions, GlmVec3Functions> chunkMap;
