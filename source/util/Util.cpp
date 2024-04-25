@@ -15,7 +15,7 @@ void Util::renderTexture(unsigned int texture){
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
     textureShader->use();
-    textureShader->setInt("depthMap",0);
+    textureShader->setInt("texture1",0);
     renderQuad();
 }
 

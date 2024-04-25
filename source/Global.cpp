@@ -16,7 +16,7 @@ LightSource* Global::sun = nullptr;
 Skybox* Global::skybox = nullptr;
 
 void Global::init() {
-    sun = new LightSource(glm::vec3{1,10,1},glm::vec3{1,1,1});
+    sun = new LightSource(glm::vec3{0,20,0},glm::vec3{1,1,1});
     skybox = new Skybox();
 }
 

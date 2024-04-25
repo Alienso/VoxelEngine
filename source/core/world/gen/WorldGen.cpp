@@ -3,7 +3,6 @@
 //
 
 #include "WorldGen.h"
-
 #include <cmath>
 
 Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
@@ -15,7 +14,7 @@ Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
         for (int x = 0; x<16; x++){
             for (int z = 0; z<16; z++){
                 if (y <= chunk->heightMap[x*16 + z])
-                    chunk->blocks[x*16 + y*256 + z] = 1;
+                    chunk->blocks[Chunk::indexFromPos(x,y,z)] = 1;
             }
         }
     }
@@ -23,20 +22,20 @@ Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
     return chunk;
 }
 
-void WorldGen::generateHeightMap(Chunk *chunk) { //TODO chunk pos offsets
+void WorldGen::generateHeightMap(Chunk *chunk) {
 
     int heightMapIndex = 0;
-    for (int y = 0 ; y <  height; y++) {
+    for (int z = 0 ; z <  height; z++) {
         for (int x = 0 ; x < width; x++) {
 
-            float localAmplitude = 5;
+            float localAmplitude = 20;
             float frequency = 1;
             float noiseHeight = 0;
 
             for (int i = 0; i < octaves; i++) {
-                float sampleX = (float)x * scale * frequency;
-                float sampleY = (float)y * scale * frequency;
-                float perlinValue = (float)perlin.noise((double)sampleX, (double)sampleY, 0) * 2 - 1;
+                float sampleX = (float)(x + chunk->x * 16) * scale * frequency;
+                float sampleZ = (float)(z + chunk->z * 16) * scale * frequency;
+                float perlinValue = (float)perlin.noise((double)sampleX, (double)sampleZ, 0) * 2 - 1;
                 noiseHeight += perlinValue * localAmplitude;
 
                 localAmplitude *= persistance;

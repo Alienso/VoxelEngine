@@ -24,8 +24,8 @@ private:
     int height = 16;
     int width = 16;
 
-    float scale = 0.1;
-    int octaves = 4;
+    float scale = 0.04;
+    int octaves = 2;
     float persistance = 0.5f;
     float lacunarity = 2.0;
 };

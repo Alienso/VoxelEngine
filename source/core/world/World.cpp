@@ -13,8 +13,25 @@
 
 
 World::World() {
-    Chunk* chunk = worldGen.generateChunk(0,0,0);
+
+    int worldSize = 3;
+    for (int i=-worldSize; i<worldSize; i++ ){
+        for (int j=-worldSize; j<worldSize; j++){
+            glm::vec3 pos = {i,0,j};
+            Chunk* chunk = worldGen.generateChunk(i,0,j);
+            chunkMap[pos] = chunk;
+        }
+    }
+
+    /*Chunk* chunk = worldGen.generateChunk(0,0,0);
+    Chunk* chunk2 = worldGen.generateChunk(0,0,1);
+    Chunk* chunk3 = worldGen.generateChunk(1,0,0);
+    Chunk* chunk4 = worldGen.generateChunk(1,0,1);
     chunkMap[{0,0,0}] = chunk;
+    chunkMap[{0,0,1}] = chunk2;
+    chunkMap[{1,0,0}] = chunk3;
+    chunkMap[{1,0,1}] = chunk4;*/
+
     cullMesher.generateMeshes(terrainMeshes, chunkMap);
     grassMat = &(Material&)(Blocks::GRASS->getMaterial());
     shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);

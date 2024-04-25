@@ -20,10 +20,25 @@ public:
 
     const int x, y, z;
     int heightMap[256];
-    bool loaded;
     uint16_t blocks[4096];
+    bool loaded;
 
-    static glm::vec3 posFromIndex(int i);
+    /* this is blocks layout
+     * @ ---> x
+     * |
+     * v
+     * z
+     */
+    constexpr static glm::vec3 posFromIndex(int i){ //TODO optimize? //TODO x and z???
+        int y = i / 256;
+        int plane = i % 256;
+        int z = plane / 16;
+        int x = plane % 16;
+        return {z,y,x};
+    }
+    constexpr static uint16_t indexFromPos(int x, int y, int z){
+        return y*256 + z*16 + x;
+    }
 
 };
 
