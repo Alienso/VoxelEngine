@@ -10,10 +10,10 @@ Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
     auto* chunk = new Chunk(posX, posY, posZ);
     generateHeightMap(chunk);
 
-    for (int y=0; y<16; y++){ //for each layer(height)
-        for (int x = 0; x<16; x++){
-            for (int z = 0; z<16; z++){
-                if (y <= chunk->heightMap[x*16 + z])
+    for (int y=0; y<Chunk::CHUNK_SIZE; y++){ //for each layer(height)
+        for (int x = 0; x<Chunk::CHUNK_SIZE; x++){
+            for (int z = 0; z<Chunk::CHUNK_SIZE; z++){
+                if (y <= chunk->heightMap[x*Chunk::CHUNK_SIZE + z])
                     chunk->blocks[Chunk::indexFromPos(x,y,z)] = 1;
             }
         }
@@ -33,8 +33,8 @@ void WorldGen::generateHeightMap(Chunk *chunk) {
             float noiseHeight = 0;
 
             for (int i = 0; i < octaves; i++) {
-                float sampleX = (float)(x + chunk->x * 16) * scale * frequency;
-                float sampleZ = (float)(z + chunk->z * 16) * scale * frequency;
+                float sampleX = (float)(x + chunk->x * Chunk::CHUNK_SIZE) * scale * frequency;
+                float sampleZ = (float)(z + chunk->z * Chunk::CHUNK_SIZE) * scale * frequency;
                 float perlinValue = (float)perlin.noise((double)sampleX, (double)sampleZ, 0) * 2 - 1;
                 noiseHeight += perlinValue * localAmplitude;
 

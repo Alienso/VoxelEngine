@@ -3,6 +3,7 @@
 //
 
 #include "ChunkProvider.h"
+#include "Chunk.h"
 
 ChunkProvider::ChunkProvider() {
     int worldSize = 3;
@@ -20,18 +21,25 @@ ChunkProvider::~ChunkProvider() {
         delete it.second;
 }
 
-Chunk &ChunkProvider::getChunkAt(int x, int y, int z) {
+Chunk *ChunkProvider::getChunkAt(int x, int y, int z) {
     if (auto it = chunkMap.find({x,y,z}); it != chunkMap.end()){
-        return *it->second;
+        return it->second;
     }
     //generate chunk and return it; maybe it is generated but not loaded? TODO
     auto* chunk = new Chunk(x,y,z);
     chunkMap[{x,y,z}] = chunk;
-    return *chunk;
+    return chunk;
 }
 
 const ChunkMap &ChunkProvider::getChunks() const {
     return chunkMap;
+}
+
+Chunk* ChunkProvider::getChunkAtWorldPos(float x, float y, float z) {
+    glm::i32vec3 chunkPos = { (int)floorf(x / Chunk::CHUNK_SIZE), (int)floorf(y / Chunk::CHUNK_SIZE), (int)floorf(z / Chunk::CHUNK_SIZE) };
+    if (const auto& it = chunkMap.find(chunkPos); it != chunkMap.end())
+        return it->second;
+    return nullptr; //todo this should load chunk if unavailable
 }
 
 /*Chunk &ChunkProvider::getAdjacentChunk(EnumSide side) const { //TODO

@@ -23,21 +23,26 @@ public:
         memset(&blocks, 0, sizeof(blocks));
     };
 
+    [[nodiscard]] static glm::uvec3 getRelativeChunkPos(glm::vec3 pos);
+    [[nodiscard]] int getHeightAt(int posX, int posZ) const;
+
     constexpr static glm::vec3 posFromIndex(int i){ //TODO x and z???
-        int y = i / 256;
-        int plane = i % 256;
-        int x = plane / 16;
-        int z = plane % 16;
+        int y = i / (CHUNK_SIZE*CHUNK_SIZE);
+        int plane = i % (CHUNK_SIZE*CHUNK_SIZE);
+        int x = plane / CHUNK_SIZE;
+        int z = plane % CHUNK_SIZE;
         return {x,y,z};
     }
     constexpr static uint16_t indexFromPos(int x, int y, int z){
-        return y*256 + z*16 + x;
+        return y*CHUNK_SIZE*CHUNK_SIZE + z*CHUNK_SIZE + x;
     }
 
 public:
+    static inline const int CHUNK_SIZE = 16;
+
     const int x, y, z;
-    int heightMap[256];
-    uint16_t blocks[4096];
+    int heightMap[CHUNK_SIZE*CHUNK_SIZE];
+    uint16_t blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
     bool loaded = true;
 
 };

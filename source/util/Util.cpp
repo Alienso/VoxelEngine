@@ -9,13 +9,12 @@
 unsigned int Util::quadVAO = 0;
 unsigned int Util::quadVBO;
 
-//TODO this doesn't work!
-void Util::renderTexture(unsigned int texture){
-    Shader* textureShader = Global::shaderManager.getAsset(Shaders::SHADOW);
+void Util::renderTexture(unsigned int textureId){
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    //Global::textureManager.getAsset(Textures::MOUNTAINS)->bind();
+    Shader* textureShader = Global::shaderManager.getAsset(Shaders::TEXTURE);
     textureShader->use();
-    textureShader->setInt("texture1",0);
     renderQuad();
 }
 
@@ -35,7 +34,7 @@ void Util::renderQuad(){
         glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)nullptr);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     }

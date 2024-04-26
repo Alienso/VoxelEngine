@@ -21,8 +21,8 @@ private:
     static uint32_t hash(uint32_t a);
 
     PerlinNoise perlin;
-    int height = 16;
-    int width = 16;
+    int height = Chunk::CHUNK_SIZE;
+    int width = Chunk::CHUNK_SIZE;
 
     float scale = 0.04;
     int octaves = 2;

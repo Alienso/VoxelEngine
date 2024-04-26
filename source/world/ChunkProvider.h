@@ -20,7 +20,8 @@ public:
     ~ChunkProvider();
 
     [[nodiscard]] const ChunkMap& getChunks() const;
-    [[nodiscard]] Chunk& getChunkAt(int x, int y, int z);
+    [[nodiscard]] Chunk* getChunkAt(int x, int y, int z);
+    [[nodiscard]] Chunk* getChunkAtWorldPos(float x, float y, float z);
     //[[nodiscard]] Chunk& getAdjacentChunk() const;
 
 private:

@@ -4,10 +4,19 @@
 
 #include "Chunk.h"
 
-/*constexpr glm::vec3 Chunk::posFromIndex(int i) {
+glm::uvec3 Chunk::getRelativeChunkPos(glm::vec3 pos) {
+    int posX = (int)floor(pos.x) % CHUNK_SIZE;
+    int posZ = (int)floor(pos.z) % CHUNK_SIZE;
+    int posY = (int)floor(pos.y) % CHUNK_SIZE;
 
+    if (posX < 0)
+        posX = CHUNK_SIZE + posX;
+    if (posZ < 0)
+        posZ = CHUNK_SIZE + posZ;
+
+    return { posX, posY, posZ};
 }
-
-constexpr uint16_t Chunk::indexFromPos(int x, int y, int z) {
-
-}*/
+int Chunk::getHeightAt(int posX, int posZ) const {
+    int index = posZ * CHUNK_SIZE + posX;
+    return heightMap[index];
+}

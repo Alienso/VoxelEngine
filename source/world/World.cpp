@@ -14,7 +14,7 @@
 
 World::World() {
     cullMesher.generateMeshes(terrainMeshes, chunkProvider);
-    //shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
+    shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
 }
 
 void World::onRender() {
@@ -24,14 +24,14 @@ void World::onRender() {
     Global::currentFrame.view = glm::lookAt(Global::camera.pos, Global::camera.pos + Global::camera.front, Global::camera.up);
     Global::currentFrame.model = glm::mat4(1.0f);
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     //renderShadows();
 
-    //scene render
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //glViewport(0, 0, Configuration::wWidth,  Configuration::wHeight);
     renderScene();
 
-    //Util::renderTexture(1);
+    //Util::renderTexture(shadowBuffer.getTextureId());
 }
 
 void World::renderScene() {
@@ -51,6 +51,9 @@ void World::renderTerrain() {
 void World::onUpdate(float deltaTime) {
     InputHandler::processKeyboardInput(deltaTime);
     InputHandler::processMouseInput();
+
+    for(auto& e : entities)
+        e.onUpdate(deltaTime);
 
     handleCollision();
 }
@@ -72,7 +75,7 @@ void World::onImGuiRender() {
 }
 
 void World::renderShadows() {
-    /*float near_plane = 1.0f, far_plane = 7.5f;
+    float near_plane = 1.0f, far_plane = 7.5f;
     glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
     glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
                                       glm::vec3( 0.0f, 0.0f,  0.0f),
@@ -86,24 +89,21 @@ void World::renderShadows() {
 
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+    shadowShader->setMat4("model", glm::mat4(1.0f));
 
     renderScene();
-    shadowBuffer.unbind();*/
+    shadowBuffer.unbind();
 }
 
 void World::handleCollision() {
-    //TODO this doesn't work
-    /*glm::vec3 pos = Global::camera.pos;
-    glm::i32vec3 chunkPos = { (int)floor(pos.x / 16.0), (int)floor(pos.y / 16.0), (int)floor(pos.z / 16.0) };
-    glm::vec3 posInChunk = { abs((int)round(pos.x) % 16), abs((int)round(pos.y) % 16), abs((int)round(pos.z) % 16) };
-    if (const auto& it = chunkMap.find(chunkPos); it != chunkMap.end()){
-        Chunk* chunk = it->second;
-        int index = (int)posInChunk.z * 16 + (int)posInChunk.x;
-        if ((int)pos.y - 3 < chunk->heightMap[index]){
-            Global::camera.pos.y = (float)chunk->heightMap[index] + 3;
-        }
-        currentTerrainHeight = chunk->heightMap[index];
-    }else{
-
-    }*/
+    glm::vec3 pos = Global::camera.pos;
+    Chunk* chunk = chunkProvider.getChunkAtWorldPos(pos.x, pos.y, pos.z);
+    if (chunk == nullptr)
+        return;
+    glm::uvec3 posInChunk = Chunk::getRelativeChunkPos(pos);
+    int height = chunk->getHeightAt((int)posInChunk.x, (int)posInChunk.z);
+    if ((int)pos.y - 3 < height){
+        Global::camera.pos.y = (float)height + 3;
+    }
+    currentTerrainHeight = height;
 }

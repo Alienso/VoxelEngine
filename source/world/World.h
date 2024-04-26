@@ -31,13 +31,13 @@ private:
 
     void handleCollision();
 
-
 private:
     CullMesher cullMesher;
     ChunkProvider chunkProvider;
+    std::vector<Entity> entities;
 
-    /*FrameBuffer shadowBuffer{FRAME_BUFFER_SHADOW};
-    Shader* shadowShader;*/
+    FrameBuffer shadowBuffer{FRAME_BUFFER_SHADOW};
+    Shader* shadowShader;
 
     std::unordered_map<uint16_t, Mesh*> terrainMeshes;
     int currentTerrainHeight = 1;
