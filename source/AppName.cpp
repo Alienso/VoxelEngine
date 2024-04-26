@@ -14,7 +14,7 @@
 #include "Global.h"
 #include "Configuration.h"
 #include "util/Profiler.h"
-#include "core/world/Blocks.h"
+#include "world/Blocks.h"
 
 #include <iostream>
 

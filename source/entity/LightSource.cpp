@@ -3,10 +3,10 @@
 //
 
 #include "LightSource.h"
-#include "../../Global.h"
+#include "Global.h"
 
 LightSource::LightSource(glm::vec3 pos, glm::vec3 color) : Entity(*Global::materialManager.getAsset(Materials::LIGHT),
-                                                                  &Global::cubeVertices[0], sizeof(Global::cubeVertices) / sizeof(float)),
+                                                                  &Global::cubeVertices[0], Global::cubeVertices.size()),
                                                            pos(pos), color(color) {
 }
 

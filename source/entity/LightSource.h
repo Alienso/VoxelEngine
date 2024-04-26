@@ -7,7 +7,7 @@
 
 
 #include "Entity.h"
-#include "../../Asset.h"
+#include "Asset.h"
 
 class LightSource : public Entity{
 

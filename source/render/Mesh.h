@@ -7,7 +7,7 @@
 
 #include "glm/glm.hpp"
 #include "Material.h"
-#include "core/render/buffer/BufferData.h"
+#include "render/buffer/BufferData.h"
 
 #include <vector>
 

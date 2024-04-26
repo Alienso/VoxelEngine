@@ -6,11 +6,11 @@
 #define INC_3DTEST_ENTITY_H
 
 #include "glm/glm.hpp"
-#include "../../util/AxisAlignedBB.h"
-#include "../render/EntityRenderer.h"
-#include "../render/Material.h"
+#include "util/AxisAlignedBB.h"
+#include "render/EntityRenderer.h"
+#include "render/Material.h"
 
-#include "../render/buffer/BufferData.h"
+#include "render/buffer/BufferData.h"
 
 class BufferData;
 

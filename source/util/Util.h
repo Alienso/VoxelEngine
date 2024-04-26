@@ -7,7 +7,7 @@
 
 #include <memory>
 #include "glm/glm.hpp"
-#include "core/render/Shader.h"
+#include "render/Shader.h"
 
 struct GlmVec3Functions {
     size_t operator()(const glm::u32vec3& k) const {

@@ -3,7 +3,7 @@
 //
 
 #include "FrameBuffer.h"
-#include "../../../Configuration.h"
+#include "Configuration.h"
 
 #include <iostream>
 

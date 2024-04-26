@@ -26,7 +26,7 @@ void Skybox::render() {
     material.shader.use();
     bufferData.va->bind();
 
-    glm::mat4 view = glm::mat4(glm::mat3(Global::camera.getViewMatrix())); //TODO use this is view?
+    [[maybe_unused]] glm::mat4 view = glm::mat4(glm::mat3(Global::camera.getViewMatrix())); //TODO use this is view?
 
     material.shader.setMat4("projection", Global::currentFrame.projection);
     material.shader.setMat4("view", Global::currentFrame.view);

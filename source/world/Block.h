@@ -6,7 +6,7 @@
 #define VOXEL_BLOCK_H
 
 
-#include "../render/Material.h"
+#include "render/Material.h"
 
 class Block {
 public:
@@ -15,10 +15,15 @@ public:
     const Material& getMaterial(){
         return *material;
     }
+
+    [[nodiscard]] constexpr uint16_t getId() const{
+        return id;
+    }
+
 private:
     static inline int blockCounter = 0;
     std::string name;
-    int id;
+    const int id;
     Material* material;
 };
 

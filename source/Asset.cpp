@@ -4,8 +4,8 @@
 
 #include "Asset.h"
 #include "AppName.h"
-#include "core/render/Texture.h"
-#include "core/render/Material.h"
+#include "render/Texture.h"
+#include "render/Material.h"
 #include "Global.h"
 
 void AppName::initAssets(){

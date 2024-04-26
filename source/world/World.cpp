@@ -3,44 +3,18 @@
 //
 
 #include "World.h"
-#include "../../InputHandler.h"
-#include "../../Configuration.h"
+#include "InputHandler.h"
+#include "Configuration.h"
 #include "Blocks.h"
-#include "../../Global.h"
+#include "Global.h"
 
-#include <imgui/imgui.h>
+#include "imgui/imgui.h"
 #include "glm/ext/matrix_clip_space.hpp"
 
 
 World::World() {
-
-    int worldSize = 3;
-    for (int i=-worldSize; i<worldSize; i++ ){
-        for (int j=-worldSize; j<worldSize; j++){
-            glm::vec3 pos = {i,0,j};
-            Chunk* chunk = worldGen.generateChunk(i,0,j);
-            chunkMap[pos] = chunk;
-        }
-    }
-
-    /*Chunk* chunk = worldGen.generateChunk(0,0,0);
-    Chunk* chunk2 = worldGen.generateChunk(0,0,1);
-    Chunk* chunk3 = worldGen.generateChunk(1,0,0);
-    Chunk* chunk4 = worldGen.generateChunk(1,0,1);
-    chunkMap[{0,0,0}] = chunk;
-    chunkMap[{0,0,1}] = chunk2;
-    chunkMap[{1,0,0}] = chunk3;
-    chunkMap[{1,0,1}] = chunk4;*/
-
-    cullMesher.generateMeshes(terrainMeshes, chunkMap);
-    grassMat = &(Material&)(Blocks::GRASS->getMaterial());
-    shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
-}
-
-World::~World() {
-    for (auto it : chunkMap){
-        delete it.second;
-    }
+    cullMesher.generateMeshes(terrainMeshes, chunkProvider);
+    //shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
 }
 
 void World::onRender() {
@@ -77,6 +51,8 @@ void World::renderTerrain() {
 void World::onUpdate(float deltaTime) {
     InputHandler::processKeyboardInput(deltaTime);
     InputHandler::processMouseInput();
+
+    handleCollision();
 }
 
 void World::onImGuiRender() {
@@ -89,21 +65,10 @@ void World::onImGuiRender() {
 
     ImGui::SliderFloat3("LightPos", &Global::sun->pos.x, -5, 5);
     ImGui::SliderFloat3("LightColor", &Global::sun->color.x, 0, 1);
-    ImGui::SliderInt("Shininess", &grassMat->shininess, 0, 64);
-    ImGui::SliderFloat("AmbientStrength", &grassMat->ambientStrength, 0, 1);
-    ImGui::SliderFloat("SpecularStrength", &grassMat->specularStrength, 0, 1);
+
+    ImGui::Text("Map height= %d", currentTerrainHeight);
 
     ImGui::End();
-}
-
-Chunk &World::getChunk(int x, int y, int z) {
-    if (auto it = chunkMap.find({x,y,z}); it != chunkMap.end()){
-        return *it->second;
-    }
-    //generate chunk and return it; maybe it is generated but not loaded?
-    auto* chunk = new Chunk(x,y,z);
-    chunkMap[{x,y,z}] = chunk;
-    return *chunk;
 }
 
 void World::renderShadows() {
@@ -124,4 +89,21 @@ void World::renderShadows() {
 
     renderScene();
     shadowBuffer.unbind();*/
+}
+
+void World::handleCollision() {
+    //TODO this doesn't work
+    /*glm::vec3 pos = Global::camera.pos;
+    glm::i32vec3 chunkPos = { (int)floor(pos.x / 16.0), (int)floor(pos.y / 16.0), (int)floor(pos.z / 16.0) };
+    glm::vec3 posInChunk = { abs((int)round(pos.x) % 16), abs((int)round(pos.y) % 16), abs((int)round(pos.z) % 16) };
+    if (const auto& it = chunkMap.find(chunkPos); it != chunkMap.end()){
+        Chunk* chunk = it->second;
+        int index = (int)posInChunk.z * 16 + (int)posInChunk.x;
+        if ((int)pos.y - 3 < chunk->heightMap[index]){
+            Global::camera.pos.y = (float)chunk->heightMap[index] + 3;
+        }
+        currentTerrainHeight = chunk->heightMap[index];
+    }else{
+
+    }*/
 }

@@ -20,7 +20,7 @@ void Global::init() {
     skybox = new Skybox();
 }
 
-float Global::cubeVertices[288] =  {
+std::vector<float> Global::cubeVertices =  {
         0.0f, 0.0f, 0.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
         1.0f,  1.0f, 0.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,

@@ -5,7 +5,7 @@
 #ifndef INC_3DTEST_APPNAME_H
 #define INC_3DTEST_APPNAME_H
 
-#include "core/world/World.h"
+#include "world/World.h"
 
 class AppName {
 public:

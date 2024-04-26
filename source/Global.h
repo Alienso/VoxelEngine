@@ -7,13 +7,13 @@
 
 
 #include <GLFW/glfw3.h>
-#include "core/render/Camera.h"
+#include "render/Camera.h"
 
-#include "core/render/AssetManager.h"
-#include "core/render/Texture.h"
-#include "core/render/Material.h"
-#include "core/entity/LightSource.h"
-#include "core/entity/Skybox.h"
+#include "render/AssetManager.h"
+#include "render/Texture.h"
+#include "render/Material.h"
+#include "entity/LightSource.h"
+#include "entity/Skybox.h"
 
 #include <vector>
 
@@ -37,7 +37,7 @@ public:
     static AssetManager<Material> materialManager;
     static AssetManager<Shader> shaderManager;
 
-    static float cubeVertices[288];
+    static std::vector<float> cubeVertices;
 
 public:
     static void init();

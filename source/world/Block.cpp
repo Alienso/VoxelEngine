@@ -3,7 +3,7 @@
 //
 
 #include "Block.h"
-#include "./../source/Global.h"
+#include "Global.h"
 #include "Blocks.h"
 
 #include <string>

@@ -3,8 +3,8 @@
 //
 
 #include "EntityRenderer.h"
-#include "../entity/Entity.h"
-#include "../../Global.h"
+#include "entity/Entity.h"
+#include "Global.h"
 
 void EntityRenderer::render(const Entity& entity) {
     entity.material.texture.bind();

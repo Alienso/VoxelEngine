@@ -3,8 +3,8 @@
 //
 
 #include "Mesh.h"
-#include "../../Global.h"
-#include "buffer/BufferData.h"
+#include "Global.h"
+#include "render/buffer/BufferData.h"
 
 Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     Mesh* mesh = new Mesh();

@@ -6,7 +6,7 @@
 #define VOXEL_WORLDGEN_H
 
 
-#include "../Chunk.h"
+#include "world/Chunk.h"
 #include "PerlinNoise.h"
 #include <unordered_map>
 
