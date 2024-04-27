@@ -9,10 +9,11 @@
 #include "Chunk.h"
 #include "util/Util.h"
 #include "world/gen/WorldGen.h"
+#include "EnumFacing.h"
 
 #include <unordered_map>
 
-typedef std::unordered_map<glm::u32vec3, Chunk *, GlmVec3Functions, GlmVec3Functions> ChunkMap;
+typedef std::unordered_map<glm::ivec3, Chunk *, GlmVec3Functions, GlmVec3Functions> ChunkMap;
 
 class ChunkProvider {
 public:
@@ -22,7 +23,7 @@ public:
     [[nodiscard]] const ChunkMap& getChunks() const;
     [[nodiscard]] Chunk* getChunkAt(int x, int y, int z);
     [[nodiscard]] Chunk* getChunkAtWorldPos(float x, float y, float z);
-    //[[nodiscard]] Chunk& getAdjacentChunk() const;
+    [[nodiscard]] Chunk* getAdjacentChunk(const Chunk& chunk, const EnumFacing* side) const;
 
 private:
     ChunkMap chunkMap;

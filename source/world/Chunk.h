@@ -19,7 +19,7 @@
 
 class Chunk {
 public:
-    Chunk(int x, int y, int z) : x(x), y(y), z(z) {
+    Chunk(int x, int y, int z) : x(x), y(y), z(z), pos({x,y,z}) {
         memset(&blocks, 0, sizeof(blocks));
     };
 
@@ -41,6 +41,7 @@ public:
     static inline const int CHUNK_SIZE = 16;
 
     const int x, y, z;
+    const glm::ivec3 pos;
     int heightMap[CHUNK_SIZE*CHUNK_SIZE];
     uint16_t blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
     bool loaded = true;

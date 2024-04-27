@@ -42,6 +42,6 @@ Chunk* ChunkProvider::getChunkAtWorldPos(float x, float y, float z) {
     return nullptr; //todo this should load chunk if unavailable
 }
 
-/*Chunk &ChunkProvider::getAdjacentChunk(EnumSide side) const { //TODO
-    return *this;
-}*/
+Chunk* ChunkProvider::getAdjacentChunk(const Chunk& chunk, const EnumFacing* side) const {
+    return chunkMap.find(chunk.pos + side->dirVec)->second;
+}

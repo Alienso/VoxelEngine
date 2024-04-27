@@ -58,7 +58,7 @@ add_executable(Voxel main.cpp
         source/util/Util.cpp source/util/Util.h
         source/entity/Skybox.cpp source/entity/Skybox.h
         source/world/ChunkProvider.cpp source/world/ChunkProvider.h
-        source/EnumSide.h)
+        source/EnumFacing.h source/EnumFacing.cpp)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)
