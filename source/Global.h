@@ -41,6 +41,8 @@ public:
     static std::vector<size_t> cubeVerticesSideOffsets;
     static size_t cubeVerticesSideSize;
 
+    static int chunkRenderDistance;
+
 public:
     static void init();
 };

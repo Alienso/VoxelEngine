@@ -28,6 +28,22 @@ uint16_t Chunk::getBlockAt(glm::ivec3 p) const {
     return blocks[p.y][p.x][p.z];
 }
 
+Chunk *Chunk::generateChunkBlock(int x, int y, int z) {
+    auto* chunk = new Chunk(x,y,z);
+    /*memset(&chunk->blocks, 1, sizeof(blocks)); //????
+    memset(&chunk->heightMap, 1, sizeof(heightMap));*/
+
+    for (int _y=0; _y<Chunk::CHUNK_SIZE; _y++){
+        for (int _x = 0; _x<Chunk::CHUNK_SIZE; _x++){
+            for (int _z = 0; _z<Chunk::CHUNK_SIZE; _z++){
+                chunk->blocks[_y][_x][_z] = 1;
+            }
+        }
+    }
+
+    return chunk;
+}
+
 /*constexpr static glm::vec3 posFromIndex(int i){ //TODO x and z???
     int y = i / (CHUNK_SIZE*CHUNK_SIZE);
     int plane = i % (CHUNK_SIZE*CHUNK_SIZE);

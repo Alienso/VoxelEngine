@@ -4,6 +4,15 @@
 
 #include "Global.h"
 
+LightSource* Global::sun = nullptr;
+Skybox* Global::skybox = nullptr;
+
+void Global::init() {
+    sun = new LightSource(glm::vec3{0,200,0},glm::vec3{1,1,1});
+    skybox = new Skybox();
+}
+
+
 GLFWwindow* Global::window = nullptr;
 Camera Global::camera;
 CurrentFrame Global::currentFrame;
@@ -12,13 +21,7 @@ AssetManager<Texture> Global::textureManager;
 AssetManager<Material> Global::materialManager;
 AssetManager<Shader> Global::shaderManager;
 
-LightSource* Global::sun = nullptr;
-Skybox* Global::skybox = nullptr;
-
-void Global::init() {
-    sun = new LightSource(glm::vec3{0,20,0},glm::vec3{1,1,1});
-    skybox = new Skybox();
-}
+int Global::chunkRenderDistance = 8;
 
 size_t Global::cubeVerticesSideSize = 48;
 

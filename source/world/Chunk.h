@@ -24,6 +24,7 @@ public:
         memset(&blocks, 0, sizeof(blocks));
     };
 
+    [[nodiscard]] static Chunk* generateChunkBlock(int x, int y, int z);
     [[nodiscard]] static glm::uvec3 getRelativeChunkPos(glm::vec3 pos);
     [[nodiscard]] int getHeightAt(int posX, int posZ) const;
     [[nodiscard]] uint16_t getBlockAt(int x, int y, int z) const;
@@ -38,7 +39,7 @@ public:
     bool loaded = true;
 
 private:
-    int heightMap[CHUNK_SIZE][CHUNK_SIZE];
+    int heightMap[CHUNK_SIZE][CHUNK_SIZE]; //TODO maybe dont have this loaded if chunk is not visible?
     uint16_t blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
     friend WorldGen;

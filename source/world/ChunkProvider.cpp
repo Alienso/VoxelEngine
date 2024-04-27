@@ -14,6 +14,16 @@ ChunkProvider::ChunkProvider() {
             chunkMap[pos] = chunk;
         }
     }
+
+    for (int i=-worldSize; i<worldSize; i++ ){
+        for (int j=-worldSize; j<worldSize; j++){
+            for (int y = -10; y<0; y++) {
+                glm::vec3 pos = {i, y, j};
+                Chunk *chunk = Chunk::generateChunkBlock(i,y,j);
+                chunkMap[pos] = chunk;
+            }
+        }
+    }
 }
 
 ChunkProvider::~ChunkProvider() {
