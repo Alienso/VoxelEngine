@@ -6,14 +6,13 @@
 #define VOXEL_ENUMFACING_H
 
 #include "glm/vec3.hpp"
+#include <vector>
 
 class EnumFacing{
 
 public:
     glm::ivec3 dirVec;
-
-private:
-    EnumFacing(int x,int y, int z);
+    const size_t id;
 
     const static EnumFacing* WEST;
     const static EnumFacing* EAST;
@@ -21,6 +20,10 @@ private:
     const static EnumFacing* SOUTH;
     const static EnumFacing* UP;
     const static EnumFacing* DOWN;
+    static std::vector<const EnumFacing*> sides;
+
+private:
+    EnumFacing(int x,int y, int z, int id);
 };
 
 #endif //VOXEL_ENUMFACING_H

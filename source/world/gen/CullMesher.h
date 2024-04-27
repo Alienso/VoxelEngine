@@ -15,13 +15,20 @@
 
 class CullMesher {
 public:
+
+    CullMesher();
+
     void generateMeshes(std::unordered_map<uint16_t, Mesh*>& terrainMeshes,
                        const ChunkProvider& chunkProvider);
 
 private:
-    void addVerticesToArray(const Chunk &chunk, uint16_t blockId, int chunkPos, const ChunkProvider& chunkProvider);
+    void addVerticesToArray(const Chunk &chunk, uint16_t blockId, glm::ivec3 posInChunk, const ChunkProvider& chunkProvider);
+    static uint16_t getAdjacentBlock(Chunk *chunk, glm::ivec3 pos, const EnumFacing* side, const ChunkProvider &provider);
+    void addVerticesForSide(uint16_t blockId, glm::ivec3 posOffset, const EnumFacing *side);
 
     std::unordered_map<uint16_t, std::vector<Vertex>> verticesMap;
+
+
 };
 
 

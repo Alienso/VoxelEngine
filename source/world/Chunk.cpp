@@ -17,6 +17,24 @@ glm::uvec3 Chunk::getRelativeChunkPos(glm::vec3 pos) {
     return { posX, posY, posZ};
 }
 int Chunk::getHeightAt(int posX, int posZ) const {
-    int index = posZ * CHUNK_SIZE + posX;
-    return heightMap[index];
+    return heightMap[posX][posZ];
 }
+
+uint16_t Chunk::getBlockAt(int posX, int posY, int posZ) const {
+    return blocks[posY][posX][posZ];
+}
+
+uint16_t Chunk::getBlockAt(glm::ivec3 p) const {
+    return blocks[p.y][p.x][p.z];
+}
+
+/*constexpr static glm::vec3 posFromIndex(int i){ //TODO x and z???
+    int y = i / (CHUNK_SIZE*CHUNK_SIZE);
+    int plane = i % (CHUNK_SIZE*CHUNK_SIZE);
+    int x = plane / CHUNK_SIZE;
+    int z = plane % CHUNK_SIZE;
+    return {x,y,z};
+}
+constexpr static uint16_t indexFromPos(int x, int y, int z){
+    return y*CHUNK_SIZE*CHUNK_SIZE + z*CHUNK_SIZE + x;
+}*/

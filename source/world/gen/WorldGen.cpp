@@ -4,17 +4,20 @@
 
 #include "WorldGen.h"
 #include <cmath>
+#include "world/Chunk.h"
+
+WorldGen::WorldGen() : height(Chunk::CHUNK_SIZE), width(Chunk::CHUNK_SIZE) {}
 
 Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
 
     auto* chunk = new Chunk(posX, posY, posZ);
     generateHeightMap(chunk);
 
-    for (int y=0; y<Chunk::CHUNK_SIZE; y++){ //for each layer(height)
+    for (int y=0; y<Chunk::CHUNK_SIZE; y++){
         for (int x = 0; x<Chunk::CHUNK_SIZE; x++){
             for (int z = 0; z<Chunk::CHUNK_SIZE; z++){
-                if (y <= chunk->heightMap[x*Chunk::CHUNK_SIZE + z])
-                    chunk->blocks[Chunk::indexFromPos(x,y,z)] = 1;
+                if (y <= chunk->heightMap[x][z])
+                    chunk->blocks[y][x][z] = 1;
             }
         }
     }
@@ -24,8 +27,7 @@ Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
 
 void WorldGen::generateHeightMap(Chunk *chunk) {
 
-    int heightMapIndex = 0;
-    for (int z = 0 ; z <  height; z++) {
+    for (int z = 0 ; z <  height; z++) { //TODO invert order for cache locality
         for (int x = 0 ; x < width; x++) {
 
             float localAmplitude = 20;
@@ -46,7 +48,7 @@ void WorldGen::generateHeightMap(Chunk *chunk) {
                 noiseHeight = 0;
             }
 
-            chunk->heightMap[heightMapIndex++] = (int)roundf(noiseHeight);
+            chunk->heightMap[x][z] = (int)roundf(noiseHeight);
         }
     }
 

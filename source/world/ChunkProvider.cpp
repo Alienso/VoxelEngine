@@ -43,5 +43,8 @@ Chunk* ChunkProvider::getChunkAtWorldPos(float x, float y, float z) {
 }
 
 Chunk* ChunkProvider::getAdjacentChunk(const Chunk& chunk, const EnumFacing* side) const {
-    return chunkMap.find(chunk.pos + side->dirVec)->second;
+    auto it = chunkMap.find(chunk.pos + side->dirVec);
+    if (it != chunkMap.end())
+        return it->second;
+    return nullptr;
 }

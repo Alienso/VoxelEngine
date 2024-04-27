@@ -38,6 +38,8 @@ public:
     static AssetManager<Shader> shaderManager;
 
     static std::vector<float> cubeVertices;
+    static std::vector<size_t> cubeVerticesSideOffsets;
+    static size_t cubeVerticesSideSize;
 
 public:
     static void init();

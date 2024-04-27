@@ -5,13 +5,15 @@
 #ifndef VOXEL_WORLDGEN_H
 #define VOXEL_WORLDGEN_H
 
-
-#include "world/Chunk.h"
 #include "PerlinNoise.h"
 #include <unordered_map>
+#include <cstdint>
+
+class Chunk;
 
 class WorldGen {
 public:
+    WorldGen();
     Chunk* generateChunk(int x, int y, int z);
 
 private:
@@ -21,8 +23,8 @@ private:
     static uint32_t hash(uint32_t a);
 
     PerlinNoise perlin;
-    int height = Chunk::CHUNK_SIZE;
-    int width = Chunk::CHUNK_SIZE;
+    const int height;
+    const int width;
 
     float scale = 0.04;
     int octaves = 2;

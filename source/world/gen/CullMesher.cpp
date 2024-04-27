@@ -2,9 +2,13 @@
 // Created by Alienson on 23.4.2024..
 //
 
+#include <chrono>
 #include "CullMesher.h"
 #include "Global.h"
 #include "world/Blocks.h"
+
+CullMesher::CullMesher() {}
+
 
 void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMeshes, const ChunkProvider &chunkProvider) {
 
@@ -13,10 +17,14 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
 
     for (auto& it : chunkProvider.getChunks()){
         Chunk* chunk = it.second;
-        for (int b=0; b<4096; b++){
-            auto block = chunk->blocks[b];
-            if (block != Blocks::AIR->getId()){
-                addVerticesToArray(*chunk, block, b, chunkProvider);
+        for (int y=0; y<Chunk::CHUNK_SIZE; y++){
+            for (int x = 0; x<Chunk::CHUNK_SIZE; x++){
+                for (int z = 0; z<Chunk::CHUNK_SIZE; z++){
+                    auto blockId = chunk->getBlockAt(x,y,z);
+                    if (blockId != Blocks::AIR->getId()) {
+                        addVerticesToArray(*chunk, blockId, {x, y, z}, chunkProvider);
+                    }
+                }
             }
         }
     }
@@ -32,13 +40,43 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
     }
 }
 
-void CullMesher::addVerticesToArray(const Chunk &chunk, uint16_t blockId, int chunkPos, const ChunkProvider& chunkProvider) {
+void CullMesher::addVerticesToArray(const Chunk &chunk, const uint16_t blockId, const glm::ivec3 posInChunk, const ChunkProvider& chunkProvider) {
 
-    float* cubeData = &Global::cubeVertices[0];
-    glm::vec3 posOffset = Chunk::posFromIndex(chunkPos) + glm::vec3(chunk.x * Chunk::CHUNK_SIZE, chunk.y * Chunk::CHUNK_SIZE, chunk.z * Chunk::CHUNK_SIZE);
-    for (size_t i=0; i<Global::cubeVertices.size(); i+=8){
-        verticesMap[blockId].emplace_back(glm::vec3{cubeData[i] + posOffset.x, cubeData[i+1] + posOffset.y, cubeData[i+2] + posOffset.z},
-                                        glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                        glm::vec2{cubeData[i+6], cubeData[i+7]});
+    glm::ivec3 posOffset = posInChunk + glm::ivec3(chunk.x * Chunk::CHUNK_SIZE, chunk.y * Chunk::CHUNK_SIZE, chunk.z * Chunk::CHUNK_SIZE);
+    for (auto side : EnumFacing::sides){
+        uint16_t otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
+        if(otherBlock == Blocks::AIR->getId()) {
+            addVerticesForSide(blockId, posOffset, side);
+        }
     }
+}
+
+void CullMesher::addVerticesForSide(const uint16_t blockId, glm::ivec3 posOffset, const EnumFacing *side) {
+
+    size_t offset = Global::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
+    float* cubeData = &Global::cubeVertices[offset];
+    for (size_t i = 0; i < Global::cubeVerticesSideSize; i+=8){
+        verticesMap[blockId].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i+1] + (float)posOffset.y, cubeData[i+2] + (float)posOffset.z},
+                                          glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
+                                          glm::vec2{cubeData[i+6], cubeData[i+7]});
+    }
+}
+
+uint16_t CullMesher::getAdjacentBlock(Chunk *chunk, glm::ivec3 posInChunk, const EnumFacing* side, const ChunkProvider &provider) {
+
+    glm::ivec3 pos = posInChunk + side->dirVec;
+
+    if (pos.x < 0 || pos.x >= Chunk::CHUNK_SIZE ||
+        pos.y < 0 || pos.y >= Chunk::CHUNK_SIZE ||
+        pos.z < 0 || pos.z >= Chunk::CHUNK_SIZE) {
+
+        chunk = provider.getAdjacentChunk(*chunk, side);
+        if (chunk == nullptr) //TODO this shouldn't happen
+            return 0;
+        pos.x = (pos.x + Chunk::CHUNK_SIZE) % Chunk::CHUNK_SIZE;
+        pos.y = (pos.y + Chunk::CHUNK_SIZE) % Chunk::CHUNK_SIZE;
+        pos.z = (pos.z + Chunk::CHUNK_SIZE) % Chunk::CHUNK_SIZE;
+    }
+
+    return chunk->getBlockAt(pos);
 }
