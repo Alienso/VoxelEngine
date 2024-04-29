@@ -144,3 +144,10 @@ void World::handleCollision() {
     }
     currentTerrainHeight = height;
 }
+
+World::~World() {
+    for (auto& it : terrainMeshes){
+        delete it.second;
+    }
+    terrainMeshes.clear();
+}

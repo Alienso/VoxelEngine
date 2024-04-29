@@ -8,7 +8,8 @@
 #include <vector>
 #include "VertexArray.h"
 
-#include "typeinfo"
+#include <memory>
+#include <typeinfo>
 
 class BufferData{
 public:
@@ -16,11 +17,12 @@ public:
     BufferData(float* vertices, std::size_t length);
     BufferData(float* vertices, std::size_t length, std::vector<int>& layout);
 
-    ~BufferData();
+    BufferData(BufferData& other);
+    BufferData& operator=(const BufferData&);
 
-    VertexArray* va;
-    VertexBuffer* vb;
-    VertexBufferLayout* layout;
+    std::shared_ptr<VertexArray> va;
+    std::shared_ptr<VertexBuffer> vb;
+    std::shared_ptr<VertexBufferLayout> layout;
 
 private:
 };

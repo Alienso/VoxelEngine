@@ -19,6 +19,7 @@
 class World {
 public:
     World();
+    ~World();
 
     void onRender();
     void onUpdate(float deltaTime);

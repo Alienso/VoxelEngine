@@ -18,7 +18,8 @@ class Entity {
 
 public:
     Entity(Material& material);
-    Entity(Material &material, float* vertices, size_t length);
+    Entity(Material& material, float* vertices, size_t length);
+    Entity(Material& material, float* vertices, size_t length, std::vector<int> layout);
     virtual ~Entity();
 
     virtual void onUpdate(float deltaTime);

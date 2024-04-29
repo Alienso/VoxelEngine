@@ -9,9 +9,8 @@ std::vector<const char*> Skybox::resourcePath = {"textures/skybox/right.png", "t
                                                  "textures/skybox/bottom.png", "textures/skybox/top.png",
                                                  "textures/skybox/front.png", "textures/skybox/back.png"};
 
-Skybox::Skybox() : Entity(*Global::materialManager.getAsset(Materials::SKYBOX)) {
-    std::vector<int> layout = {3};
-    bufferData = BufferData(skyboxVertices, sizeof(skyboxVertices) / sizeof(float), layout);
+Skybox::Skybox() : Entity(*Global::materialManager.getAsset(Materials::SKYBOX),
+        skyboxVertices, sizeof(skyboxVertices) / sizeof(float), {3}) {
 }
 
 void Skybox::onUpdate(float deltaTime) {
