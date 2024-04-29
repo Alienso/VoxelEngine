@@ -5,9 +5,12 @@
 #ifndef VOXEL_UTIL_H
 #define VOXEL_UTIL_H
 
-#include <memory>
 #include "glm/glm.hpp"
 #include "render/Shader.h"
+
+#include <memory>
+#include <chrono>
+#include <iostream>
 
 struct GlmVec3Functions {
     size_t operator()(const glm::ivec3& k) const {
@@ -27,6 +30,34 @@ public:
 private:
     static unsigned int quadVAO;
     static unsigned int quadVBO;
+};
+
+
+class Timer{
+public:
+    Timer(const char* name) : name(name){
+        startTimePoint = std::chrono::steady_clock::now();
+    }
+    ~Timer(){
+        if (!stopped)
+            stop();
+    }
+
+    void stop(){
+        auto endTimePoint = std::chrono::steady_clock::now();
+
+        long long start = std::chrono::time_point_cast<std::chrono::milliseconds>(startTimePoint).time_since_epoch().count();
+        long long end = std::chrono::time_point_cast<std::chrono::milliseconds>(endTimePoint).time_since_epoch().count();
+
+        std::cout << name << " took " <<end - start << "ms\n";
+
+        stopped = true;
+    }
+
+private:
+    const char* name;
+    std::chrono::time_point<std::chrono::steady_clock> startTimePoint;
+    bool stopped;
 };
 
 

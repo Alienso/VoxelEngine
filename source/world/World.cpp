@@ -56,6 +56,7 @@ void World::onUpdate(float deltaTime) {
         e.onUpdate(deltaTime);
 
     handleCollision();
+    updateTerrain();
 }
 
 void World::onImGuiRender() {
@@ -93,6 +94,42 @@ void World::renderShadows() {
 
     renderScene();
     shadowBuffer.unbind();
+}
+
+void World::updateTerrain() {
+    glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
+    int renderDistance = Global::renderDistance;
+    std::vector<Chunk*> newChunks;
+    std::vector<Chunk*> chunksToRemove;
+    std::vector<Chunk*> traversedChunks;
+    for (int x = pos.x - renderDistance; x<=pos.x + renderDistance; x++){
+        for (int z = pos.z - renderDistance; z<=pos.z + renderDistance; z++){
+            if ((x - pos.x)*(x - pos.x) + (z - pos.z)*(z - pos.z) <= renderDistance * renderDistance){
+                Chunk* chunk = chunkProvider.getChunkAt(x,0,z);
+                if (chunk == nullptr){
+                    chunk = chunkProvider.generateChunkAt(x,0,z);
+                    newChunks.push_back(chunk);
+                }
+                traversedChunks.push_back(chunk);
+            }
+        }
+    }
+
+    bool found;
+    for(const auto& it : chunkProvider.getChunks()){
+        glm::ivec3 chunkPos = it.second->pos;
+        found = false;
+        for (auto c : traversedChunks){
+            if (c->pos == chunkPos)
+                found = true;
+        }
+        if (!found)
+            chunksToRemove.push_back(it.second);
+    }
+
+    if (!newChunks.empty()){
+        cullMesher.updateMeshes(newChunks, chunksToRemove, terrainMeshes, chunkProvider);
+    }
 }
 
 void World::handleCollision() {

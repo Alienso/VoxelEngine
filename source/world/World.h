@@ -29,6 +29,7 @@ private:
     void renderScene();
     void renderShadows();
 
+    void updateTerrain();
     void handleCollision();
 
 private:

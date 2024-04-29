@@ -4,6 +4,9 @@
 
 #include "Chunk.h"
 
+/**
+ * For given worldPosition returns position relative to chunk
+ */
 glm::uvec3 Chunk::getRelativeChunkPos(glm::vec3 pos) {
     int posX = (int)floor(pos.x) % CHUNK_SIZE;
     int posZ = (int)floor(pos.z) % CHUNK_SIZE;
@@ -16,6 +19,7 @@ glm::uvec3 Chunk::getRelativeChunkPos(glm::vec3 pos) {
 
     return { posX, posY, posZ};
 }
+
 int Chunk::getHeightAt(int posX, int posZ) const {
     return heightMap[posX][posZ];
 }
@@ -28,7 +32,10 @@ uint16_t Chunk::getBlockAt(glm::ivec3 p) const {
     return blocks[p.y][p.x][p.z];
 }
 
-Chunk *Chunk::generateChunkBlock(int x, int y, int z) {
+/**
+ * Generates a solid chunk
+ */
+Chunk *Chunk::generateSolidChunk(int x, int y, int z) {
     auto* chunk = new Chunk(x,y,z);
     /*memset(&chunk->blocks, 1, sizeof(blocks)); //????
     memset(&chunk->heightMap, 1, sizeof(heightMap));*/
@@ -40,8 +47,14 @@ Chunk *Chunk::generateChunkBlock(int x, int y, int z) {
             }
         }
     }
-
     return chunk;
+}
+
+/**
+ * Given worldPos returns position for chunk
+ */
+glm::ivec3 Chunk::worldToChunkPos(float x, float y, float z) {
+    return  { (int)floorf(x / Chunk::CHUNK_SIZE), (int)floorf(y / Chunk::CHUNK_SIZE), (int)floorf(z / Chunk::CHUNK_SIZE) };
 }
 
 /*constexpr static glm::vec3 posFromIndex(int i){ //TODO x and z???

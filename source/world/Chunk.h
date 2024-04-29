@@ -24,11 +24,13 @@ public:
         memset(&blocks, 0, sizeof(blocks));
     };
 
-    [[nodiscard]] static Chunk* generateChunkBlock(int x, int y, int z);
+    [[nodiscard]] static Chunk* generateSolidChunk(int x, int y, int z);
     [[nodiscard]] static glm::uvec3 getRelativeChunkPos(glm::vec3 pos);
     [[nodiscard]] int getHeightAt(int posX, int posZ) const;
     [[nodiscard]] uint16_t getBlockAt(int x, int y, int z) const;
     [[nodiscard]] uint16_t getBlockAt(glm::ivec3) const;
+
+    [[nodiscard]] static glm::ivec3 worldToChunkPos(float x, float y, float z);
 
 
 public:

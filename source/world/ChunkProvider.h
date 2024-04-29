@@ -25,6 +25,11 @@ public:
     [[nodiscard]] Chunk* getChunkAtWorldPos(float x, float y, float z);
     [[nodiscard]] Chunk* getAdjacentChunk(const Chunk& chunk, const EnumFacing* side) const;
 
+    Chunk* generateChunkAt(int x, int y, int z);
+    Chunk* generateChunkAtWorldPos(float x, float y, float z);
+
+    void deleteChunkAt(glm::ivec3 pos);
+
 private:
     ChunkMap chunkMap;
     WorldGen worldGen;

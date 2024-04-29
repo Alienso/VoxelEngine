@@ -21,7 +21,7 @@ AssetManager<Texture> Global::textureManager;
 AssetManager<Material> Global::materialManager;
 AssetManager<Shader> Global::shaderManager;
 
-int Global::chunkRenderDistance = 8;
+int Global::renderDistance = 4;
 
 size_t Global::cubeVerticesSideSize = 48;
 
