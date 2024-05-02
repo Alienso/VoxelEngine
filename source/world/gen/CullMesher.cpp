@@ -14,7 +14,6 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
 
     Mesh* currentMesh;
     verticesForBlockMap.clear();
-    //verticesForChunkMap.clear();
 
     //Timer timer("Generating mesh");
 
@@ -53,20 +52,11 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
     }
 }
 
-void CullMesher::updateMeshes(const std::vector<Chunk *> &newChunks, const std::vector<Chunk *> &chunksToRemove,
-                         std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider) {
+void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider) {
 
     for(Chunk* chunk : chunksToRemove){
-        // delete old data but don't 'commit' until we add new data
-        // offsets become invalid the second chunk is deleted and new doesn't take its place
-        // try to generate a new mesh for new chunks and merge it with the old one?
-        // drop the old mesh since deleting chunk can mean we are deleting from the middle of the vertices array
-        // have map of vertices for each chunk but don't hold the whole mesh, a since only the visible vertices are stored
-        // the mesh generation will be fast.
         if (verticesForBlockChunkMap.find(chunk->pos) != verticesForBlockChunkMap.end()){
             verticesForBlockChunkMap.erase(chunk->pos);
-        }else{
-            std::cerr << "Error while finding vertices for chunk: " << chunk->x << ' ' << chunk->y << ' ' << chunk->z << '\n';
         }
         chunkProvider.deleteChunkAt(chunk->pos);
     }
@@ -90,9 +80,6 @@ void CullMesher::addVerticesForSide(const uint16_t blockId, glm::ivec3 posOffset
     size_t offset = Global::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
     float* cubeData = &Global::cubeVertices[offset];
     for (size_t i = 0; i < Global::cubeVerticesSideSize; i+=8){ //TODO memcpy?
-        /*verticesForBlockMap[blockId].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
-                                                  glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                  glm::vec2{cubeData[i+6], cubeData[i+7]});*/
         verticesForBlockChunkMap[chunk.pos][blockId].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                   glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
                                                   glm::vec2{cubeData[i+6], cubeData[i+7]});

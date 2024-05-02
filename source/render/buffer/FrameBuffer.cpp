@@ -25,6 +25,7 @@ FrameBuffer::FrameBuffer(FrameBufferType type) {
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
+    glBindTexture(GL_TEXTURE_2D, 0);
     unbind();
 }
 
@@ -49,7 +50,7 @@ void FrameBuffer::createTexture(){
 
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Configuration::wWidth, Configuration::wHeight, 0,GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Configuration::wWidth, Configuration::wHeight, 0,GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -62,7 +63,7 @@ void FrameBuffer::createShadowTexture(){
 
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, Configuration::wWidth, Configuration::wHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, Configuration::wWidth, Configuration::wHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

@@ -13,35 +13,29 @@
 #include "world/gen/CullMesher.h"
 #include "render/buffer/FrameBuffer.h"
 #include "ChunkProvider.h"
+#include "render/WorldRenderer.h"
 
 #include <unordered_map>
 
 class World {
 public:
     World();
-    ~World();
 
     void onRender();
     void onUpdate(float deltaTime);
     void onImGuiRender();
 
 private:
-    void renderTerrain();
-    void renderScene();
-    void renderShadows();
-
     void updateTerrain();
     void handleCollision();
 
 private:
     CullMesher cullMesher;
     ChunkProvider chunkProvider;
+    WorldRenderer worldRenderer;
+
     std::vector<Entity> entities;
 
-    FrameBuffer shadowBuffer{FRAME_BUFFER_SHADOW};
-    Shader* shadowShader;
-
-    std::unordered_map<uint16_t, Mesh*> terrainMeshes;
     int currentTerrainHeight = 1;
 };
 

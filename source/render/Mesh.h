@@ -26,7 +26,10 @@ public:
     Mesh() = default;
     static Mesh* fromRawData(float* vertices, size_t length);
 
+    void bindVertexArray() const;
     void render(const Material& material);
+
+    [[nodiscard]] size_t getVerticesCount() const;
 
 private:
     std::vector<Vertex> vertices;

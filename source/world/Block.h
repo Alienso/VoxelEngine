@@ -7,24 +7,27 @@
 
 
 #include "render/Material.h"
+#include "render/WorldRenderer.h"
 
 class Block {
 public:
     explicit Block(const char* name, int id = blockCounter);
 
-    const Material& getMaterial(){
-        return *material;
-    }
-
     [[nodiscard]] constexpr uint16_t getId() const{
         return id;
     }
+    /*const Material& getMaterial(){
+        return *material;
+    }*/
+
+    friend WorldRenderer;
 
 private:
     static inline int blockCounter = 0;
-    std::string name;
     const int id;
-    Material* material;
+    std::string name;
+    //Material* material;
+    std::vector<Texture*> blockTextures;
 };
 
 

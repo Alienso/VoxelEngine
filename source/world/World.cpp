@@ -13,39 +13,20 @@
 
 
 World::World() {
-    cullMesher.generateMeshes(terrainMeshes, chunkProvider);
-    shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
+    updateTerrain();
+    cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
 }
 
 void World::onRender() {
 
     Global::currentFrame.projection = glm::perspective(glm::radians(Configuration::fov), (float)Configuration::wWidth/(float)Configuration::wHeight,
-                                                       0.01f, 1000.0f);
+                                                       1.0f, (float)(Global::renderDistance + 1)*Chunk::CHUNK_SIZE);
     Global::currentFrame.view = glm::lookAt(Global::camera.pos, Global::camera.pos + Global::camera.front, Global::camera.up);
     Global::currentFrame.model = glm::mat4(1.0f);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //renderShadows();
-
     //glViewport(0, 0, Configuration::wWidth,  Configuration::wHeight);
-    renderScene();
-
+    worldRenderer.renderScene();
     //Util::renderTexture(shadowBuffer.getTextureId());
-}
-
-void World::renderScene() {
-    Global::sun->render();
-    renderTerrain();
-    Global::skybox->render();
-}
-
-void World::renderTerrain() {
-    for (auto& it : terrainMeshes){
-        Block& block = Blocks::getById(it.first);
-        Mesh* mesh = it.second;
-        mesh->render(block.getMaterial());
-    }
 }
 
 void World::onUpdate(float deltaTime) {
@@ -75,31 +56,9 @@ void World::onImGuiRender() {
     ImGui::End();
 }
 
-void World::renderShadows() {
-    float near_plane = 1.0f, far_plane = 7.5f;
-    glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-    glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
-                                      glm::vec3( 0.0f, 0.0f,  0.0f),
-                                      glm::vec3( 0.0f, 1.0f,  0.0f));
-    glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-
-    //shadow render
-    glViewport(0, 0, Configuration::shadowWidth,  Configuration::shadowWidth);
-    shadowBuffer.bind();
-    glClear(GL_DEPTH_BUFFER_BIT);
-
-    shadowShader->use();
-    shadowShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-    shadowShader->setMat4("model", glm::mat4(1.0f));
-
-    renderScene();
-    shadowBuffer.unbind();
-}
-
 void World::updateTerrain() {
     glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
     int renderDistance = Global::renderDistance;
-    std::vector<Chunk*> newChunks;
     std::vector<Chunk*> chunksToRemove;
     std::vector<Chunk*> traversedChunks;
     for (int x = pos.x - renderDistance; x<=pos.x + renderDistance; x++){
@@ -108,7 +67,6 @@ void World::updateTerrain() {
                 Chunk* chunk = chunkProvider.getChunkAt(x,0,z);
                 if (chunk == nullptr){
                     chunk = chunkProvider.generateChunkAt(x,0,z);
-                    newChunks.push_back(chunk);
                 }
                 traversedChunks.push_back(chunk);
             }
@@ -127,8 +85,8 @@ void World::updateTerrain() {
             chunksToRemove.push_back(it.second);
     }
 
-    if (!newChunks.empty()){
-        cullMesher.updateMeshes(newChunks, chunksToRemove, terrainMeshes, chunkProvider);
+    if (!chunksToRemove.empty()){
+        cullMesher.updateMeshes(chunksToRemove, worldRenderer.getTerrainMeshes(), chunkProvider);
     }
 }
 
@@ -143,11 +101,4 @@ void World::handleCollision() {
         Global::camera.pos.y = (float)height + 3;
     }
     currentTerrainHeight = height;
-}
-
-World::~World() {
-    for (auto& it : terrainMeshes){
-        delete it.second;
-    }
-    terrainMeshes.clear();
 }

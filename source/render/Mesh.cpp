@@ -24,11 +24,9 @@ void Mesh::render(const Material &material) {
     material.shader.use();
     bufferData.va->bind();
 
-    glm::mat4 model = Global::currentFrame.model;
-
     material.shader.setMat4("projection", Global::currentFrame.projection);
     material.shader.setMat4("view", Global::currentFrame.view);
-    material.shader.setMat4("model", model);
+    material.shader.setMat4("model", Global::currentFrame.model);
 
     material.shader.setVec3("lightColor", Global::sun->color);
     material.shader.setVec3("lightPos", Global::sun->pos);
@@ -40,4 +38,12 @@ void Mesh::render(const Material &material) {
 
 
     glDrawArrays(GL_TRIANGLES, 0, (int)vertices.size()); //@Danger
+}
+
+size_t Mesh::getVerticesCount() const {
+    return vertices.size();
+}
+
+void Mesh::bindVertexArray() const {
+    this->bufferData.va->bind();
 }

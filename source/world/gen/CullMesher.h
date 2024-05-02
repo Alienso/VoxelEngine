@@ -24,8 +24,7 @@ public:
     CullMesher();
 
     void generateMeshes(std::unordered_map<uint16_t, Mesh*>& terrainMeshes, const ChunkProvider& chunkProvider);
-    void updateMeshes(const std::vector<Chunk *> &newChunks, const std::vector<Chunk *> &chunksToRemove,
-                                  std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
+    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
 
 private:
     void addBlockVerticesToArray(const Chunk &chunk, uint16_t blockId, glm::ivec3 posInChunk, const ChunkProvider& chunkProvider);
@@ -33,10 +32,6 @@ private:
     void addVerticesForSide(uint16_t blockId, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk);
 
     std::unordered_map<uint16_t, std::vector<Vertex>> verticesForBlockMap;
-    //Vertices for chunk only makes sense if we want to render each chunk separate
-    std::unordered_map<glm::ivec3,std::vector<Vertex>, GlmVec3Functions, GlmVec3Functions> verticesForChunkMap;
-
-    //std::unordered_map<uint16_t, std::unordered_map<glm::ivec3,std::vector<Vertex>, GlmVec3Functions, GlmVec3Functions>> verticesForBlockChunkMap;
     std::unordered_map<glm::ivec3, std::unordered_map<uint16_t ,std::vector<Vertex>>, GlmVec3Functions, GlmVec3Functions> verticesForBlockChunkMap;
 
 };
