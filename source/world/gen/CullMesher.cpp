@@ -6,6 +6,7 @@
 #include "CullMesher.h"
 #include "Global.h"
 #include "world/Blocks.h"
+#include "CubeVerticesTypes.h"
 
 CullMesher::CullMesher() {}
 
@@ -76,10 +77,11 @@ void CullMesher::addBlockVerticesToArray(const Chunk &chunk, const uint16_t bloc
 }
 
 void CullMesher::addVerticesForSide(const uint16_t blockId, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk) {
+    size_t offset = CubeVerticesTypes::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
+    Block& block = Blocks::getById(blockId);
+    float* cubeData = &((*block.getVerticesPtr())[offset]);
 
-    size_t offset = Global::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
-    float* cubeData = &Global::cubeVertices[offset];
-    for (size_t i = 0; i < Global::cubeVerticesSideSize; i+=8){ //TODO memcpy?
+    for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=8){ //TODO memcpy?
         verticesForBlockChunkMap[chunk.pos][blockId].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                   glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
                                                   glm::vec2{cubeData[i+6], cubeData[i+7]});

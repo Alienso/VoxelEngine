@@ -11,6 +11,7 @@
 #include "imgui/imgui.h"
 #include "glm/ext/matrix_clip_space.hpp"
 
+int World::timeOfDay = 2500;
 
 World::World() {
     updateTerrain();
@@ -38,6 +39,8 @@ void World::onUpdate(float deltaTime) {
 
     handleCollision();
     updateTerrain();
+
+    timeOfDay = (timeOfDay + 1)  % 86400;
 }
 
 void World::onImGuiRender() {
@@ -48,8 +51,9 @@ void World::onImGuiRender() {
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-    ImGui::SliderFloat3("LightPos", &Global::sun->pos.x, -5, 5);
-    ImGui::SliderFloat3("LightColor", &Global::sun->color.x, 0, 1);
+    ImGui::SliderFloat3("SunPos", &Global::sun->pos.x, -5, 5);
+    ImGui::SliderFloat3("SunColor", &Global::sun->color.x, 0, 1);
+    ImGui::SliderInt("TimeOfDay", &timeOfDay, 0, 86400);
 
     ImGui::Text("Map height= %d", currentTerrainHeight);
 
@@ -106,4 +110,8 @@ void World::handleCollision() {
         Global::camera.pos.y = (float)height + 3;
     }
     currentTerrainHeight = height;
+}
+
+int World::getTimeOfDay() {
+    return timeOfDay;
 }

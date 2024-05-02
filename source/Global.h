@@ -12,7 +12,7 @@
 #include "render/AssetManager.h"
 #include "render/Texture.h"
 #include "render/Material.h"
-#include "entity/LightSource.h"
+#include "entity/SunEntity.h"
 #include "entity/Skybox.h"
 
 #include <vector>
@@ -30,16 +30,12 @@ public:
     static GLFWwindow* window;
     static Camera camera;
     static CurrentFrame currentFrame;
-    static LightSource* sun;
+    static SunEntity* sun;
     static Skybox* skybox;
 
     static AssetManager<Texture> textureManager;
     static AssetManager<Material> materialManager;
     static AssetManager<Shader> shaderManager;
-
-    static std::vector<float> cubeVertices;
-    static std::vector<size_t> cubeVerticesSideOffsets;
-    static size_t cubeVerticesSideSize;
 
     static int renderDistance;
 

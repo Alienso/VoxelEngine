@@ -28,8 +28,8 @@ void Mesh::render(const Material &material) {
     material.shader.setMat4("view", Global::currentFrame.view);
     material.shader.setMat4("model", Global::currentFrame.model);
 
-    material.shader.setVec3("lightColor", Global::sun->color);
-    material.shader.setVec3("lightPos", Global::sun->pos);
+    material.shader.setVec3("lightColor", Global::sun->getColor());
+    material.shader.setVec3("lightDir", Global::sun->getLightDir());
     material.shader.setVec3("viewPos", Global::camera.pos);
 
     material.shader.setFloat("ambientStrength", material.ambientStrength);

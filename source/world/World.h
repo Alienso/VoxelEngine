@@ -7,7 +7,7 @@
 
 #include "glm/glm.hpp"
 #include "Chunk.h"
-#include "entity/LightSource.h"
+#include "entity/SunEntity.h"
 #include "render/Mesh.h"
 #include "world/gen/WorldGen.h"
 #include "world/gen/CullMesher.h"
@@ -25,6 +25,8 @@ public:
     void onUpdate(float deltaTime);
     void onImGuiRender();
 
+    static int getTimeOfDay();
+
 private:
     void updateTerrain();
     void handleCollision();
@@ -37,6 +39,7 @@ private:
     std::vector<Entity> entities;
 
     int currentTerrainHeight = 1;
+    static int timeOfDay;
 };
 
 

@@ -5,7 +5,7 @@
 #include "Material.h"
 
 Material::Material(Shader &shader, Texture &texture) : shader(shader), texture(texture) {
-    ambientStrength = 0.1;
+    ambientStrength = 0.2;
     specularStrength = 0.5;
     shininess = 2;
 }

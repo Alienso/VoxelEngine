@@ -49,7 +49,7 @@ add_executable(Voxel main.cpp
         source/world/Chunk.cpp source/world/Chunk.h
         source/world/Block.cpp source/world/Block.h
         source/world/Blocks.h source/world/Blocks.cpp
-        source/entity/LightSource.cpp source/entity/LightSource.h
+        source/entity/SunEntity.cpp source/entity/SunEntity.h
         source/InputHandler.cpp source/InputHandler.h
         source/render/Mesh.cpp source/render/Mesh.h
         source/world/gen/WorldGen.cpp source/world/gen/WorldGen.h
@@ -59,7 +59,8 @@ add_executable(Voxel main.cpp
         source/entity/Skybox.cpp source/entity/Skybox.h
         source/world/ChunkProvider.cpp source/world/ChunkProvider.h
         source/EnumFacing.h source/EnumFacing.cpp
-        source/render/WorldRenderer.cpp source/render/WorldRenderer.h)
+        source/render/WorldRenderer.cpp source/render/WorldRenderer.h
+        source/CubeVerticesTypes.h source/CubeVerticesTypes.cpp)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

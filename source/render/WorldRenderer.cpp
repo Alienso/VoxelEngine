@@ -30,7 +30,7 @@ void WorldRenderer::renderScene() {
 
 
     //renderFog();
-    Global::sun->render();
+    //Global::sun->render();
 
     //DepthMap gen
     /*depthBuffer.bind();
@@ -81,10 +81,8 @@ std::unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshes() {
 }
 
 void WorldRenderer::renderBlockMesh(Block &block, Mesh *mesh) {
-    Shader& shader = *Global::shaderManager.getAsset(Shaders::BASE);
-    for (size_t i=0; i<block.blockTextures.size(); i++){
-        block.blockTextures[i]->bind(i);
-    }
+    Shader& shader = block.getMaterial().shader;
+    block.getMaterial().texture.bind();
     shader.use();
     mesh->bindVertexArray();
 
@@ -92,13 +90,13 @@ void WorldRenderer::renderBlockMesh(Block &block, Mesh *mesh) {
     shader.setMat4("view", Global::currentFrame.view);
     shader.setMat4("model", Global::currentFrame.model);
 
-    shader.setVec3("lightColor", Global::sun->color);
-    shader.setVec3("lightPos", Global::sun->pos);
+    shader.setVec3("lightColor", Global::sun->getColor());
+    shader.setVec3("lightDir", Global::sun->getLightDir());
     shader.setVec3("viewPos", Global::camera.pos);
 
-    shader.setFloat("ambientStrength", 0.1f);
-    shader.setFloat("specularStrength", 0.5f);
-    shader.setInt("shininess", 32);
+    shader.setFloat("ambientStrength", block.getMaterial().ambientStrength);
+    shader.setFloat("specularStrength", block.getMaterial().specularStrength);
+    shader.setInt("shininess", block.getMaterial().shininess);
 
     glDrawArrays(GL_TRIANGLES, 0, (int)mesh->getVerticesCount()); //@Danger
 }
