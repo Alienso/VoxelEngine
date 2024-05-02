@@ -57,6 +57,7 @@ void World::onImGuiRender() {
 }
 
 void World::updateTerrain() {
+    bool newChunks = false;
     glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
     int renderDistance = Global::renderDistance;
     std::vector<Chunk*> chunksToRemove;
@@ -67,22 +68,26 @@ void World::updateTerrain() {
                 Chunk* chunk = chunkProvider.getChunkAt(x,0,z);
                 if (chunk == nullptr){
                     chunk = chunkProvider.generateChunkAt(x,0,z);
+                    newChunks = true;
                 }
                 traversedChunks.push_back(chunk);
             }
         }
     }
 
-    bool found;
-    for(const auto& it : chunkProvider.getChunks()){
-        glm::ivec3 chunkPos = it.second->pos;
-        found = false;
-        for (auto c : traversedChunks){
-            if (c->pos == chunkPos)
-                found = true;
+    //If there are new chunks there are probably chunks to be removed
+    if (newChunks) {
+        bool found;
+        for (const auto &it: chunkProvider.getChunks()) {
+            glm::ivec3 chunkPos = it.second->pos;
+            found = false;
+            for (auto c: traversedChunks) {
+                if (c->pos == chunkPos)
+                    found = true;
+            }
+            if (!found)
+                chunksToRemove.push_back(it.second);
         }
-        if (!found)
-            chunksToRemove.push_back(it.second);
     }
 
     if (!chunksToRemove.empty()){

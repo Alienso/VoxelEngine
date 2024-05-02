@@ -8,7 +8,7 @@ LightSource* Global::sun = nullptr;
 Skybox* Global::skybox = nullptr;
 
 void Global::init() {
-    sun = new LightSource(glm::vec3{0,200,0},glm::vec3{1,1,1});
+    sun = new LightSource(glm::vec3{0,50,0},glm::vec3{1,1,1});
     skybox = new Skybox();
 }
 
@@ -21,7 +21,7 @@ AssetManager<Texture> Global::textureManager;
 AssetManager<Material> Global::materialManager;
 AssetManager<Shader> Global::shaderManager;
 
-int Global::renderDistance = 4;
+int Global::renderDistance = 16;
 
 size_t Global::cubeVerticesSideSize = 48;
 

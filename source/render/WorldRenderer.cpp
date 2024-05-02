@@ -26,11 +26,11 @@ WorldRenderer::~WorldRenderer() {
 void WorldRenderer::renderScene() {
 
     glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
     //renderFog();
     Global::sun->render();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //DepthMap gen
     /*depthBuffer.bind();

@@ -23,7 +23,7 @@ void LightSource::render() {
 
     material.shader.setMat4("projection", Global::currentFrame.projection);
     material.shader.setMat4("view", Global::currentFrame.view);
-    material.shader.setMat4("model", glm::translate(model, pos));
+    material.shader.setMat4("model", glm::translate(model, pos) * glm::scale(model, glm::vec3(20.0f,20.0f,20.0f)));
 
     material.shader.setVec3("lightColor", color);
 
