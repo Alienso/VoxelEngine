@@ -5,6 +5,7 @@
 #include "WorldGen.h"
 #include <cmath>
 #include "world/Chunk.h"
+#include "world/Blocks.h"
 
 WorldGen::WorldGen() : height(Chunk::CHUNK_SIZE), width(Chunk::CHUNK_SIZE) {}
 
@@ -17,7 +18,7 @@ Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
         for (int x = 0; x<Chunk::CHUNK_SIZE; x++){
             for (int z = 0; z<Chunk::CHUNK_SIZE; z++){
                 if (y <= chunk->heightMap[x][z])
-                    chunk->blocks[y][x][z] = 1;
+                    chunk->blocks[y][x][z] = Blocks::GRASS->getId();
             }
         }
     }

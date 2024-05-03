@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType ) : id(id), name(name) {
+Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType, bool transparent) : id(id), name(name), transparent(transparent) {
     blockCounter++;
     string path = "textures/block/" + string(name) + ".png";
     Texture& texture = Global::textureManager.createAsset(name, path.data(), GL_RGBA);

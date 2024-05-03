@@ -11,7 +11,7 @@
 #include "imgui/imgui.h"
 #include "glm/ext/matrix_clip_space.hpp"
 
-int World::timeOfDay = 2500;
+int World::timeOfDay = 5000;
 
 World::World() {
     updateTerrain();
@@ -40,7 +40,7 @@ void World::onUpdate(float deltaTime) {
     handleCollision();
     updateTerrain();
 
-    timeOfDay = (timeOfDay + 1)  % 86400;
+    //timeOfDay = (timeOfDay + 1)  % 86400;
 }
 
 void World::onImGuiRender() {

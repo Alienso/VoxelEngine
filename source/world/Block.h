@@ -19,7 +19,7 @@ enum BlockTextureRenderTypeEnum{
 
 class Block {
 public:
-    Block(const char* name, int id, BlockTextureRenderTypeEnum renderType );
+    Block(const char* name, int id, BlockTextureRenderTypeEnum renderType, bool transparent = false );
 
     [[nodiscard]] constexpr uint16_t getId() const{
         return id;
@@ -27,8 +27,11 @@ public:
     [[nodiscard]] std::vector<float>* getVerticesPtr() const{
         return verticesPtr;
     }
-    const Material& getMaterial(){
+    [[nodiscard]] const Material& getMaterial(){
         return *material;
+    }
+    [[nodiscard]] bool isTransparent() const{
+        return transparent;
     }
 
     friend WorldRenderer;
@@ -37,6 +40,10 @@ private:
     static inline int blockCounter = 0;
     const int id;
     std::string name;
+
+    bool transparent;
+
+
     Material* material;
     std::vector<float>* verticesPtr;
 };

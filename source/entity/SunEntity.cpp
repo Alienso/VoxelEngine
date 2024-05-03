@@ -39,8 +39,8 @@ glm::vec3 SunEntity::getColor() const {
      */
     float t = (2 * (float)World::getTimeOfDay() / 86400.0f) - 1; //max 86400 [-1,1]
     float r = 1.0f;
-    float g = 0.85f - 0.40f * powf(t,16);
-    float b = 0.7f - 0.97f * powf(t,16);
+    float g = 1.0f - 0.47f * powf(t,16);
+    float b = 1.0f - 0.97f * powf(t,16);
     return {r,g,b};
 }
 

@@ -27,9 +27,9 @@ public:
     void updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
 
 private:
-    void addBlockVerticesToArray(const Chunk &chunk, uint16_t blockId, glm::ivec3 posInChunk, const ChunkProvider& chunkProvider);
-    static uint16_t getAdjacentBlock(Chunk *chunk, glm::ivec3 pos, const EnumFacing* side, const ChunkProvider &provider);
-    void addVerticesForSide(uint16_t blockId, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk);
+    void addBlockVerticesToArray(const Chunk &chunk, const Block& block, glm::ivec3 posInChunk, const ChunkProvider& chunkProvider);
+    static Block& getAdjacentBlock(Chunk *chunk, glm::ivec3 pos, const EnumFacing* side, const ChunkProvider &provider);
+    void addVerticesForSide(const Block& block, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk);
 
     std::unordered_map<uint16_t, std::vector<Vertex>> verticesForBlockMap;
     std::unordered_map<glm::ivec3, std::unordered_map<uint16_t ,std::vector<Vertex>>, GlmVec3Functions, GlmVec3Functions> verticesForBlockChunkMap;

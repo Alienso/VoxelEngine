@@ -17,6 +17,11 @@ uniform float specularStrength;
 uniform int shininess;
 
 void main(){
+
+    vec4 texColor = texture(texture1, TexCoord);
+    if (texColor.a < 0.1)
+        discard;
+
     vec3 ambient = ambientStrength * lightColor;
 
     vec3 norm = normalize(Normal);
@@ -28,6 +33,7 @@ void main(){
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
     vec3 specular = specularStrength * spec * lightColor;
 
+    FragColor = vec4(ambient + diffuse + specular, 1.0) * texColor;
 
     /*float fogDensity = 0.05;
     vec4 fogColor = vec4(0.2,0.2,0.2,0.5);
@@ -43,6 +49,4 @@ void main(){
     vec4 finalColor = vec4(ambient + diffuse + specular, 1.0) * texture(texture1, TexCoord);
     FragColor = mix(fogColor, finalColor, fogFactor );*/
 
-
-    FragColor = vec4(ambient + diffuse + specular, 1.0) * texture(texture1, TexCoord);
 }
