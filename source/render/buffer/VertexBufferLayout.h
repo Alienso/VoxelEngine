@@ -44,7 +44,7 @@ public:
         }
     }
 
-    const std::vector<VertexBufferElement> &getElements() const;
+    [[nodiscard]] const std::vector<VertexBufferElement> &getElements() const;
 };
 
 

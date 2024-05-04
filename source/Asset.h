@@ -18,7 +18,8 @@ public:
     static inline const char* SKYBOX = "skybox";
     static inline const char* SHADOW = "shadow";
     static inline const char* TEXTURE = "texture";
-    static inline const char * TEXTURE_MONO = "textureMono";
+    static inline const char* TEXTURE_MONO = "textureMono";
+    static inline const char* GRASS = "grass";
 };
 
 class Materials{

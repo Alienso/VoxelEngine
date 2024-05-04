@@ -29,6 +29,7 @@ public:
     [[nodiscard]] int getHeightAt(int posX, int posZ) const;
     [[nodiscard]] uint16_t getBlockAt(int x, int y, int z) const;
     [[nodiscard]] uint16_t getBlockAt(glm::ivec3) const;
+    void setBlockAt(glm::ivec3 p, uint16_t block);
 
     [[nodiscard]] static glm::ivec3 worldToChunkPos(float x, float y, float z);
 

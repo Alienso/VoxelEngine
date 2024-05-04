@@ -35,24 +35,9 @@ private:
 
 class Timer{
 public:
-    Timer(const char* name) : name(name){
-        startTimePoint = std::chrono::steady_clock::now();
-    }
-    ~Timer(){
-        if (!stopped)
-            stop();
-    }
-
-    void stop(){
-        auto endTimePoint = std::chrono::steady_clock::now();
-
-        long long start = std::chrono::time_point_cast<std::chrono::milliseconds>(startTimePoint).time_since_epoch().count();
-        long long end = std::chrono::time_point_cast<std::chrono::milliseconds>(endTimePoint).time_since_epoch().count();
-
-        std::cout << name << " took " <<end - start << "ms\n";
-
-        stopped = true;
-    }
+    Timer(const char* name);
+    ~Timer();
+    void stop();
 
 private:
     const char* name;

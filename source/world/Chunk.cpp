@@ -16,6 +16,8 @@ glm::uvec3 Chunk::getRelativeChunkPos(glm::vec3 pos) {
         posX = CHUNK_SIZE + posX;
     if (posZ < 0)
         posZ = CHUNK_SIZE + posZ;
+    if (posY < 0)
+        posY = CHUNK_SIZE + posY;
 
     return { posX, posY, posZ};
 }
@@ -30,6 +32,10 @@ uint16_t Chunk::getBlockAt(int posX, int posY, int posZ) const {
 
 uint16_t Chunk::getBlockAt(glm::ivec3 p) const {
     return blocks[p.y][p.x][p.z];
+}
+
+void Chunk::setBlockAt(glm::ivec3 p, uint16_t block) {
+    blocks[p.y][p.x][p.z] = block;
 }
 
 /**

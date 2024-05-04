@@ -17,6 +17,7 @@ public:
     static std::vector<float> cubeVerticesFront;
     static std::vector<float> cubeVerticesTopBottom;
     static std::vector<float> cubeVerticesMulti;
+    static std::vector<float> cubeVerticesX;
 };
 
 #endif //VOXEL_CUBEVERTICESTYPES_H

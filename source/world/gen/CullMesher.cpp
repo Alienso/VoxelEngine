@@ -26,7 +26,7 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
                         auto blockId = chunk->getBlockAt(x, y, z);
                         if (blockId != Blocks::AIR->getId()) {
                             Block& block = Blocks::getById(blockId);
-                            addBlockVerticesToArray(*chunk, block, {x, y, z}, chunkProvider);
+                            generateVerticesForBlockChunk(*chunk, block, {x, y, z}, chunkProvider);
                         }
                     }
                 }
@@ -34,6 +34,7 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
         }
     }
 
+    //TODO optimize this!
     for (const auto& it : verticesForBlockChunkMap){
         for (const auto& blockMap : it.second){
             for (const auto& v : blockMap.second) {
@@ -65,13 +66,36 @@ void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::u
     generateMeshes(terrainMeshes, chunkProvider);
 }
 
-void CullMesher::addBlockVerticesToArray(const Chunk &chunk, const Block& block, const glm::ivec3 posInChunk, const ChunkProvider& chunkProvider) {
-    glm::ivec3 posOffset = posInChunk + glm::ivec3(chunk.x * Chunk::CHUNK_SIZE, chunk.y * Chunk::CHUNK_SIZE, chunk.z * Chunk::CHUNK_SIZE);
-    for (auto side : EnumFacing::sides){
-        Block& otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
-        if(otherBlock.isTransparent()) {
-            addVerticesForSide(block, posOffset, side, chunk);
+void CullMesher::generateVerticesForBlockChunk(const Chunk &chunk, const Block& block, const glm::ivec3 posInChunk, const ChunkProvider& chunkProvider) {
+
+    glm::ivec3 posOffset = posInChunk + glm::ivec3(chunk.x * Chunk::CHUNK_SIZE, chunk.y * Chunk::CHUNK_SIZE,
+                                                   chunk.z * Chunk::CHUNK_SIZE);
+
+    if (block.isRegularBlock()) {
+        for (auto side: EnumFacing::sides) {
+            Block &otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
+            if (otherBlock.isTransparent()) {
+                addVerticesForSide(block, posOffset, side, chunk);
+            }
         }
+    }else{
+        for (auto side: EnumFacing::sides) {
+            Block &otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
+            if (otherBlock.isTransparent()) {
+                addVertices(block, posOffset, chunk);
+                break;
+            }
+        }
+    }
+}
+void CullMesher::addVertices(const Block& block, glm::ivec3 posOffset, const Chunk& chunk){
+    size_t cubeDataSize = block.getVerticesPtr()->size();
+    float* cubeData = &((*block.getVerticesPtr())[0]);
+
+    for (size_t i = 0; i < cubeDataSize; i+=8){ //TODO memcpy?
+        verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
+                                                                        glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
+                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]});
     }
 }
 
@@ -95,7 +119,7 @@ Block& CullMesher::getAdjacentBlock(Chunk *chunk, glm::ivec3 posInChunk, const E
         pos.z < 0 || pos.z >= Chunk::CHUNK_SIZE) {
 
         chunk = provider.getAdjacentChunk(*chunk, side);
-        if (chunk == nullptr) //TODO this shouldn't happen
+        if (chunk == nullptr)
             return *Blocks::AIR;
         pos.x = (pos.x + Chunk::CHUNK_SIZE) % Chunk::CHUNK_SIZE;
         pos.y = (pos.y + Chunk::CHUNK_SIZE) % Chunk::CHUNK_SIZE;
@@ -103,4 +127,8 @@ Block& CullMesher::getAdjacentBlock(Chunk *chunk, glm::ivec3 posInChunk, const E
     }
 
     return Blocks::getById(chunk->getBlockAt(pos));
+}
+
+void CullMesher::invalidateChunkCache(Chunk *chunk) {
+    verticesForBlockChunkMap.erase(chunk->pos);
 }

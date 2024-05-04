@@ -100,6 +100,7 @@ void AppName::init() {
     Blocks::init();
     Global::init();
     world = new World();
+    Global::world = world;
 }
 
 void AppName::mainLoop() {

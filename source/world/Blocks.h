@@ -12,7 +12,7 @@ class Blocks{
 public:
     static inline Block* AIR = nullptr;
     static inline Block* STONE = nullptr;
-    static inline Block* GRASS = nullptr;
+    static inline Block* GRASS_BLOCK = nullptr;
     static inline Block* DIRT = nullptr;
     static inline Block* COBBLESTONE = nullptr;
     static inline Block* OAK_WOOD_PLANK = nullptr;
@@ -29,6 +29,8 @@ public:
     static inline Block* COAL_ORE = nullptr;
     static inline Block* OAK_WOOD = nullptr;
     static inline Block* OAK_LEAVES = nullptr;
+
+    static inline Block* GRASS = nullptr;
 
     static void init();
 

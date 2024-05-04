@@ -16,6 +16,8 @@ int World::timeOfDay = 5000;
 World::World() {
     updateTerrain();
     cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
+
+    entities.push_back(Global::sun);
 }
 
 void World::onRender() {
@@ -33,9 +35,15 @@ void World::onRender() {
 void World::onUpdate(float deltaTime) {
     InputHandler::processKeyboardInput(deltaTime);
     InputHandler::processMouseInput();
+    RayTraceResult rayTraceResult = InputHandler::processMouseClick();
+    if (rayTraceResult.hit){
+        rayTraceResult.chunk->setBlockAt(rayTraceResult.hitPos, 0);
+        cullMesher.invalidateChunkCache(rayTraceResult.chunk); //TODO invalidate nearby chunk if block is at the edge
+        cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
+    }
 
     for(auto& e : entities)
-        e.onUpdate(deltaTime);
+        e->onUpdate(deltaTime);
 
     handleCollision();
     updateTerrain();
@@ -114,4 +122,8 @@ void World::handleCollision() {
 
 int World::getTimeOfDay() {
     return timeOfDay;
+}
+
+ChunkProvider &World::getChunkProvider() {
+    return chunkProvider;
 }

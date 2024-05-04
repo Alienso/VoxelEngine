@@ -6,6 +6,8 @@
 #include "entity/Entity.h"
 #include "Global.h"
 
+#include <GLFW/glfw3.h>
+
 void EntityRenderer::render(const Entity& entity) {
     entity.material.texture.bind();
     entity.material.shader.use();

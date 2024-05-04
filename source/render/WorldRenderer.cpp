@@ -9,8 +9,9 @@
 #include "Configuration.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
-#include "glad.h"
 #include "Global.h"
+
+#include <GLFW/glfw3.h>
 
 WorldRenderer::WorldRenderer() {
     //shadowShader = Global::shaderManager.getAsset(Shaders::SHADOW);
@@ -30,7 +31,7 @@ void WorldRenderer::renderScene() {
 
 
     //renderFog();
-    //Global::sun->render();
+    Global::sun->render();
 
     //DepthMap gen
     /*depthBuffer.bind();
@@ -89,6 +90,7 @@ void WorldRenderer::renderBlockMesh(Block &block, Mesh *mesh) {
     shader.setMat4("projection", Global::currentFrame.projection);
     shader.setMat4("view", Global::currentFrame.view);
     shader.setMat4("model", Global::currentFrame.model);
+    shader.setFloat("uTime", (float)glfwGetTime());
 
     shader.setVec3("lightColor", Global::sun->getColor());
     shader.setVec3("lightDir", Global::sun->getLightDir());

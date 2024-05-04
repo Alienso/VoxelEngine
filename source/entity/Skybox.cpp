@@ -4,6 +4,7 @@
 
 #include "Skybox.h"
 #include "Global.h"
+#include <GLFW/glfw3.h>
 
 std::vector<const char*> Skybox::resourcePath = {"textures/skybox/right.png", "textures/skybox/left.png",
                                                  "textures/skybox/bottom.png", "textures/skybox/top.png",

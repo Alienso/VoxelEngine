@@ -8,16 +8,17 @@
 #include "CubeVerticesTypes.h"
 
 #include <string>
+#include <GLFW/glfw3.h>
 
 using namespace std;
 
-Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType, bool transparent) : id(id), name(name), transparent(transparent) {
-    blockCounter++;
+Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType, bool transparent, Shader* shader) : id(id), name(name), transparent(transparent) {
     string path = "textures/block/" + string(name) + ".png";
     Texture& texture = Global::textureManager.createAsset(name, path.data(), GL_RGBA);
-
-    Shader* shader = Global::shaderManager.getAsset(Shaders::BASE);
     material = &(Global::materialManager.createAsset(name, *shader, texture));
+
+    regularBlock = true;
+    blockCounter++;
 
     if ((int)Blocks::blocks.size() <= id){
         Blocks::blocks.resize(id + 1);
@@ -39,6 +40,11 @@ Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType, bo
             break;
         case BLOCK_TEXTURE_MULTI:
             verticesPtr = &CubeVerticesTypes::cubeVerticesMulti;
+            break;
+        case BLOCK_TEXTURE_X:
+            verticesPtr = &CubeVerticesTypes::cubeVerticesX;
+            regularBlock = false;
+            material->ambientStrength = 0.8f;
             break;
     }
 }

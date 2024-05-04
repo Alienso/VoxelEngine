@@ -5,6 +5,9 @@
 #include "Util.h"
 #include "glad.h"
 #include "Global.h"
+#include "Configuration.h"
+#include "world/World.h"
+#include "world/Blocks.h"
 
 unsigned int Util::quadVAO = 0;
 unsigned int Util::quadVBO;
@@ -43,4 +46,23 @@ void Util::renderQuad(){
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+}
+
+Timer::Timer(const char *name)  : name(name){
+    startTimePoint = std::chrono::steady_clock::now();
+}
+Timer::~Timer(){
+    if (!stopped)
+        stop();
+}
+
+void Timer::stop(){
+    auto endTimePoint = std::chrono::steady_clock::now();
+
+    long long start = std::chrono::time_point_cast<std::chrono::milliseconds>(startTimePoint).time_since_epoch().count();
+    long long end = std::chrono::time_point_cast<std::chrono::milliseconds>(endTimePoint).time_since_epoch().count();
+
+    std::cout << name << " took " <<end - start << "ms\n";
+
+    stopped = true;
 }

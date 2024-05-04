@@ -10,6 +10,7 @@
 #include "util/Util.h"
 #include "world/gen/WorldGen.h"
 #include "EnumFacing.h"
+#include "world/biome/BiomeProvider.h"
 
 #include <unordered_map>
 
@@ -33,6 +34,7 @@ public:
 private:
     ChunkMap chunkMap;
     WorldGen worldGen;
+    BiomeProvider biomeProvider;
 };
 
 

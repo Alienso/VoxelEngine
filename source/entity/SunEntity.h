@@ -20,7 +20,7 @@ public:
     [[nodiscard]] glm::vec3 getLightDir() const;
 
     glm::vec3 color = {1,1,1};
-    glm::vec3 pos;
+    glm::vec3 pos = {0,10,0};
 
 private:
 

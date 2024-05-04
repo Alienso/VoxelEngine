@@ -5,8 +5,6 @@
 #ifndef INC_3DTEST_GLOBAL_H
 #define INC_3DTEST_GLOBAL_H
 
-
-#include <GLFW/glfw3.h>
 #include "render/Camera.h"
 
 #include "render/AssetManager.h"
@@ -16,6 +14,9 @@
 #include "entity/Skybox.h"
 
 #include <vector>
+
+class World;
+class GLFWwindow;
 
 struct CurrentFrame{
     glm::mat4 model;
@@ -32,6 +33,7 @@ public:
     static CurrentFrame currentFrame;
     static SunEntity* sun;
     static Skybox* skybox;
+    static World* world;
 
     static AssetManager<Texture> textureManager;
     static AssetManager<Material> materialManager;

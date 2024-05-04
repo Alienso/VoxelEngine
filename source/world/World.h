@@ -14,6 +14,7 @@
 #include "render/buffer/FrameBuffer.h"
 #include "ChunkProvider.h"
 #include "render/WorldRenderer.h"
+#include "world/biome/BiomeProvider.h"
 
 #include <unordered_map>
 
@@ -27,6 +28,8 @@ public:
 
     static int getTimeOfDay();
 
+    [[nodiscard]] ChunkProvider& getChunkProvider();
+
 private:
     void updateTerrain();
     void handleCollision();
@@ -36,7 +39,7 @@ private:
     ChunkProvider chunkProvider;
     WorldRenderer worldRenderer;
 
-    std::vector<Entity> entities;
+    std::vector<Entity*> entities;
 
     int currentTerrainHeight = 1;
     static int timeOfDay;

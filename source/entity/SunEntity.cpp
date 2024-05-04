@@ -6,6 +6,10 @@
 #include "Global.h"
 #include "CubeVerticesTypes.h"
 #include "world/World.h"
+#include "Configuration.h"
+#include "glm/ext/matrix_clip_space.inl"
+
+#include <GLFW/glfw3.h>
 
 SunEntity::SunEntity(glm::vec3 pos) : Entity(*Global::materialManager.getAsset(Materials::LIGHT),
                                                               &CubeVerticesTypes::cubeVerticesSingle[0], CubeVerticesTypes::cubeVerticesSingle.size()), pos(pos) {
@@ -13,6 +17,7 @@ SunEntity::SunEntity(glm::vec3 pos) : Entity(*Global::materialManager.getAsset(M
 
 void SunEntity::onUpdate(float deltaTime) {
     Entity::onUpdate(deltaTime);
+    pos = getLightDir() * glm::vec3(9999);
 }
 
 void SunEntity::render() {
@@ -22,11 +27,17 @@ void SunEntity::render() {
 
     glm::mat4 model= Global::currentFrame.model;
 
-    material.shader.setMat4("projection", Global::currentFrame.projection);
-    material.shader.setMat4("view", Global::currentFrame.view);
-    material.shader.setMat4("model", glm::translate(model, pos));
+    glm::mat4 projection = Global::currentFrame.projection = glm::perspective(glm::radians(Configuration::fov), (float)Configuration::wWidth/(float)Configuration::wHeight,
+                                                                              1.0f, 100000.0f);
 
-    material.shader.setVec3("lightColor", glm::vec3(1,1,1));
+    //TODO FIX THIS RENDER
+    material.shader.setMat4("projection", projection);
+    material.shader.setMat4("view", Global::currentFrame.view);
+    material.shader.setMat4("model", glm::translate(model, pos) * glm::scale(model, glm::vec3(1000.0f, 1000.0f, 1000.0f))); //TODO dont calculate all of this every frame
+
+    material.shader.setVec3("lightColor", getColor());
+    /*material.shader.setVec3("lightCenter", pos);
+    material.shader.setVec2("uResolution", glm::vec2(Configuration::wWidth, Configuration::wHeight));*/
 
     glDrawArrays(GL_TRIANGLES, 0, 36); //@DANGER
 }

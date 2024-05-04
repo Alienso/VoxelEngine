@@ -62,6 +62,7 @@ Chunk* ChunkProvider::getAdjacentChunk(const Chunk& chunk, const EnumFacing* sid
 Chunk *ChunkProvider::generateChunkAt(int x, int y, int z) {
     //maybe it is generated but not loaded? TODO
     auto* chunk =  worldGen.generateChunk(x,y,z);
+    biomeProvider.getBiomeAt(x,y,z)->decorateChunk(chunk);
     chunkMap[{x,y,z}] = chunk;
     return chunk;
 }

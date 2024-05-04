@@ -6,6 +6,8 @@
 #include "Global.h"
 #include "render/buffer/BufferData.h"
 
+#include <GLFW/glfw3.h>
+
 Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     Mesh* mesh = new Mesh();
     mesh->vertices.reserve(length / 8);
