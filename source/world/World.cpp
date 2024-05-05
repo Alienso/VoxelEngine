@@ -22,8 +22,8 @@ World::World() {
 
 void World::onRender() {
 
-    Global::currentFrame.projection = glm::perspective(glm::radians(Configuration::fov), (float)Configuration::wWidth/(float)Configuration::wHeight,
-                                                       1.0f, (float)(Global::renderDistance + 1)*Chunk::CHUNK_SIZE);
+    Global::currentFrame.projection = glm::perspective(glm::radians(GraphicsConfiguration::fov), (float)Configuration::windowWidth / (float)Configuration::windowHeight,
+                                                       1.0f, (float)(GraphicsConfiguration::renderDistance + 1)*Chunk::CHUNK_SIZE);
     Global::currentFrame.view = glm::lookAt(Global::camera.pos, Global::camera.pos + Global::camera.front, Global::camera.up);
     Global::currentFrame.model = glm::mat4(1.0f);
 
@@ -62,8 +62,17 @@ void World::onImGuiRender() {
     ImGui::SliderFloat3("SunPos", &Global::sun->pos.x, -5, 5);
     ImGui::SliderFloat3("SunColor", &Global::sun->color.x, 0, 1);
     ImGui::SliderInt("TimeOfDay", &timeOfDay, 0, 86400);
+    ImGui::SliderFloat("LightStrength", &Global::sun->lightStrength, 0.1f, 20.0f);
 
-    ImGui::Text("Map height= %d", currentTerrainHeight);
+    ImGui::SliderFloat("FogFactor", &GraphicsConfiguration::fogStrength, 0.01, 16);
+    ImGui::SliderInt("FogDistance", &GraphicsConfiguration::fogDistance, 1, 64);
+    ImGui::SliderFloat("BloomThreshold", &GraphicsConfiguration::bloomThreshold, 0.0, 10.0);
+    ImGui::SliderInt("BloomStrength", &GraphicsConfiguration::bloomDecay, 1, 64);
+
+    ImGui::SliderFloat("Contrast", &GraphicsConfiguration::contrast, 0.0, 2.0);
+    ImGui::SliderFloat("brightness", &GraphicsConfiguration::brightness, -1.0, 1.0);
+    ImGui::SliderFloat("saturation", &GraphicsConfiguration::saturation, 0.0, 5.0);
+    ImGui::SliderFloat("Gamma", &GraphicsConfiguration::gamma, 0.01, 3);
 
     ImGui::End();
 }
@@ -71,7 +80,7 @@ void World::onImGuiRender() {
 void World::updateTerrain() {
     bool newChunks = false;
     glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
-    int renderDistance = Global::renderDistance;
+    int renderDistance = GraphicsConfiguration::renderDistance;
     std::vector<Chunk*> chunksToRemove;
     std::vector<Chunk*> traversedChunks;
     for (int x = pos.x - renderDistance; x<=pos.x + renderDistance; x++){

@@ -11,10 +11,10 @@
 
 RayTraceResult RayTrace::traceScene(double xPos, double yPos){
 
-    glm::vec2 uv = glm::vec2(xPos,yPos) / glm::vec2(Configuration::wWidth,Configuration::wHeight);
+    glm::vec2 uv = glm::vec2(xPos,yPos) / glm::vec2(Configuration::windowWidth, Configuration::windowHeight);
 
     uv = uv * glm::vec2(2.0) - glm::vec2(1.0);//transform from [0,1] to [-1,1]
-    uv.x *= (float)(Configuration::wWidth)/(float)Configuration::wHeight; //aspect fix
+    uv.x *= (float)(Configuration::windowWidth) / (float)Configuration::windowHeight; //aspect fix
 
     //glm::vec3 rayDir = normalize(glm::vec4(glm::vec3(0,0,1) + glm::vec3(uv.x,uv.y,0),1) * Global::camera.transformationMatrix);
     glm::vec3 rayDir = Global::camera.front;

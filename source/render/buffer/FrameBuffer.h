@@ -16,7 +16,12 @@ public:
     ~FrameBuffer();
     void bind() const;
     void unbind() const;
-    void bindTexture() const;
+    void bindTexture(unsigned int slot = 0) const;
+    void generateMipMaps() const;
+
+    [[nodiscard]] unsigned int getID() const{
+        return rendererID;
+    }
 
     [[nodiscard]] unsigned int getTextureId() const{
         return renderedTexture;
@@ -24,7 +29,8 @@ public:
 
 private:
     unsigned int rendererID;
-    unsigned int renderedTexture;
+    unsigned int renderedTexture = 0;
+    unsigned int depthTexture = 0;
 
     void createTexture();
     void createShadowTexture();

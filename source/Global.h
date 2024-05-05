@@ -39,8 +39,6 @@ public:
     static AssetManager<Material> materialManager;
     static AssetManager<Shader> shaderManager;
 
-    static int renderDistance;
-
 public:
     static void init();
 };

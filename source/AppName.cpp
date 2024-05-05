@@ -19,11 +19,11 @@
 #include <iostream>
 
 void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
-    Configuration::fov -= (float)yoffset;
-    if (Configuration::fov < 1.0f)
-        Configuration::fov = 1.0f;
-    if (Configuration::fov > Configuration::fovMax)
-        Configuration::fov = Configuration::fovMax;
+    GraphicsConfiguration::fov -= (float)yoffset;
+    if (GraphicsConfiguration::fov < 1.0f)
+        GraphicsConfiguration::fov = 1.0f;
+    if (GraphicsConfiguration::fov > GraphicsConfiguration::fovMax)
+        GraphicsConfiguration::fov = GraphicsConfiguration::fovMax;
 }
 
 void GLAPIENTRY glErrorCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam ){
@@ -34,8 +34,8 @@ void GLAPIENTRY glErrorCallback( GLenum source, GLenum type, GLuint id, GLenum s
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
-    Configuration::wWidth = width;
-    Configuration::wHeight = height;
+    Configuration::windowWidth = width;
+    Configuration::windowHeight = height;
 }
 
 void AppName::initGlfw(){
@@ -44,7 +44,7 @@ void AppName::initGlfw(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    Global::window = glfwCreateWindow(Configuration::wWidth,Configuration::wHeight, "Test 3D", nullptr, nullptr);
+    Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Test 3D", nullptr, nullptr);
     if (Global::window == nullptr){
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();

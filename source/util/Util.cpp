@@ -16,8 +16,8 @@ void Util::renderTexture(unsigned int textureId){
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId);
     //Global::textureManager.getAsset(Textures::MOUNTAINS)->bind();
-    //Shader* textureShader = Global::shaderManager.getAsset(Shaders::TEXTURE);
-    Shader* textureShader = Global::shaderManager.getAsset(Shaders::TEXTURE_MONO);
+    Shader* textureShader = Global::shaderManager.getAsset(Shaders::TEXTURE);
+    //Shader* textureShader = Global::shaderManager.getAsset(Shaders::TEXTURE_MONO);
     textureShader->use();
     textureShader->setInt("texture1", 0);
     renderQuad();

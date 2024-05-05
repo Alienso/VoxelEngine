@@ -27,10 +27,19 @@ public:
 private:
     void renderBlockMesh(Block &block, Mesh *mesh);
     void renderFog();
+    void applyBloom();
+    void applyToneMapping();
+    void applyColorCorrection();
+    void applyGammaCorrection();
 
     FrameBuffer depthBuffer{FRAME_BUFFER_SHADOW};
-    FrameBuffer fogBuffer;
+    FrameBuffer renderBuffer;
+    FrameBuffer bloomBuffer;
+    FrameBuffer toneMapperBuffer;
     Shader* shadowShader;
+
+    FrameBuffer mipLevels[8];
+    FrameBuffer scaledImages[8];
 
     std::unordered_map<uint16_t, Mesh*> terrainMeshes;
 };

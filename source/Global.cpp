@@ -24,5 +24,3 @@ World* Global::world;
 AssetManager<Texture> Global::textureManager;
 AssetManager<Material> Global::materialManager;
 AssetManager<Shader> Global::shaderManager;
-
-int Global::renderDistance = 6;

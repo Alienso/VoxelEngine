@@ -108,7 +108,7 @@ RayTraceResult InputHandler::processMouseClick() {
 
         double xpos, ypos;
         glfwGetCursorPos(Global::window, &xpos, &ypos);
-        return RayTrace::traceScene(xpos, Configuration::wHeight - ypos);
+        return RayTrace::traceScene(xpos, Configuration::windowHeight - ypos);
     }
     return RayTraceResult{false};
 }

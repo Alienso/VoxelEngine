@@ -27,7 +27,7 @@ void SunEntity::render() {
 
     glm::mat4 model= Global::currentFrame.model;
 
-    glm::mat4 projection = Global::currentFrame.projection = glm::perspective(glm::radians(Configuration::fov), (float)Configuration::wWidth/(float)Configuration::wHeight,
+    glm::mat4 projection = Global::currentFrame.projection = glm::perspective(glm::radians(GraphicsConfiguration::fov), (float)Configuration::windowWidth / (float)Configuration::windowHeight,
                                                                               1.0f, 100000.0f);
 
     //TODO FIX THIS RENDER
@@ -35,7 +35,7 @@ void SunEntity::render() {
     material.shader.setMat4("view", Global::currentFrame.view);
     material.shader.setMat4("model", glm::translate(model, pos) * glm::scale(model, glm::vec3(1000.0f, 1000.0f, 1000.0f))); //TODO dont calculate all of this every frame
 
-    material.shader.setVec3("lightColor", getColor());
+    material.shader.setVec3("lightColor", getColor() * lightStrength);
     /*material.shader.setVec3("lightCenter", pos);
     material.shader.setVec2("uResolution", glm::vec2(Configuration::wWidth, Configuration::wHeight));*/
 

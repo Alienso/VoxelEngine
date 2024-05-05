@@ -21,6 +21,7 @@ public:
 
     glm::vec3 color = {1,1,1};
     glm::vec3 pos = {0,10,0};
+    float lightStrength = 10.0f;
 
 private:
 
