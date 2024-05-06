@@ -45,8 +45,8 @@ void WorldRenderer::renderScene() {
 
     renderBuffer.unbind();
 
-    //renderFog();
-    applyBloom();
+    //renderFog(); //Skybox and breaks bloom?
+    //applyBloom(); //Use better blurring or predefined texture map for sun
     applyColorCorrection();
     applyToneMapping();
     applyGammaCorrection();
@@ -131,7 +131,7 @@ void WorldRenderer::applyBloom() {
     bloomShader->setInt("mipLevel1", 2);
     scaledImages[2].bindTexture(3);
     bloomShader->setInt("mipLevel2", 3);
-    scaledImages[3].bindTexture(4);
+    /*scaledImages[3].bindTexture(4);
     bloomShader->setInt("mipLevel3", 4);
     scaledImages[4].bindTexture(5);
     bloomShader->setInt("mipLevel4", 5);
@@ -140,7 +140,7 @@ void WorldRenderer::applyBloom() {
     scaledImages[6].bindTexture(7);
     bloomShader->setInt("mipLevel6", 7);
     scaledImages[7].bindTexture(8);
-    bloomShader->setInt("mipLevel7", 8);
+    bloomShader->setInt("mipLevel7", 8);*/
 
     bloomShader->setInt("bloomDecay", GraphicsConfiguration::bloomDecay);
 
@@ -163,15 +163,15 @@ void WorldRenderer::applyToneMapping() {
     toneMapperBuffer.unbind();
 
 
-    Shader* trMapper = Global::shaderManager.getAsset(Shaders::TONE_MAPPER_TR);
+    Shader* trMapper = Global::shaderManager.getAsset(Shaders::TONE_MAPPER_NACES);
     trMapper->use();
-    toneMapperBuffer.bindTexture(0);
-    renderBuffer.bindTexture(1);
+    renderBuffer.bindTexture(0);
+    //toneMapperBuffer.bindTexture(1);
 
-    trMapper->setInt("luminanceTexture", 0);
-    trMapper->setInt("renderTexture", 1);
+    trMapper->setInt("renderTexture", 0);
+    /*trMapper->setInt("luminanceTexture", 1);
     trMapper->setFloat("lumMax", 100.0f);
-    trMapper->setFloat("cMax", 10.0f);
+    trMapper->setFloat("cMax", 10.0f);*/
 
     renderBuffer.bind();
     glClear(GL_DEPTH_BUFFER_BIT);

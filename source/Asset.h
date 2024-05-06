@@ -25,6 +25,7 @@ public:
     static inline const char* BLOOM = "bloom";
     static inline const char* BLOOM_CONTRAST = "bloom_contrast";
     static inline const char* TONE_MAPPER_TR = "tone_mapper_tumblin_rushmier";
+    static inline const char* TONE_MAPPER_NACES = "tone_mapper_narkowiez_aces";
     static inline const char* LUMINANCE_TEXTURE = "luminance_texture";
     static inline const char* COLOR_CORRECTION = "color_correction";
     static inline const char* GAMMA_CORRECTION = "gamma_correction";

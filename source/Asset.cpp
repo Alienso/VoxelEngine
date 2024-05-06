@@ -23,6 +23,7 @@ void AppName::initAssets(){
     [[maybe_unused]] Shader& bloomShader = Global::shaderManager.createAsset(Shaders::BLOOM, "texture.vs", "bloom.fs");
     [[maybe_unused]] Shader& bloomContrastShader = Global::shaderManager.createAsset(Shaders::BLOOM_CONTRAST, "texture.vs", "bloom_contrast.fs");
     [[maybe_unused]] Shader& toneMapperTRShader = Global::shaderManager.createAsset(Shaders::TONE_MAPPER_TR, "texture.vs", "tone_mapper_tumblin_rushmier.fs");
+    [[maybe_unused]] Shader& toneMapperNAces = Global::shaderManager.createAsset(Shaders::TONE_MAPPER_NACES, "texture.vs", "tone_mapper_narkowiez_aces.fs");
     [[maybe_unused]] Shader& luminanceTextureShader = Global::shaderManager.createAsset(Shaders::LUMINANCE_TEXTURE, "texture.vs", "luminance_texture.fs");
     [[maybe_unused]] Shader& colorCorrectionShader = Global::shaderManager.createAsset(Shaders::COLOR_CORRECTION, "texture.vs", "color_correction.fs");
     [[maybe_unused]] Shader& gammaCorrectionShader = Global::shaderManager.createAsset(Shaders::GAMMA_CORRECTION, "texture.vs", "gamma_correction.fs");

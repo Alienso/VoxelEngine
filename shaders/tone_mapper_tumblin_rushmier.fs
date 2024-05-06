@@ -3,17 +3,16 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 
-layout(binding=0) uniform sampler2D luminanceTexture;
-layout(binding=1) uniform sampler2D renderTexture;
+layout(binding=0) uniform sampler2D renderTexture;
+layout(binding=1) uniform sampler2D luminanceTexture;
 
 uniform float lumMax;
 uniform float cMax;
 
 void main(){
     vec3 color = texture(renderTexture, TexCoords).rgb;
-    vec3 Cout = vec3((color * (2.51*color + 0.03)) / (color * (2.43*color + 0.59) + 0.14));
 
-    /*float lumIn = 0.2126*color.r + 0.7152*color.g + 0.0722*color.b;
+    float lumIn = 0.2126*color.r + 0.7152*color.g + 0.0722*color.b;
     float lumAvg = textureLod(luminanceTexture, vec2(0,0), 10.0).r;
 
     float logLrw = log(lumAvg) / log(10) + 0.84;
@@ -26,7 +25,7 @@ void main(){
     float betaD = -0.4 * logLd * logLd - 2.584 * logLd + 2.0208;
 
     float lumOut = pow(lumIn, alphaRw / alphaD) / lumMax * pow(10, (betaRw / betaD) / alphaD) - (1.0 / cMax);
-    vec3 Cout = color / lumIn * lumOut;*/
+    vec3 Cout = color / lumIn * lumOut;
 
     FragColor = vec4(Cout, 1.0);
 }

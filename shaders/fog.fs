@@ -11,8 +11,8 @@ uniform float fogStrength;
 uniform int fogDistance;
 
 void main(){
-    float fogFactor = pow(texture(depthTexture, TexCoords).r, fogDistance) * fogStrength;
-    vec3 fogColor = vec3(0.5,0.5,0.5); //texture(fogTexture, TexCoords).rgb;
+    float fogFactor = pow(texture(depthTexture, TexCoords).r, fogDistance) * fogStrength; //* (1 - TexCoords.y);
+    vec3 fogColor = vec3(0.8,0.8,0.8); //texture(fogTexture, TexCoords).rgb;
     vec3 renderColor = texture(renderTexture, TexCoords).rgb;
     FragColor = vec4( fogFactor * fogColor + (1 - fogFactor) * renderColor,  1.0);
 }
