@@ -29,6 +29,7 @@ BufferData::BufferData(float *vertices, size_t length) {
     layout->push<float>(3);
     layout->push<float>(3);
     layout->push<float>(2);
+    layout->push<float>(1);
     va = make_shared<VertexArray>();
     va->addBuffer(*vb, *layout);
 }

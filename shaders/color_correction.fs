@@ -10,7 +10,7 @@ uniform float brightness;
 uniform float saturation;
 uniform float gamma;
 
-void clampColor(out vec3 color){
+void clampColor(inout vec3 color){
     if (color.r > 1)
         color.r = 1;
     else if (color.r < 0)
@@ -30,10 +30,10 @@ void clampColor(out vec3 color){
 void main(){
     vec3 color = texture(renderTexture, TexCoords).rgb;
     color = contrast*(color- 0.5) + 0.5 + brightness;
-    //clampColor(color);
+    clampColor(color);
     vec3 grayscale = color * vec3(0.299, 0.587, 0.114);
     color = mix(grayscale, color, saturation);
-    //clampColor(color);
+    clampColor(color);
 
     FragColor = vec4(color, 1.0);
 }

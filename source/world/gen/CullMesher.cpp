@@ -46,7 +46,7 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
     for (const auto& it : verticesForBlockMap) {
         if (it.second.empty())
             continue;
-        currentMesh = Mesh::fromRawData((float *) (&(it.second[0])), it.second.size() * 8);
+        currentMesh = Mesh::fromRawData((float *) (&(it.second[0])), it.second.size() * 9);
         if (auto meshIter = terrainMeshes.find(it.first); meshIter != terrainMeshes.end()) {
             delete meshIter->second;
         }
@@ -92,10 +92,10 @@ void CullMesher::addVertices(const Block& block, glm::ivec3 posOffset, const Chu
     size_t cubeDataSize = block.getVerticesPtr()->size();
     float* cubeData = &((*block.getVerticesPtr())[0]);
 
-    for (size_t i = 0; i < cubeDataSize; i+=8){ //TODO memcpy?
+    for (size_t i = 0; i < cubeDataSize; i+=9){ //TODO memcpy?
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                                         glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]});
+                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]}, 0);
     }
 }
 
@@ -103,10 +103,10 @@ void CullMesher::addVerticesForSide(const Block& block, glm::ivec3 posOffset, co
     size_t offset = CubeVerticesTypes::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
     float* cubeData = &((*block.getVerticesPtr())[offset]);
 
-    for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=8){ //TODO memcpy?
+    for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=9){ //TODO memcpy?
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                   glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                  glm::vec2{cubeData[i+6], cubeData[i+7]});
+                                                  glm::vec2{cubeData[i+6], cubeData[i+7]}, 0);
     }
 }
 

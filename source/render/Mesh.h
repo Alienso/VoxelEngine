@@ -17,8 +17,9 @@ struct Vertex{
     glm::vec3 pos;
     glm::vec3 normal;
     glm::vec2 texCoord;
+    float ao;
 
-    Vertex(glm::vec3 pos, glm::vec3 normal, glm::vec2 texCoord) : pos(pos), normal(normal), texCoord(texCoord){}
+    Vertex(glm::vec3 pos, glm::vec3 normal, glm::vec2 texCoord, float ao) : pos(pos), normal(normal), texCoord(texCoord), ao(ao){}
 };
 
 class Mesh {
