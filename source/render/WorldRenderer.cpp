@@ -47,9 +47,9 @@ void WorldRenderer::renderScene() {
 
     //renderFog(); //Skybox and breaks bloom?
     //applyBloom(); //Use better blurring or predefined texture map for sun
-    applyColorCorrection();
-    applyToneMapping();
-    applyGammaCorrection();
+    //applyColorCorrection();
+    //applyToneMapping();
+    //applyGammaCorrection();
 
     //Util::renderTexture(depthBuffer.getTextureId());
     Util::renderTexture(renderBuffer.getTextureId());

@@ -16,12 +16,12 @@ int GraphicsConfiguration::shadowHeight = 900;
 
 int GraphicsConfiguration::renderDistance = 6;
 
-float GraphicsConfiguration::fogStrength = 1.0f;
-int GraphicsConfiguration::fogDistance = 16;
+float GraphicsConfiguration::fogStrength = 0.5f;
+int GraphicsConfiguration::fogDistance = 256;
 float GraphicsConfiguration::bloomThreshold = 1.1f;
 int GraphicsConfiguration::bloomDecay = 8;
 
 float GraphicsConfiguration::contrast = 1.0f;
 float GraphicsConfiguration::brightness = 0.0f;
 float GraphicsConfiguration::saturation = 1.0f;
-float GraphicsConfiguration::gamma = 1.0f;
+float GraphicsConfiguration::gamma = 1.4f;

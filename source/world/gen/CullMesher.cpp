@@ -95,7 +95,7 @@ void CullMesher::addVertices(const Block& block, glm::ivec3 posOffset, const Chu
     for (size_t i = 0; i < cubeDataSize; i+=9){ //TODO memcpy?
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                                         glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]}, 0);
+                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]}, 2);
     }
 }
 
@@ -106,7 +106,7 @@ void CullMesher::addVerticesForSide(const Block& block, glm::ivec3 posOffset, co
     for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=9){ //TODO memcpy?
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                   glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                  glm::vec2{cubeData[i+6], cubeData[i+7]}, 0);
+                                                  glm::vec2{cubeData[i+6], cubeData[i+7]}, 2);
     }
 }
 

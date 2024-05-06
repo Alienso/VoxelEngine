@@ -14,7 +14,7 @@ Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     for (size_t i = 0; i < length; i+=9){
         mesh->vertices.emplace_back(glm::vec3{vertexData[i], vertexData[i+1], vertexData[i+2]},
                                     glm::vec3{vertexData[i+3], vertexData[i+4], vertexData[i+5]},
-                                    glm::vec2{vertexData[i+6], vertexData[i+7]}, 0);
+                                    glm::vec2{vertexData[i+6], vertexData[i+7]}, vertexData[i+8]);
     }
     mesh->bufferData = BufferData(vertexData, length);
     //memcpy((void*)&(mesh->vertices[0]), (void*)vertexData, length); //TODO alignment?

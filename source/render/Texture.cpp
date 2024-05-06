@@ -47,6 +47,7 @@ Texture* Texture::generateCubeMap(std::vector<const char*> faces, int type) {
         unsigned char *data = stbi_load(faces[i], &texture->width, &texture->height, &texture->bytesPerPixel, 0);
         if (data){
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, texture->width, texture->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
             stbi_image_free(data);
         }
         else{

@@ -64,7 +64,7 @@ void World::onImGuiRender() {
     ImGui::SliderInt("TimeOfDay", &timeOfDay, 0, 86400);
     ImGui::SliderFloat("LightStrength", &Global::sun->lightStrength, 0.1f, 20.0f);
 
-    ImGui::SliderFloat("FogFactor", &GraphicsConfiguration::fogStrength, 0.01, 16);
+    ImGui::SliderFloat("FogFactor", &GraphicsConfiguration::fogStrength, 0.01, 2.0);
     ImGui::SliderInt("FogDistance", &GraphicsConfiguration::fogDistance, 1, 256);
     ImGui::SliderFloat("BloomThreshold", &GraphicsConfiguration::bloomThreshold, 0.0, 10.0);
     ImGui::SliderInt("BloomStrength", &GraphicsConfiguration::bloomDecay, 1, 64);

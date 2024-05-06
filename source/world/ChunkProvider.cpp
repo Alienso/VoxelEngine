@@ -7,21 +7,16 @@
 #include "Global.h"
 
 ChunkProvider::ChunkProvider() {
-    /*int worldSize = Global::renderDistance;
-    for (int i=-worldSize; i<worldSize; i++ ){
-        for (int j=-worldSize; j<worldSize; j++){
-            glm::vec3 pos = {i,0,j};
-            Chunk* chunk = worldGen.generateChunk(i,0,j);
-            chunkMap[pos] = chunk;
-        }
-    }*/
-
-    /*for (int i=-worldSize; i<worldSize; i++ ){
-        for (int j=-worldSize; j<worldSize; j++){
-            for (int y = -10; y<0; y++) {
-                glm::vec3 pos = {i, y, j};
-                Chunk *chunk = Chunk::generateChunkBlock(i,y,j);
-                chunkMap[pos] = chunk;
+    /*glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
+    int renderDistance = 16;
+    for (int x = pos.x - renderDistance; x<=pos.x + renderDistance; x++){
+        for (int z = pos.z - renderDistance; z<=pos.z + renderDistance; z++){
+            if ((x - pos.x)*(x - pos.x) + (z - pos.z)*(z - pos.z) <= renderDistance * renderDistance){
+                for (int y = -5; y<0; y++) {
+                    glm::vec3 newPos = {x, y, y};
+                    Chunk *chunk = Chunk::generateSolidChunk(x, y, z);
+                    chunkMap[newPos] = chunk;
+                }
             }
         }
     }*/
