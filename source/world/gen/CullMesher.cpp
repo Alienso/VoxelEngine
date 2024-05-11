@@ -10,7 +10,7 @@
 CullMesher::CullMesher() {}
 
 
-void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMeshes, const ChunkProvider &chunkProvider) {
+void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMeshes, ChunkProvider &chunkProvider) {
 
     Mesh* currentMesh;
     verticesForBlockMap.clear();
@@ -66,7 +66,7 @@ void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::u
     generateMeshes(terrainMeshes, chunkProvider);
 }
 
-void CullMesher::generateVerticesForBlockChunk(const Chunk &chunk, const Block& block, const glm::ivec3 posInChunk, const ChunkProvider& chunkProvider) {
+void CullMesher::generateVerticesForBlockChunk(const Chunk &chunk, const Block& block, const glm::ivec3 posInChunk, ChunkProvider& chunkProvider) {
 
     glm::ivec3 posOffset = posInChunk + glm::ivec3(chunk.x * Chunk::CHUNK_SIZE, chunk.y * Chunk::CHUNK_SIZE,
                                                    chunk.z * Chunk::CHUNK_SIZE);
@@ -75,38 +75,40 @@ void CullMesher::generateVerticesForBlockChunk(const Chunk &chunk, const Block& 
         for (auto side: EnumFacing::sides) {
             Block &otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
             if (otherBlock.isTransparent()) {
-                addVerticesForSide(block, posOffset, side, chunk);
+                addVerticesForSide(block, posOffset, side, chunk, chunkProvider);
             }
         }
     }else{
         for (auto side: EnumFacing::sides) {
             Block &otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
             if (otherBlock.isTransparent()) {
-                addVertices(block, posOffset, chunk);
+                addVertices(block, posOffset, chunk, chunkProvider);
                 break;
             }
         }
     }
 }
-void CullMesher::addVertices(const Block& block, glm::ivec3 posOffset, const Chunk& chunk){
+void CullMesher::addVertices(const Block& block, glm::ivec3 posOffset, const Chunk& chunk, ChunkProvider& chunkProvider){
     size_t cubeDataSize = block.getVerticesPtr()->size();
     float* cubeData = &((*block.getVerticesPtr())[0]);
 
     for (size_t i = 0; i < cubeDataSize; i+=9){ //TODO memcpy?
+        float ao = getAOValue(i/9, 0, &cubeData[i], chunkProvider); //TODO 0?
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                                         glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]}, 2);
+                                                                        glm::vec2{cubeData[i+6], cubeData[i+7]}, ao);
     }
 }
 
-void CullMesher::addVerticesForSide(const Block& block, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk) {
+void CullMesher::addVerticesForSide(const Block& block, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk, ChunkProvider& chunkProvider) {
     size_t offset = CubeVerticesTypes::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
     float* cubeData = &((*block.getVerticesPtr())[offset]);
 
     for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=9){ //TODO memcpy?
+        float ao = getAOValue(i/9, side->id, &cubeData[i], chunkProvider);
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                   glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},
-                                                  glm::vec2{cubeData[i+6], cubeData[i+7]}, 2);
+                                                  glm::vec2{cubeData[i+6], cubeData[i+7]}, ao);
     }
 }
 

@@ -5,6 +5,7 @@
 #include "Biomes.h"
 #include "Biome.h"
 #include "world/Blocks.h"
+#include "world/World.h"
 
 Biome* generatePlains(){
     auto* biome = new Biome();

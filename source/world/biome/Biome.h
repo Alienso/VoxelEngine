@@ -16,11 +16,13 @@
 #include "Biomes.h"
 #include "world/Chunk.h"
 
+class ChunkProvider;
+
 class Biome {
 public:
     Biome() = default;
 
-    void decorateChunk(Chunk* chunk);
+    void decorateChunk(Chunk* chunk, ChunkProvider& chunkProvider);
 
     friend Biomes;
 

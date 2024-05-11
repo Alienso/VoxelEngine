@@ -19,6 +19,7 @@ void AppName::initAssets(){
     [[maybe_unused]] Shader& textureShader = Global::shaderManager.createAsset(Shaders::TEXTURE, "texture.vs", "texture.fs");
     [[maybe_unused]] Shader& textureMonoShader = Global::shaderManager.createAsset(Shaders::TEXTURE_MONO, "texture.vs", "texture_mono.fs");
     [[maybe_unused]] Shader& grassShader = Global::shaderManager.createAsset(Shaders::GRASS, "grass.vs", "3D.fs");
+    [[maybe_unused]] Shader& leavesShader = Global::shaderManager.createAsset(Shaders::LEAVES, "leaves.vs", "3D.fs");
     [[maybe_unused]] Shader& fogShader = Global::shaderManager.createAsset(Shaders::FOG, "texture.vs", "fog.fs");
     [[maybe_unused]] Shader& bloomShader = Global::shaderManager.createAsset(Shaders::BLOOM, "texture.vs", "bloom.fs");
     [[maybe_unused]] Shader& bloomContrastShader = Global::shaderManager.createAsset(Shaders::BLOOM_CONTRAST, "texture.vs", "bloom_contrast.fs");

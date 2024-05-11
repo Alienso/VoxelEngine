@@ -4,6 +4,7 @@ project(Voxel)
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-parameter -g -O0")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 
 include_directories(${PROJECT_SOURCE_DIR}/source)
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -60,7 +61,8 @@ add_executable(Voxel main.cpp
         source/world/ChunkProvider.cpp source/world/ChunkProvider.h
         source/EnumFacing.h source/EnumFacing.cpp
         source/render/WorldRenderer.cpp source/render/WorldRenderer.h
-        source/CubeVerticesTypes.h source/CubeVerticesTypes.cpp source/world/biome/Biome.cpp source/world/biome/Biome.h source/world/gen/PlantGenerator.cpp source/world/gen/PlantGenerator.h source/world/gen/TreeGenerator.cpp source/world/gen/TreeGenerator.h source/world/biome/BiomeDecorator.cpp source/world/biome/BiomeDecorator.h source/world/biome/Biomes.cpp source/world/biome/Biomes.h source/world/biome/BiomeProvider.cpp source/world/biome/BiomeProvider.h source/util/RayTrace.cpp source/util/RayTrace.h)
+        source/CubeVerticesTypes.h source/CubeVerticesTypes.cpp source/world/biome/Biome.cpp source/world/biome/Biome.h source/world/gen/PlantGenerator.cpp source/world/gen/PlantGenerator.h source/world/gen/TreeGenerator.cpp source/world/gen/TreeGenerator.h source/world/biome/BiomeDecorator.cpp source/world/biome/BiomeDecorator.h source/world/biome/Biomes.cpp source/world/biome/Biomes.h source/world/biome/BiomeProvider.cpp source/world/biome/BiomeProvider.h source/util/RayTrace.cpp source/util/RayTrace.h
+        source/world/gen/ao.cpp)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

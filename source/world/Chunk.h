@@ -39,10 +39,11 @@ public:
 
     const int x, y, z;
     const glm::ivec3 pos;
-    bool loaded = true;
+    bool isLoaded = true;
+    bool isDecorated = false;
 
 private:
-    int heightMap[CHUNK_SIZE][CHUNK_SIZE]; //TODO maybe dont have this loaded if chunk is not visible?
+    int heightMap[CHUNK_SIZE][CHUNK_SIZE]; //TODO maybe dont have this isLoaded if chunk is not visible?
     uint16_t blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
     friend WorldGen;

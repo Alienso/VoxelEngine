@@ -40,6 +40,13 @@ Chunk *ChunkProvider::getChunkAt(int x, int y, int z) {
     return nullptr;
 }
 
+Chunk *ChunkProvider::getChunkAt(glm::ivec3 pos) {
+    if (auto it = chunkMap.find(pos); it != chunkMap.end()){
+        return it->second;
+    }
+    return nullptr;
+}
+
 Chunk* ChunkProvider::getChunkAtWorldPos(float x, float y, float z) {
     glm::ivec3 chunkPos = Chunk::worldToChunkPos(x,y,z);
     if (const auto& it = chunkMap.find(chunkPos); it != chunkMap.end())
@@ -55,14 +62,14 @@ Chunk* ChunkProvider::getAdjacentChunk(const Chunk& chunk, const EnumFacing* sid
 }
 
 Chunk *ChunkProvider::generateChunkAt(int x, int y, int z) {
-    //maybe it is generated but not loaded? TODO
+    //maybe it is generated but not isLoaded? TODO
     auto* chunk =  worldGen.generateChunk(x,y,z);
-    biomeProvider.getBiomeAt(x,y,z)->decorateChunk(chunk);
     chunkMap[{x,y,z}] = chunk;
+    biomeProvider.getBiomeAt(x,y,z)->decorateChunk(chunk, *this);
     return chunk;
 }
 
-Chunk *ChunkProvider::generateChunkAtWorldPos(const float x, const float y, const float z) {
+Chunk *ChunkProvider::generatePlainChunkAtWorldPos(const float x, const float y, const float z) {
     glm::ivec3 chunkPos = Chunk::worldToChunkPos(x,y,z);
     auto* chunk =  worldGen.generateChunk(chunkPos.x,chunkPos.y,chunkPos.z);
     chunkMap[chunkPos] = chunk;
@@ -74,5 +81,19 @@ void ChunkProvider::deleteChunkAt(const glm::ivec3 pos) {
         delete it->second;
         chunkMap.erase(pos);
     }
+}
+
+uint16_t ChunkProvider::getBlockAtWorldPos(float x, float y, float z) {
+    Chunk* chunk = getChunkAtWorldPos(x,y,z);
+    if (chunk == nullptr)
+        return 0;
+    return chunk->getBlockAt(Chunk::getRelativeChunkPos({x,y,z}));
+}
+
+void ChunkProvider::setBlockAtWorldPos(float x, float y, float z, uint16_t block) {
+    Chunk* chunk = getChunkAtWorldPos(x, y, z);
+    if (chunk == nullptr)
+        chunk = generatePlainChunkAtWorldPos(x, y, z);
+    chunk->setBlockAt(Chunk::getRelativeChunkPos({x,y,z}), block);
 }
 

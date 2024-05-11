@@ -3,7 +3,11 @@
 //
 
 #include "Biome.h"
+#include "world/ChunkProvider.h"
+#include "world/Chunk.h"
 
-void Biome::decorateChunk(Chunk *chunk) {
+void Biome::decorateChunk(Chunk *chunk, ChunkProvider& chunkProvider) {
     plantGenerator.decorate(chunk);
+    treeGenerator.decorate(chunk, chunkProvider);
+    chunk->isDecorated = true;
 }

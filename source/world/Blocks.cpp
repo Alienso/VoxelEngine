@@ -22,7 +22,7 @@ void Blocks::init() {
     IRON_ORE = new Block("iron_ore",15, BLOCK_TEXTURE_SINGLE);
     COAL_ORE = new Block("coal_ore",16, BLOCK_TEXTURE_SINGLE);
     OAK_WOOD = new Block("log_oak",17, BLOCK_TEXTURE_TOP_BOTTOM);
-    OAK_LEAVES = new Block("leaves_oak",18, BLOCK_TEXTURE_SINGLE, true);
+    OAK_LEAVES = new Block("leaves_oak",18, BLOCK_TEXTURE_SINGLE, true, Global::shaderManager.getAsset(Shaders::LEAVES));
 
     GRASS = new Block("grass",31, BLOCK_TEXTURE_X, true, Global::shaderManager.getAsset(Shaders::GRASS));
 }
