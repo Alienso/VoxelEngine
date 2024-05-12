@@ -23,8 +23,8 @@ public:
 
     CullMesher();
 
-    void generateMeshes(std::unordered_map<uint16_t, Mesh*>& terrainMeshes, ChunkProvider& chunkProvider);
-    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
+    void generateMeshes(lime62::concurrent_unordered_map<uint16_t, Mesh*>& terrainMeshes, ChunkProvider& chunkProvider);
+    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, lime62::concurrent_unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
 
     void invalidateChunkCache(Chunk *chunk);
 
@@ -34,7 +34,7 @@ private:
     void addVerticesForSide(const Block& block, glm::ivec3 posOffset, const EnumFacing *side, const Chunk& chunk, ChunkProvider& chunkProvider);
 
     static Block& getAdjacentBlock(Chunk *chunk, glm::ivec3 pos, const EnumFacing* side, const ChunkProvider &provider);
-    static float getAOValue(int vertexIndex, size_t sideww, float* vertexPos, ChunkProvider& chunkProvider);
+    static float getAOValue(int vertexIndex, size_t side, float* vertexPos, ChunkProvider& chunkProvider);
 
     std::unordered_map<uint16_t, std::vector<Vertex>> verticesForBlockMap;
     std::unordered_map<glm::ivec3, std::unordered_map<uint16_t ,std::vector<Vertex>>, GlmVec3Functions, GlmVec3Functions> verticesForBlockChunkMap;

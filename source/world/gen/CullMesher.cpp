@@ -10,7 +10,7 @@
 CullMesher::CullMesher() {}
 
 
-void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMeshes, ChunkProvider &chunkProvider) {
+void CullMesher::generateMeshes(lime62::concurrent_unordered_map<uint16_t, Mesh *> &terrainMeshes, ChunkProvider &chunkProvider) {
 
     Mesh* currentMesh;
     verticesForBlockMap.clear();
@@ -43,6 +43,7 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
         }
     }
 
+    terrainMeshes.lock();
     for (const auto& it : verticesForBlockMap) {
         if (it.second.empty())
             continue;
@@ -50,11 +51,12 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
         if (auto meshIter = terrainMeshes.find(it.first); meshIter != terrainMeshes.end()) {
             delete meshIter->second;
         }
-        terrainMeshes[it.first] = currentMesh;
+        terrainMeshes[it.first] =  currentMesh;
     }
+    terrainMeshes.unlock();
 }
 
-void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider) {
+void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, lime62::concurrent_unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider) {
 
     for(Chunk* chunk : chunksToRemove){
         if (verticesForBlockChunkMap.find(chunk->pos) != verticesForBlockChunkMap.end()){

@@ -56,15 +56,18 @@ void WorldRenderer::renderScene() {
 }
 
 void WorldRenderer::renderTerrain() {
+    //TODO Dont use concurrent map but two maps, something like double buffers for openGL and swap them when terrain updates
+    terrainMeshes.lock();
     for (auto& it : terrainMeshes){
         Block& block = Blocks::getById(it.first);
         Mesh* mesh = it.second;
         renderBlockMesh(block, mesh);
     }
+    terrainMeshes.unlock();
 }
 
 
-std::unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshes() {
+lime62::concurrent_unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshes() {
     return terrainMeshes;
 }
 

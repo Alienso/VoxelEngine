@@ -11,6 +11,8 @@
 #include "Mesh.h"
 #include <unordered_map>
 
+#include "util/concurrent_unoredered_map.h"
+
 class Block;
 
 class WorldRenderer {
@@ -22,7 +24,7 @@ public:
     void renderTerrain();
     void renderShadows();
 
-    std::unordered_map<uint16_t, Mesh*>& getTerrainMeshes();
+    lime62::concurrent_unordered_map<uint16_t, Mesh*>& getTerrainMeshes();
 
 private:
     void renderBlockMesh(Block &block, Mesh *mesh);
@@ -41,7 +43,7 @@ private:
     FrameBuffer mipLevels[8];
     FrameBuffer scaledImages[8];
 
-    std::unordered_map<uint16_t, Mesh*> terrainMeshes;
+    lime62::concurrent_unordered_map<uint16_t, Mesh*> terrainMeshes;
 };
 
 

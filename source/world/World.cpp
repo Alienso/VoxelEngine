@@ -14,8 +14,9 @@
 int World::timeOfDay = 5000;
 
 World::World() {
-    updateTerrain();
-    cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
+    Global::world = this;
+    //updateTerrain();
+    //cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
 
     entities.push_back(Global::sun);
 }
@@ -33,20 +34,18 @@ void World::onRender() {
 }
 
 void World::onUpdate(float deltaTime) {
-    InputHandler::processKeyboardInput(deltaTime);
-    InputHandler::processMouseInput();
-    RayTraceResult rayTraceResult = InputHandler::processMouseClick();
+    /*RayTraceResult rayTraceResult = InputHandler::processMouseClick();
     if (rayTraceResult.hit){
         rayTraceResult.chunk->setBlockAt(rayTraceResult.hitPos, 0);
         cullMesher.invalidateChunkCache(rayTraceResult.chunk); //TODO invalidate nearby chunk if block is at the edge
         cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
-    }
+    }*/
 
     for(auto& e : entities)
         e->onUpdate(deltaTime);
 
-    handleCollision();
-    updateTerrain();
+    //handleCollision();
+    //updateTerrain();
 
     //timeOfDay = (timeOfDay + 1)  % 86400;
 }
@@ -126,7 +125,6 @@ void World::handleCollision() {
     if ((int)pos.y - 3 < height){
         Global::camera.pos.y = (float)height + 3;
     }
-    currentTerrainHeight = height;
 }
 
 int World::getTimeOfDay() {
@@ -135,4 +133,17 @@ int World::getTimeOfDay() {
 
 ChunkProvider &World::getChunkProvider() {
     return chunkProvider;
+}
+
+void World::genBufferData(float *vertexData, size_t length, BufferData *bufferData, std::condition_variable& cv) {
+    bufferDataQueue.emplace(vertexData, length, bufferData, cv);
+}
+
+void World::updateBufferData() {
+    while(!bufferDataQueue.empty()){
+        BufferDataCommand command = bufferDataQueue.front();
+        *(command.bufferData) = BufferData(command.vertexData, command.length);
+        command.cv.notify_one();
+        bufferDataQueue.pop();
+    }
 }

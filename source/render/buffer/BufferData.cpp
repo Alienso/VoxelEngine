@@ -17,12 +17,6 @@ BufferData::BufferData() {
     va = nullptr;
 }
 
-BufferData::BufferData(BufferData &other) {
-    va = other.va;
-    vb = other.vb;
-    layout = other.layout;
-}
-
 BufferData::BufferData(float *vertices, size_t length) {
     vb = make_shared<VertexBuffer>(vertices, length * sizeof(float));
     layout = make_shared<VertexBufferLayout>();
@@ -45,5 +39,3 @@ BufferData::BufferData(float *vertices, std::size_t length, std::vector<int>& la
     va = make_shared<VertexArray>();
     va->addBuffer(*vb, *layout);
 }
-
-BufferData& BufferData::operator=(const BufferData& other) = default;

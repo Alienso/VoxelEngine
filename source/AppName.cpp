@@ -15,6 +15,7 @@
 #include "Configuration.h"
 #include "util/Profiler.h"
 #include "world/Blocks.h"
+#include "InputHandler.h"
 
 #include <iostream>
 
@@ -100,25 +101,49 @@ void AppName::init() {
     Blocks::init();
     Global::init();
     world = new World();
-    Global::world = world;
+
+    /*
+     * OpenGl context is on main thread, maybe it can be moved to another?
+     * Glfw polling must be done on main thread https://discourse.glfw.org/t/multithreading-glfw/573/2
+     * When updating terrain, and when mesh is being generated calls are being made to openGl when creating BufferData,
+     * so it currently breaks
+     */
+
+    lastLogicTime = lastMainTime = glfwGetTime();
+
+    logicThread = std::thread([this] {
+        while(shouldContinue) {
+            world->onUpdate(glfwGetTime() - lastLogicTime);
+            lastLogicTime = glfwGetTime();
+        }
+    });
+
+    terrainUpdateThread = std::thread([this] {
+        while(shouldContinue) {
+            this->world->updateTerrain();
+        }
+    });
+
 }
 
 void AppName::mainLoop() {
 
-    double lastTime = glfwGetTime();
+    while (shouldContinue) {
 
-    while (!glfwWindowShouldClose(Global::window)) {
+        shouldContinue = !glfwWindowShouldClose(Global::window);
 
-        PROFILE_SCOPE("mainLoop");
+        //PROFILE_SCOPE("mainLoop");
         glfwPollEvents();
 
-        world->onUpdate(glfwGetTime() - lastTime);
-        lastTime = glfwGetTime();
+        InputHandler::processKeyboardInput(glfwGetTime() - lastMainTime);
+        InputHandler::processMouseInput();
+
+        lastMainTime = glfwGetTime();
+
+        world->updateBufferData();
 
         world->onRender();
-
         renderImGui();
-
         glfwSwapBuffers(Global::window);
     }
 }

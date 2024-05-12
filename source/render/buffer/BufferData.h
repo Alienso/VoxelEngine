@@ -17,14 +17,12 @@ public:
     BufferData(float* vertices, std::size_t length);
     BufferData(float* vertices, std::size_t length, std::vector<int>& layout);
 
-    BufferData(BufferData& other);
-    BufferData& operator=(const BufferData&);
-
     std::shared_ptr<VertexArray> va;
     std::shared_ptr<VertexBuffer> vb;
     std::shared_ptr<VertexBufferLayout> layout;
 
 private:
+
 };
 
 #endif //INC_3DTEST_BUFFERDATA_H

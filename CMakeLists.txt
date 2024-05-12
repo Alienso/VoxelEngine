@@ -62,7 +62,9 @@ add_executable(Voxel main.cpp
         source/EnumFacing.h source/EnumFacing.cpp
         source/render/WorldRenderer.cpp source/render/WorldRenderer.h
         source/CubeVerticesTypes.h source/CubeVerticesTypes.cpp source/world/biome/Biome.cpp source/world/biome/Biome.h source/world/gen/PlantGenerator.cpp source/world/gen/PlantGenerator.h source/world/gen/TreeGenerator.cpp source/world/gen/TreeGenerator.h source/world/biome/BiomeDecorator.cpp source/world/biome/BiomeDecorator.h source/world/biome/Biomes.cpp source/world/biome/Biomes.h source/world/biome/BiomeProvider.cpp source/world/biome/BiomeProvider.h source/util/RayTrace.cpp source/util/RayTrace.h
-        source/world/gen/ao.cpp)
+        source/world/gen/ao.cpp
+        source/util/concurrent_queue.h
+        source/util/concurrent_unoredered_map.h)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

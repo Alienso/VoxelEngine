@@ -15,8 +15,21 @@
 #include "ChunkProvider.h"
 #include "render/WorldRenderer.h"
 #include "world/biome/BiomeProvider.h"
+#include "util/concurrent_queue.h"
 
 #include <unordered_map>
+#include <mutex>
+#include <queue>
+
+struct BufferDataCommand{
+    float* vertexData;
+    size_t length;
+    BufferData* bufferData;
+    std::condition_variable& cv;
+
+    BufferDataCommand(float* vertexData, size_t length, BufferData* bufferData, std::condition_variable& cv) : vertexData(vertexData),
+                                                                                                   length(length), bufferData(bufferData), cv(cv){}
+};
 
 class World {
 public:
@@ -26,12 +39,16 @@ public:
     void onUpdate(float deltaTime);
     void onImGuiRender();
 
+    void genBufferData(float* vertexData, size_t length, BufferData* bufferData, std::condition_variable& cv);
+
+    void updateTerrain();
     static int getTimeOfDay();
 
     [[nodiscard]] ChunkProvider& getChunkProvider();
 
+    void updateBufferData();
+
 private:
-    void updateTerrain();
     void handleCollision();
 
 private:
@@ -41,7 +58,8 @@ private:
 
     std::vector<Entity*> entities;
 
-    int currentTerrainHeight = 1;
+    lime62::concurrent_queue <BufferDataCommand> bufferDataQueue;
+
     static int timeOfDay;
 };
 
