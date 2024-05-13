@@ -16,7 +16,8 @@ int World::timeOfDay = 5000;
 World::World() {
     Global::world = this;
     //updateTerrain();
-    //cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
+    //cullMesher.generateMeshes(worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
+    //worldRenderer.swapMaps();
 
     entities.push_back(Global::sun);
 }
@@ -38,7 +39,7 @@ void World::onUpdate(float deltaTime) {
     if (rayTraceResult.hit){
         rayTraceResult.chunk->setBlockAt(rayTraceResult.hitPos, 0);
         cullMesher.invalidateChunkCache(rayTraceResult.chunk); //TODO invalidate nearby chunk if block is at the edge
-        cullMesher.generateMeshes(worldRenderer.getTerrainMeshes(), chunkProvider);
+        cullMesher.generateMeshes(worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
     }*/
 
     for(auto& e : entities)
@@ -111,7 +112,8 @@ void World::updateTerrain() {
     }
 
     if (!chunksToRemove.empty()){
-        cullMesher.updateMeshes(chunksToRemove, worldRenderer.getTerrainMeshes(), chunkProvider);
+        cullMesher.updateMeshes(chunksToRemove, worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
+        worldRenderer.swapMaps();
     }
 }
 

@@ -23,8 +23,8 @@ public:
 
     CullMesher();
 
-    void generateMeshes(lime62::concurrent_unordered_map<uint16_t, Mesh*>& terrainMeshes, ChunkProvider& chunkProvider);
-    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, lime62::concurrent_unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
+    void generateMeshes(std::unordered_map<uint16_t, Mesh*>& terrainMeshes, ChunkProvider& chunkProvider);
+    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
 
     void invalidateChunkCache(Chunk *chunk);
 

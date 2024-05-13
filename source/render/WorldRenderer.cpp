@@ -20,10 +20,10 @@ WorldRenderer::WorldRenderer() {
 }
 
 WorldRenderer::~WorldRenderer() {
-    for (auto& it : terrainMeshes){
+    for (auto& it : terrainMeshes1){
         delete it.second;
     }
-    terrainMeshes.clear();
+    terrainMeshes1.clear();
 }
 
 void WorldRenderer::renderScene() {
@@ -56,19 +56,23 @@ void WorldRenderer::renderScene() {
 }
 
 void WorldRenderer::renderTerrain() {
-    //TODO Dont use concurrent map but two maps, something like double buffers for openGL and swap them when terrain updates
-    terrainMeshes.lock();
-    for (auto& it : terrainMeshes){
+    auto map = getTerrainMeshesReadMap();
+    for (auto& it : map){
         Block& block = Blocks::getById(it.first);
         Mesh* mesh = it.second;
         renderBlockMesh(block, mesh);
     }
-    terrainMeshes.unlock();
 }
 
 
-lime62::concurrent_unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshes() {
-    return terrainMeshes;
+std::unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshesWriteMap() {
+    std::scoped_lock sl(swapMutex);
+    return *terrainMeshesWriteMap;
+}
+
+std::unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshesReadMap() {
+    std::scoped_lock sl(swapMutex);
+    return *terrainMeshesReadMap;
 }
 
 void WorldRenderer::renderBlockMesh(Block &block, Mesh *mesh) {
@@ -251,4 +255,16 @@ void WorldRenderer::renderShadows() {
 
     //renderScene();
     depthBuffer.unbind();
+}
+
+void WorldRenderer::swapMaps() {
+    swapMutex.lock();
+    if (terrainMeshesWriteMap == &terrainMeshes1){
+        terrainMeshesWriteMap = &terrainMeshes2;
+        terrainMeshesReadMap =  &terrainMeshes1;
+    }else{
+        terrainMeshesWriteMap = &terrainMeshes1;
+        terrainMeshesReadMap =  &terrainMeshes2;
+    }
+    swapMutex.unlock();
 }

@@ -10,8 +10,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include <unordered_map>
-
-#include "util/concurrent_unoredered_map.h"
+#include <mutex>
 
 class Block;
 
@@ -24,7 +23,9 @@ public:
     void renderTerrain();
     void renderShadows();
 
-    lime62::concurrent_unordered_map<uint16_t, Mesh*>& getTerrainMeshes();
+    std::unordered_map<uint16_t, Mesh*>& getTerrainMeshesWriteMap();
+    std::unordered_map<uint16_t, Mesh*>& getTerrainMeshesReadMap();
+    void swapMaps();
 
 private:
     void renderBlockMesh(Block &block, Mesh *mesh);
@@ -43,7 +44,12 @@ private:
     FrameBuffer mipLevels[8];
     FrameBuffer scaledImages[8];
 
-    lime62::concurrent_unordered_map<uint16_t, Mesh*> terrainMeshes;
+    std::unordered_map<uint16_t, Mesh*> terrainMeshes1;
+    std::unordered_map<uint16_t, Mesh*> terrainMeshes2;
+    std::unordered_map<uint16_t, Mesh*>* terrainMeshesWriteMap = &terrainMeshes1;
+    std::unordered_map<uint16_t, Mesh*>* terrainMeshesReadMap = &terrainMeshes2;
+    std::mutex swapMutex;
+
 };
 
 
