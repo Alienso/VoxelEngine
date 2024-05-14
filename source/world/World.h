@@ -15,7 +15,7 @@
 #include "ChunkProvider.h"
 #include "render/WorldRenderer.h"
 #include "world/biome/BiomeProvider.h"
-#include "util/concurrent_queue.h"
+#include "util/ts_queue.h"
 
 #include <unordered_map>
 #include <mutex>
@@ -58,7 +58,7 @@ private:
 
     std::vector<Entity*> entities;
 
-    lime62::concurrent_queue <BufferDataCommand> bufferDataQueue;
+    ts_queue <BufferDataCommand> bufferDataQueue;
 
     static int timeOfDay;
 };

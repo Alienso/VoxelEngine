@@ -45,7 +45,7 @@ void World::onUpdate(float deltaTime) {
     for(auto& e : entities)
         e->onUpdate(deltaTime);
 
-    //handleCollision();
+    handleCollision();
     //updateTerrain();
 
     //timeOfDay = (timeOfDay + 1)  % 86400;
@@ -138,14 +138,23 @@ ChunkProvider &World::getChunkProvider() {
 }
 
 void World::genBufferData(float *vertexData, size_t length, BufferData *bufferData, std::condition_variable& cv) {
-    bufferDataQueue.emplace(vertexData, length, bufferData, cv);
+    bufferDataQueue.emplace_back(vertexData, length, bufferData, cv);
 }
 
 void World::updateBufferData() {
     while(!bufferDataQueue.empty()){
+        Timer front("Front");
         BufferDataCommand command = bufferDataQueue.front();
+        front.stop();
+        Timer createBuffer("createBuffer");
         *(command.bufferData) = BufferData(command.vertexData, command.length);
+        createBuffer.stop();
+        Timer notify("Notify");
         command.cv.notify_one();
-        bufferDataQueue.pop();
+        notify.stop();
+        Timer pop("Pop");
+        bufferDataQueue.pop_front();
+        pop.stop();
+        std::cout << "----------------------";
     }
 }

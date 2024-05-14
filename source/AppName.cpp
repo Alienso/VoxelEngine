@@ -45,7 +45,8 @@ void AppName::initGlfw(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Test 3D", nullptr, nullptr);
+    //Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", glfwGetPrimaryMonitor(), nullptr);
+    Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", nullptr, nullptr);
     if (Global::window == nullptr){
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -109,18 +110,20 @@ void AppName::init() {
      * so it currently breaks
      */
 
+    terrainUpdateThread = std::thread([this] {
+        while(shouldContinue) {
+            this->world->updateTerrain();
+        }
+    });
+
+    this_thread::sleep_for(std::chrono::milliseconds(300));
+
     lastLogicTime = lastMainTime = glfwGetTime();
 
     logicThread = std::thread([this] {
         while(shouldContinue) {
             world->onUpdate(glfwGetTime() - lastLogicTime);
             lastLogicTime = glfwGetTime();
-        }
-    });
-
-    terrainUpdateThread = std::thread([this] {
-        while(shouldContinue) {
-            this->world->updateTerrain();
         }
     });
 
@@ -149,6 +152,10 @@ void AppName::mainLoop() {
 }
 
 void AppName::cleanup() {
+
+    /*terrainUpdateThread.join(); //TODO deadlock?
+    logicThread.join();*/
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

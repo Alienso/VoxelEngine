@@ -14,7 +14,7 @@ float GraphicsConfiguration::fovMax = 100.0f;
 int GraphicsConfiguration::shadowWidth = 1600;
 int GraphicsConfiguration::shadowHeight = 900;
 
-int GraphicsConfiguration::renderDistance = 6;
+int GraphicsConfiguration::renderDistance = 16;
 
 float GraphicsConfiguration::fogStrength = 0.5f;
 int GraphicsConfiguration::fogDistance = 256;

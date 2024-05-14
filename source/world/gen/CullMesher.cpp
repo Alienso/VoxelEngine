@@ -15,7 +15,10 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
     Mesh* currentMesh;
     verticesForBlockMap.clear();
 
-    //Timer timer("Generating mesh");
+    /*std::cout << "verticesForBlockChunkMap size=" << verticesForBlockChunkMap.size() << '\n';
+    std::cout << "Chunk size=" << chunkProvider.getChunks().size() << '\n';
+    Timer timer("Generating mesh");
+    Timer generatingVertices("Generating vertices");*/
 
     for (auto& it : chunkProvider.getChunks()){
         Chunk* chunk = it.second;
@@ -34,6 +37,9 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
         }
     }
 
+    //generatingVertices.stop();
+    //Timer mapTransform("Map Transform");
+
     //TODO optimize this!
     for (const auto& it : verticesForBlockChunkMap){
         for (const auto& blockMap : it.second){
@@ -42,6 +48,9 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
             }
         }
     }
+
+    //mapTransform.stop();
+    //Timer final("Final");
 
     for (const auto& it : verticesForBlockMap) {
         if (it.second.empty())
@@ -52,6 +61,9 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
         }
         terrainMeshes[it.first] =  currentMesh;
     }
+
+    //final.stop();
+    //std::cout << "----------------------------------\n";
 }
 
 void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider) {
