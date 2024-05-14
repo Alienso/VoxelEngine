@@ -5,7 +5,6 @@
 #include "BufferData.h"
 
 #include "VertexBufferLayout.h"
-
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 
@@ -16,6 +15,11 @@ BufferData::BufferData() {
     layout = nullptr;
     va = nullptr;
 }
+
+BufferData::~BufferData() {
+
+}
+
 
 BufferData::BufferData(float *vertices, size_t length) {
     vb = make_shared<VertexBuffer>(vertices, length * sizeof(float));

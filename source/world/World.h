@@ -26,7 +26,6 @@ struct BufferDataCommand{
     size_t length;
     BufferData* bufferData;
     std::condition_variable& cv;
-
     BufferDataCommand(float* vertexData, size_t length, BufferData* bufferData, std::condition_variable& cv) : vertexData(vertexData),
                                                                                                    length(length), bufferData(bufferData), cv(cv){}
 };

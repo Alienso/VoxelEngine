@@ -144,7 +144,7 @@ void World::genBufferData(float *vertexData, size_t length, BufferData *bufferDa
 void World::updateBufferData() {
     while(!bufferDataQueue.empty()){
         Timer front("Front");
-        BufferDataCommand command = bufferDataQueue.front();
+        const BufferDataCommand& command = bufferDataQueue.front();
         front.stop();
         Timer createBuffer("createBuffer");
         *(command.bufferData) = BufferData(command.vertexData, command.length);

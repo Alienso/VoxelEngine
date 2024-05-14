@@ -14,14 +14,13 @@
 class BufferData{
 public:
     BufferData();
+    ~BufferData();
     BufferData(float* vertices, std::size_t length);
     BufferData(float* vertices, std::size_t length, std::vector<int>& layout);
 
     std::shared_ptr<VertexArray> va;
     std::shared_ptr<VertexBuffer> vb;
     std::shared_ptr<VertexBufferLayout> layout;
-
-private:
 
 };
 
