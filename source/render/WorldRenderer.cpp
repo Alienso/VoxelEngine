@@ -61,10 +61,21 @@ void WorldRenderer::renderScene() {
 
 void WorldRenderer::renderTerrain() {
     auto map = getTerrainMeshesReadMap();
+    std::vector<std::pair<const uint16_t, Mesh *>> transparentBlocks;
     for (auto& it : map){
         Block& block = Blocks::getById(it.first);
         Mesh* mesh = it.second;
-        renderBlockMesh(block, mesh);
+        if (block.isTransparent()){
+            transparentBlocks.emplace_back(block.id, mesh);
+        }
+        else {
+            renderBlockMesh(block, mesh);
+        }
+    }
+
+    for (auto it : transparentBlocks){
+        Block& block = Blocks::getById(it.first);
+        renderBlockMesh(block, it.second);
     }
 }
 

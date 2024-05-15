@@ -5,7 +5,6 @@ out vec4 FragColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
-in vec3 AO;
 
 layout(binding=0) uniform sampler2D texture1;
 
@@ -37,11 +36,8 @@ void clampColor(inout vec3 color){
 void main(){
 
     vec4 texColor = texture(texture1, TexCoord);
-    if (texColor.a < 0.1)
-        discard;
 
-    //vec3 ambient = ambientStrength * lightColor;
-    vec3 ambient = AO * lightColor;
+    vec3 ambient = 0.1 * lightColor;
 
     vec3 norm = normalize(Normal);
     float diff = max(dot(norm, lightDir), 0.0);

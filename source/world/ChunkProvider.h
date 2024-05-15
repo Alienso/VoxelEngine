@@ -8,7 +8,7 @@
 #include "glm/glm.hpp"
 #include "Chunk.h"
 #include "util/Util.h"
-#include "world/gen/WorldGen.h"
+#include "world/gen/TerrainGen.h"
 #include "EnumFacing.h"
 #include "world/biome/BiomeProvider.h"
 
@@ -37,7 +37,7 @@ public:
 
 private:
     ChunkMap chunkMap;
-    WorldGen worldGen;
+    TerrainGen worldGen;
     BiomeProvider biomeProvider;
 };
 

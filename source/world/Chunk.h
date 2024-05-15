@@ -13,7 +13,7 @@
  */
 
 #include "Block.h"
-#include "gen/WorldGen.h"
+#include "gen/TerrainGen.h"
 
 #include <cstring>
 #include <cstdint>
@@ -29,9 +29,10 @@ public:
     [[nodiscard]] int getHeightAt(int posX, int posZ) const;
     [[nodiscard]] uint16_t getBlockAt(int x, int y, int z) const;
     [[nodiscard]] uint16_t getBlockAt(glm::ivec3) const;
-    void setBlockAt(glm::ivec3 p, uint16_t block);
+    void setBlockAt(glm::ivec3 pos, uint16_t block);
 
     [[nodiscard]] static glm::ivec3 worldToChunkPos(float x, float y, float z);
+    glm::vec3 chunkToWorldPos(int x, int y, int z) const;
 
 
 public:
@@ -46,7 +47,7 @@ private:
     int heightMap[CHUNK_SIZE][CHUNK_SIZE]; //TODO maybe dont have this isLoaded if chunk is not visible?
     uint16_t blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
-    friend WorldGen;
+    friend TerrainGen;
 };
 
 

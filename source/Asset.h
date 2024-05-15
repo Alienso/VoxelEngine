@@ -7,7 +7,7 @@
 
 class Textures{
 public:
-    static inline const char* MOUNTAINS = "mountains";
+    static inline const char* BLANK = "blank";
     static inline const char* SKYBOX = "skybox";
     static inline const char* FOG = "fog";
 };
@@ -30,6 +30,7 @@ public:
     static inline const char* COLOR_CORRECTION = "color_correction";
     static inline const char* GAMMA_CORRECTION = "gamma_correction";
     static inline const char* LEAVES = "leaves";
+    static inline const char* WATER = "water";
 };
 
 class Materials{

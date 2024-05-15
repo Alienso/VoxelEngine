@@ -12,8 +12,8 @@ void Blocks::init() {
     OAK_WOOD_PLANK = new Block("planks_oak",5, BLOCK_TEXTURE_SINGLE);
     OAK_SAPLING = new Block("sapling_oak",6, BLOCK_TEXTURE_X, true);
     BEDROCK = new Block("bedrock",7, BLOCK_TEXTURE_SINGLE);
-    FLOWING_WATER = new Block("water_flow",8, BLOCK_TEXTURE_SINGLE, true);
-    STILL_WATER = new Block("water_still",9, BLOCK_TEXTURE_SINGLE, true);
+    FLOWING_WATER = new Block("water_flow",8, BLOCK_TEXTURE_SINGLE, true, Global::shaderManager.getAsset(Shaders::WATER));
+    STILL_WATER = new Block("water_still",9, BLOCK_TEXTURE_SINGLE, true, Global::shaderManager.getAsset(Shaders::WATER));
     FLOWING_LAVA = new Block("lava_flow",10, BLOCK_TEXTURE_SINGLE);
     STILL_LAVA = new Block("lava_still",11, BLOCK_TEXTURE_SINGLE);
     SAND = new Block("sand",12, BLOCK_TEXTURE_SINGLE);

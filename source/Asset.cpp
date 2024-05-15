@@ -28,8 +28,9 @@ void AppName::initAssets(){
     [[maybe_unused]] Shader& luminanceTextureShader = Global::shaderManager.createAsset(Shaders::LUMINANCE_TEXTURE, "texture.vs", "luminance_texture.fs");
     [[maybe_unused]] Shader& colorCorrectionShader = Global::shaderManager.createAsset(Shaders::COLOR_CORRECTION, "texture.vs", "color_correction.fs");
     [[maybe_unused]] Shader& gammaCorrectionShader = Global::shaderManager.createAsset(Shaders::GAMMA_CORRECTION, "texture.vs", "gamma_correction.fs");
+    [[maybe_unused]] Shader& waterShader = Global::shaderManager.createAsset(Shaders::WATER, "water.vs", "water.fs");
 
-    Texture& baseTexture = Global::textureManager.createAsset(Textures::MOUNTAINS, "Background.jpg", GL_RGB);
+    Texture& baseTexture = Global::textureManager.createAsset(Textures::BLANK, "blank.png", GL_RGB);
     Texture* skyboxTexture = Texture::generateCubeMap(Skybox::resourcePath, GL_RGB);
     Global::textureManager.registerAsset(Textures::SKYBOX, skyboxTexture);
     [[maybe_unused]] Texture& fogTexture = Global::textureManager.createAsset(Textures::FOG, "fog.png", GL_RGBA);

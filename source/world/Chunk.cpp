@@ -63,6 +63,15 @@ glm::ivec3 Chunk::worldToChunkPos(float x, float y, float z) {
     return  { (int)floorf(x / Chunk::CHUNK_SIZE), (int)floorf(y / Chunk::CHUNK_SIZE), (int)floorf(z / Chunk::CHUNK_SIZE) };
 }
 
+/**
+ * Given chunk Pos returns worldPos
+ */
+glm::vec3 Chunk::chunkToWorldPos(int posX, int posY, int posZ) const {
+    return {this->pos.x * Chunk::CHUNK_SIZE + posX,
+            this->pos.y * Chunk::CHUNK_SIZE + posY,
+            this->pos.z * Chunk::CHUNK_SIZE + posZ};
+}
+
 /*constexpr static glm::vec3 posFromIndex(int i){ //TODO x and z???
     int y = i / (CHUNK_SIZE*CHUNK_SIZE);
     int plane = i % (CHUNK_SIZE*CHUNK_SIZE);

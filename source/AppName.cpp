@@ -16,6 +16,7 @@
 #include "util/Profiler.h"
 #include "world/Blocks.h"
 #include "InputHandler.h"
+#include "stb_image.h"
 
 #include <iostream>
 
@@ -45,6 +46,8 @@ void AppName::initGlfw(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    glfwWindowHint(GLFW_SAMPLES, 4);
+
     //Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", glfwGetPrimaryMonitor(), nullptr);
     Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", nullptr, nullptr);
     if (Global::window == nullptr){
@@ -56,13 +59,22 @@ void AppName::initGlfw(){
     glfwSetFramebufferSizeCallback(Global::window, framebuffer_size_callback);
     glfwSwapInterval(0);
 
+    GLFWimage images[1];
+    images[0].pixels = stbi_load("icon.png", &images[0].width, &images[0].height, nullptr, 4); //rgba channels
+    glfwSetWindowIcon(Global::window, 1, images);
+    stbi_image_free(images[0].pixels);
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         std::cout << "Failed to initialize GLAD" << std::endl;
         exit(-1);
     }
 
+    glEnable(GL_BLEND);
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glfwSetScrollCallback(Global::window, scrollCallback);
     glfwSetInputMode(Global::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }

@@ -9,7 +9,7 @@
 #include "Chunk.h"
 #include "entity/SunEntity.h"
 #include "render/Mesh.h"
-#include "world/gen/WorldGen.h"
+#include "world/gen/TerrainGen.h"
 #include "world/gen/CullMesher.h"
 #include "render/buffer/FrameBuffer.h"
 #include "ChunkProvider.h"

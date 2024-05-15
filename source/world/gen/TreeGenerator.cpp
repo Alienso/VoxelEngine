@@ -19,9 +19,8 @@ void TreeGenerator::decorate(Chunk *chunk, ChunkProvider& chunkProvider) {
             float perlinValue = (float)perlinNoise.noise((double)sampleX, (double)sampleZ, 0) * 2 - 1;
             if (perlinValue > threshold) {
                 int y = chunk->getHeightAt(x,z);
-                glm::vec3 pos = {chunk->pos.x * Chunk::CHUNK_SIZE + x,
-                                 chunk->pos.y * Chunk::CHUNK_SIZE + y + 1,
-                                 chunk->pos.z * Chunk::CHUNK_SIZE + z};
+                glm::vec3 pos = chunk->chunkToWorldPos(x,y,z);
+                pos.y+=1;
                 generateTree(pos, chunkProvider);
             }
         }

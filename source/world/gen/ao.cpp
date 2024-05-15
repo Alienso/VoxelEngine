@@ -29,5 +29,5 @@ void getBlockOffsets(size_t side, int vertexIndex, glm::ivec3* offsets[3]){
 }
 
 float CullMesher::getAOValue(int vertexIndex, size_t sideId, float* vertexPos, ChunkProvider& chunkProvider){
-    return 1;
+    return 2;
 }

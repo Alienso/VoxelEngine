@@ -2,14 +2,14 @@
 // Created by Alienson on 23.4.2024..
 //
 
-#include "WorldGen.h"
+#include "TerrainGen.h"
 #include <cmath>
 #include "world/Chunk.h"
 #include "world/Blocks.h"
 
-WorldGen::WorldGen() : height(Chunk::CHUNK_SIZE), width(Chunk::CHUNK_SIZE) {}
+TerrainGen::TerrainGen() : height(Chunk::CHUNK_SIZE), width(Chunk::CHUNK_SIZE) {}
 
-Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
+Chunk *TerrainGen::generateChunk(int posX, int posY, int posZ) {
 
     auto* chunk = new Chunk(posX, posY, posZ);
     generateHeightMap(chunk);
@@ -26,12 +26,12 @@ Chunk *WorldGen::generateChunk(int posX, int posY, int posZ) {
     return chunk;
 }
 
-void WorldGen::generateHeightMap(Chunk *chunk) {
+void TerrainGen::generateHeightMap(Chunk *chunk) {
 
     for (int z = 0 ; z <  height; z++) { //TODO invert order for cache locality
         for (int x = 0 ; x < width; x++) {
 
-            float localAmplitude = 20;
+            float localAmplitude = (float)amplitude;
             float frequency = 1;
             float noiseHeight = 0;
 
@@ -53,19 +53,5 @@ void WorldGen::generateHeightMap(Chunk *chunk) {
         }
     }
 
-}
-
-uint32_t WorldGen::hash(uint32_t a){
-    a = (a + 0x7ed55d16) + (a << 12);
-    a = (a ^ 0xc761c23c) ^ (a >> 19);
-    a = (a + 0x165667b1) + (a << 5);
-    a = (a + 0xd3a2646c) ^ (a << 9);
-    a = (a + 0xfd7046c5) + (a << 3);
-    a = (a ^ 0xb55a4f09) ^ (a >> 16);
-    return a;
-}
-
-int WorldGen::toMapIndex(int x, int y) {
-    return (53 + hash(y)) * 53 + hash(x);
 }
 

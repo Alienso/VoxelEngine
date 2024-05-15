@@ -15,6 +15,7 @@
 
 #include "Biomes.h"
 #include "world/Chunk.h"
+#include "world/gen/WaterGen.h"
 
 class ChunkProvider;
 
@@ -42,6 +43,7 @@ public:
 private:
     PlantGenerator plantGenerator;
     TreeGenerator treeGenerator;
+    WaterGen waterGen;
     BiomeDecorator decorator;
 
 };

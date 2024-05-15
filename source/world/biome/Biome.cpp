@@ -9,5 +9,6 @@
 void Biome::decorateChunk(Chunk *chunk, ChunkProvider& chunkProvider) {
     plantGenerator.decorate(chunk);
     treeGenerator.decorate(chunk, chunkProvider);
+    waterGen.decorate(chunk, chunkProvider);
     chunk->isDecorated = true;
 }
