@@ -32,6 +32,17 @@ BufferData::BufferData(float *vertices, size_t length) {
     va->addBuffer(*vb, *layout);
 }
 
+void BufferData::genAtLocation(BufferData* dest, const float* vertices, size_t length){
+    dest->vb = make_shared<VertexBuffer>(vertices, length * sizeof(float));
+    dest->layout = make_shared<VertexBufferLayout>();
+    dest->layout->push<float>(3);
+    dest->layout->push<float>(3);
+    dest->layout->push<float>(2);
+    dest->layout->push<float>(1);
+    dest->va = make_shared<VertexArray>();
+    dest->va->addBuffer(*(dest->vb), *(dest->layout));
+}
+
 BufferData::BufferData(float *vertices, std::size_t length, std::vector<int>& layoutFormat) {
     vb = make_shared<VertexBuffer>(vertices, length * sizeof(float));
     layout = make_shared<VertexBufferLayout>();

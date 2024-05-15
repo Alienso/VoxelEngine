@@ -17,11 +17,11 @@ public:
     ~BufferData();
     BufferData(float* vertices, std::size_t length);
     BufferData(float* vertices, std::size_t length, std::vector<int>& layout);
+    static void genAtLocation(BufferData* dest, const float* vertices, size_t length);
 
     std::shared_ptr<VertexArray> va;
     std::shared_ptr<VertexBuffer> vb;
     std::shared_ptr<VertexBufferLayout> layout;
-
 };
 
 #endif //INC_3DTEST_BUFFERDATA_H

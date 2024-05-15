@@ -10,6 +10,10 @@
 #include <GLFW/glfw3.h>
 #include <mutex>
 
+Mesh::~Mesh() {
+    Global::world->deleteBufferData(bufferData);
+}
+
 Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     Mesh* mesh = new Mesh();
     mesh->vertices.reserve(length / 9);
@@ -24,7 +28,8 @@ Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     std::mutex mut;
     std::unique_lock<std::mutex> lock(mut);
     std::condition_variable cv;
-    Global::world->genBufferData(vertexData, length, &(mesh->bufferData), cv);
+    mesh->bufferData = new BufferData();
+    Global::world->genBufferData(vertexData, length, mesh->bufferData, cv);
     cv.wait(lock);
     //mut.lock();
 
@@ -34,7 +39,7 @@ Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
 void Mesh::render(const Material &material) {
     material.texture.bind();
     material.shader.use();
-    bufferData.va->bind();
+    bufferData->va->bind();
 
     material.shader.setMat4("projection", Global::currentFrame.projection);
     material.shader.setMat4("view", Global::currentFrame.view);
@@ -57,5 +62,5 @@ size_t Mesh::getVerticesCount() const {
 }
 
 void Mesh::bindVertexArray() const {
-    this->bufferData.va->bind();
+    this->bufferData->va->bind();
 }

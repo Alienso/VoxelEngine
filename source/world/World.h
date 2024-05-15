@@ -47,6 +47,8 @@ public:
 
     void updateBufferData();
 
+    void deleteBufferData(BufferData *pData);
+
 private:
     void handleCollision();
 
@@ -57,7 +59,8 @@ private:
 
     std::vector<Entity*> entities;
 
-    ts_queue <BufferDataCommand> bufferDataQueue;
+    ts_queue <BufferDataCommand> bufferDataCommandQueue; //TODO refactor placement
+    std::vector<BufferData*> renderBufferData; //TODO maybe make this non pointers for faster access?
 
     static int timeOfDay;
 };

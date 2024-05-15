@@ -138,23 +138,32 @@ ChunkProvider &World::getChunkProvider() {
 }
 
 void World::genBufferData(float *vertexData, size_t length, BufferData *bufferData, std::condition_variable& cv) {
-    bufferDataQueue.emplace_back(vertexData, length, bufferData, cv);
+    bufferDataCommandQueue.emplace_back(vertexData, length, bufferData, cv);
 }
 
 void World::updateBufferData() {
-    while(!bufferDataQueue.empty()){
-        Timer front("Front");
-        const BufferDataCommand& command = bufferDataQueue.front();
-        front.stop();
-        Timer createBuffer("createBuffer");
-        *(command.bufferData) = BufferData(command.vertexData, command.length);
-        createBuffer.stop();
-        Timer notify("Notify");
+    while(!bufferDataCommandQueue.empty()){
+        //Timer front("Front");
+        BufferDataCommand& command = bufferDataCommandQueue.front();
+        //front.stop();
+        //Timer createBuffer("createBuffer");
+        BufferData::genAtLocation(command.bufferData, command.vertexData, command.length);
+        //createBuffer.stop();
+        //Timer notify("Notify");
         command.cv.notify_one();
-        notify.stop();
-        Timer pop("Pop");
-        bufferDataQueue.pop_front();
-        pop.stop();
-        std::cout << "----------------------";
+        //notify.stop();
+        //Timer pop("Pop");
+        bufferDataCommandQueue.pop_front();
+        //pop.stop();
+        //std::cout << "----------------------";
     }
+
+    for (BufferData* bd : renderBufferData){
+        delete bd;
+    }
+    renderBufferData.clear();
+}
+
+void World::deleteBufferData(BufferData *bufferData) {
+    renderBufferData.push_back(bufferData);
 }

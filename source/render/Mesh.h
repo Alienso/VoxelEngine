@@ -25,6 +25,7 @@ struct Vertex{
 class Mesh {
 public:
     Mesh() = default;
+    ~Mesh();
     static Mesh* fromRawData(float* vertices, size_t length);
 
     void bindVertexArray() const;
@@ -34,7 +35,7 @@ public:
 
 private:
     std::vector<Vertex> vertices;
-    BufferData bufferData;
+    BufferData* bufferData = nullptr;
 };
 
 

@@ -24,6 +24,10 @@ WorldRenderer::~WorldRenderer() {
         delete it.second;
     }
     terrainMeshes1.clear();
+    for (auto& it : terrainMeshes2){
+        delete it.second;
+    }
+    terrainMeshes2.clear();
 }
 
 void WorldRenderer::renderScene() {
@@ -258,7 +262,7 @@ void WorldRenderer::renderShadows() {
 }
 
 void WorldRenderer::swapMaps() {
-    swapMutex.lock();
+     swapMutex.lock();
     if (terrainMeshesWriteMap == &terrainMeshes1){
         terrainMeshesWriteMap = &terrainMeshes2;
         terrainMeshesReadMap =  &terrainMeshes1;

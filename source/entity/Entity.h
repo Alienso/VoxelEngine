@@ -9,10 +9,7 @@
 #include "util/AxisAlignedBB.h"
 #include "render/EntityRenderer.h"
 #include "render/Material.h"
-
 #include "render/buffer/BufferData.h"
-
-class BufferData;
 
 class Entity {
 

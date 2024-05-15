@@ -114,6 +114,7 @@ void AppName::init() {
         while(shouldContinue) {
             this->world->updateTerrain();
         }
+        std::cout << "shutting down logicThread\n";
     });
 
     this_thread::sleep_for(std::chrono::milliseconds(300));
@@ -125,6 +126,7 @@ void AppName::init() {
             world->onUpdate(glfwGetTime() - lastLogicTime);
             lastLogicTime = glfwGetTime();
         }
+        std::cout << "shutting down logicThread\n";
     });
 
 }
@@ -153,8 +155,10 @@ void AppName::mainLoop() {
 
 void AppName::cleanup() {
 
-    /*terrainUpdateThread.join(); //TODO deadlock?
-    logicThread.join();*/
+    if (terrainUpdateThread.joinable())
+        terrainUpdateThread.join();
+    if (logicThread.joinable())
+        logicThread.join();
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

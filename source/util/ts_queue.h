@@ -61,12 +61,12 @@ public:
         return val;
     }
 
-    const T& front() {
+    T& front() {
         scoped_lock lock(mutex_);
         return queue.front();
     }
 
-    const T& back() {
+    T& back() {
         scoped_lock lock(mutex_);
         queue.back();
     }
