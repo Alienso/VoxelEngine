@@ -40,23 +40,23 @@ void WorldRenderer::renderScene() {
     renderTerrain(); //TODO do a bare bones vs shader render, fs shouldn't do anything
     depthBuffer.unbind();
 
-    renderBuffer.bind();
+    //renderBuffer.bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     Global::sun->render();
     renderTerrain();
     Global::skybox->render();
 
-    renderBuffer.unbind();
+    //renderBuffer.unbind();
 
     //renderFog(); //Skybox and breaks bloom?
-    applyBloom(); //Use better blurring or predefined texture map for sun
-    applyColorCorrection();
-    applyToneMapping();
-    applyGammaCorrection();
+    //applyBloom(); //Use better blurring or predefined texture map for sun
+    //applyColorCorrection();
+    //applyToneMapping();
+    //applyGammaCorrection();
 
     //Util::renderTexture(depthBuffer.getTextureId());
-    Util::renderTexture(renderBuffer.getTextureId());
+    //Util::renderTexture(renderBuffer.getTextureId());
 }
 
 void WorldRenderer::renderTerrain() {

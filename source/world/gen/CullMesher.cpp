@@ -86,7 +86,7 @@ void CullMesher::generateVerticesForBlockChunk(const Chunk &chunk, const Block& 
     if (block.isRegularBlock()) {
         for (auto side: EnumFacing::sides) {
             Block &otherBlock = getAdjacentBlock(const_cast<Chunk *>(&chunk), posInChunk, side, chunkProvider);
-            if (otherBlock.isTransparent()) {
+            if ((otherBlock.isTransparent() || block.isTransparent()) && otherBlock.getId() != block.getId()) { //TODO add if we should merge blocks into blob or not
                 addVerticesForSide(block, posOffset, side, chunk, chunkProvider);
             }
         }

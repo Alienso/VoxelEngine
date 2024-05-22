@@ -33,11 +33,12 @@ void WaterGen::decorate(Chunk *chunk, ChunkProvider& chunkProvider) {
                 noiseHeight = 0;
             }
 
-            int depth = (int)noiseHeight;
-            int y = chunk->getHeightAt(x, z);
-            for (int i=0; i<=depth; i++) {
-                glm::vec3 pos = chunk->chunkToWorldPos(x,y,z);
-                chunkProvider.setBlockAtWorldPos(pos.x, pos.y - (float)i, pos.z, Blocks::STILL_WATER->getId());
+            if (noiseHeight > threshold) { //TODO
+                int y = chunk->getHeightAt(x, z);
+                for (int i = 0; i <= noiseHeight - threshold; i++) {
+                    glm::vec3 pos = chunk->chunkToWorldPos(x, y, z);
+                    chunkProvider.setBlockAtWorldPos(pos.x, pos.y - (float) i, pos.z, Blocks::STILL_WATER->getId());
+                }
             }
         }
     }

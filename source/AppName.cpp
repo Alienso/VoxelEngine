@@ -46,7 +46,7 @@ void AppName::initGlfw(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    glfwWindowHint(GLFW_SAMPLES, 4);
+    //glfwWindowHint(GLFW_SAMPLES, 4);
 
     //Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", glfwGetPrimaryMonitor(), nullptr);
     Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", nullptr, nullptr);
@@ -70,7 +70,7 @@ void AppName::initGlfw(){
     }
 
     glEnable(GL_BLEND);
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     

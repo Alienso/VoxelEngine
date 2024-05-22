@@ -28,7 +28,7 @@ private:
     int octaves = 2;
     float persistance = 0.5f;
     float lacunarity = 2.0;
-    float threshold = 0.5f;
+    float threshold = 5.0f;
 };
 
 

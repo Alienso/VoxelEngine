@@ -1,5 +1,0 @@
-add render, terrain, logic thread
-fix sun lighting
-add fog for chunk loading
-shadows
-block sides rendering

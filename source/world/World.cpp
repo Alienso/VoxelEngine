@@ -78,6 +78,9 @@ void World::onImGuiRender() {
 }
 
 void World::updateTerrain() {
+
+    chunkProvider.setBlockAtWorldPos(1,5,1,Blocks::STILL_WATER->getId());
+
     bool newChunks = false;
     glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
     int renderDistance = GraphicsConfiguration::renderDistance;

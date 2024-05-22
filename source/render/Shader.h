@@ -12,7 +12,7 @@ public:
     unsigned int ID = 0;
 
     Shader() = default;
-    Shader(const char* vertexPath, const char* fragmentPath);
+    Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 
     int getUniformLocation(const std::string &key);
 
@@ -34,6 +34,7 @@ public:
 
 private:
     static void checkCompileErrors(unsigned int shader, const std::string& type);
+    [[nodiscard]] static unsigned int generateShader(const char* path, unsigned int shaderType);
 
     std::unordered_map<std::string, int> uniformMap;
 };

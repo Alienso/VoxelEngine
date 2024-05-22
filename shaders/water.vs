@@ -4,17 +4,17 @@ layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoord;
 layout (location = 3) in float aAo;
 
-out vec2 TexCoord;
-out vec3 Normal;
-out vec3 FragPos;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+out VS_OUT { //TODO remove normals and AO
+    vec3 vPos;
+    vec3 vNormal;
+    vec2 vTexCoord;
+    float vAo;
+} vs_out;
 
 void main(){
-	gl_Position = projection * view * model * vec4(aPos, 1.0f);
-	FragPos = vec3(model * vec4(aPos, 1.0));
-	Normal = mat3(transpose(inverse(model))) * aNormal;
-	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
+    vs_out.vPos = aPos;
+    vs_out.vNormal = aNormal;
+    vs_out.vTexCoord = aTexCoord;
+    vs_out.vAo = aAo;
+	gl_Position = vec4(aPos, 1.0f);
 }
