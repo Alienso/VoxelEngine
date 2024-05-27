@@ -22,15 +22,15 @@ void InputHandler::processMouseInput() {
     float ypos = static_cast<float>(yposIn);
 
     if (Global::camera.firstMouse) {
-        Global::camera.lastPos[0] = xpos;
-        Global::camera.lastPos[1] = ypos;
+        Global::camera.lastMousePos[0] = xpos;
+        Global::camera.lastMousePos[1] = ypos;
         Global::camera.firstMouse = false;
     }
 
-    float xoffset = xpos - Global::camera.lastPos[0];
-    float yoffset = Global::camera.lastPos[1] - ypos;
-    Global::camera.lastPos[0] = xpos;
-    Global::camera.lastPos[1] = ypos;
+    float xoffset = xpos - Global::camera.lastMousePos[0];
+    float yoffset = Global::camera.lastMousePos[1] - ypos;
+    Global::camera.lastMousePos[0] = xpos;
+    Global::camera.lastMousePos[1] = ypos;
 
     float sensitivity = 0.1f;
     xoffset *= sensitivity;
@@ -85,6 +85,7 @@ void InputHandler::processKeyboardInput(float deltaTime) {
     if (glfwGetKey(Global::window, GLFW_KEY_F) == GLFW_PRESS)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+    Global::camera.prevPos = Global::camera.pos;
     if (glfwGetKey(Global::window, GLFW_KEY_W) == GLFW_PRESS)
         Global::camera.pos += cameraSpeed * Global::camera.front;
     if (glfwGetKey(Global::window, GLFW_KEY_S) == GLFW_PRESS)

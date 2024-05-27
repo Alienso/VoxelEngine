@@ -7,18 +7,25 @@
 #include "world/Blocks.h"
 #include "CubeVerticesTypes.h"
 
+#include "world/ChunkProvider.h"
+
+struct genInfo{
+    glm::ivec3 pos;
+    uint16_t block;
+
+    genInfo(glm::ivec3 pos_, uint16_t block_) : pos(pos_), block(block_){}
+};
+
 CullMesher::CullMesher() {}
 
 
-void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMeshes, ChunkProvider &chunkProvider) {
-
-    Mesh* currentMesh;
-    verticesForBlockMap.clear();
+void CullMesher::generateMeshes(terrainMeshMap &terrainMeshes, ChunkProvider &chunkProvider) {
 
     /*std::cout << "verticesForBlockChunkMap size=" << verticesForBlockChunkMap.size() << '\n';
     std::cout << "Chunk size=" << chunkProvider.getChunks().size() << '\n';
-    Timer timer("Generating mesh");
     Timer generatingVertices("Generating vertices");*/
+
+    std::vector<genInfo> newChunks;
 
     for (auto& it : chunkProvider.getChunks()){
         Chunk* chunk = it.second;
@@ -30,6 +37,7 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
                         if (blockId != Blocks::AIR->getId()) {
                             Block& block = Blocks::getById(blockId);
                             generateVerticesForBlockChunk(*chunk, block, {x, y, z}, chunkProvider);
+                            newChunks.emplace_back(chunk->pos, blockId);
                         }
                     }
                 }
@@ -38,42 +46,53 @@ void CullMesher::generateMeshes(std::unordered_map<uint16_t, Mesh *> &terrainMes
     }
 
     //generatingVertices.stop();
-    //Timer mapTransform("Map Transform");
+    //Timer timer("Generating mesh");
 
-    //TODO optimize this!
-    for (const auto& it : verticesForBlockChunkMap){
-        for (const auto& blockMap : it.second){
-            for (const auto& v : blockMap.second) {
-                verticesForBlockMap[blockMap.first].push_back(v);
-            }
+    /*for (auto newChunk : newChunks){
+        if (auto it = terrainMeshes.find(newChunk.pos); it == terrainMeshes.end()){
+            if (auto outerMapIt = verticesForBlockChunkMap.find(newChunk.pos); outerMapIt != verticesForBlockChunkMap.end()) {
+                if (auto innerMapIt = outerMapIt->second.find(newChunk.block); innerMapIt != outerMapIt->second.end()) {
+                    terrainMeshes.insert(std::make_pair(newChunk.pos, std::unordered_map<uint16_t, Mesh *>()));
+                    terrainMeshes[newChunk.pos].insert(std::make_pair(newChunk.block, Mesh::fromRawData((float*)(&(innerMapIt->second[0])), innerMapIt->second.size() * 9)));
+                }else
+                    continue;
+            }else
+                continue;
+        }else
+            continue;
+    }*/
+
+    //We can't iterate only over newChunks since we are swapping maps each load so some chunks will not persist in other map between switching
+    for (auto &chunk : verticesForBlockChunkMap){
+        for (auto &blockVertices : chunk.second) {
+            if (auto it = terrainMeshes.find(chunk.first); it == terrainMeshes.end()) {
+                //terrainMeshes.insert(std::make_pair(chunk.first, std::unordered_map<uint16_t, Mesh *>()));
+                terrainMeshes[chunk.first].insert(std::make_pair(blockVertices.first, Mesh::fromRawData((float *) (&(blockVertices.second[0])), blockVertices.second.size() * 9)));
+            } else
+                continue;
         }
     }
 
     //mapTransform.stop();
-    //Timer final("Final");
-
-    for (const auto& it : verticesForBlockMap) {
-        if (it.second.empty())
-            continue;
-        currentMesh = Mesh::fromRawData((float *) (&(it.second[0])), it.second.size() * 9);
-        if (auto meshIter = terrainMeshes.find(it.first); meshIter != terrainMeshes.end()) {
-            delete meshIter->second;
-        }
-        terrainMeshes[it.first] =  currentMesh;
-    }
-
-    //final.stop();
     //std::cout << "----------------------------------\n";
 }
 
-void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider) {
+void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider) {
 
-    for(Chunk* chunk : chunksToRemove){
+    /*for(Chunk* chunk : chunksToRemove){
         if (verticesForBlockChunkMap.find(chunk->pos) != verticesForBlockChunkMap.end()){
             verticesForBlockChunkMap.erase(chunk->pos);
+            auto it =  terrainMeshes.find(chunk->pos);
+            if (it == terrainMeshes.end()){
+                continue;
+            }
+            for (auto chunkMap : it->second){
+                delete chunkMap.second;
+            }
+            it->second.clear();
         }
         chunkProvider.deleteChunkAt(chunk->pos);
-    }
+    }*/
 
     generateMeshes(terrainMeshes, chunkProvider);
 }
@@ -116,7 +135,7 @@ void CullMesher::addVerticesForSide(const Block& block, glm::ivec3 posOffset, co
     size_t offset = CubeVerticesTypes::cubeVerticesSideOffsets[side->id]; //Danger have mapper?
     float* cubeData = &((*block.getVerticesPtr())[offset]);
 
-    for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=9){ //TODO memcpy?
+    for (size_t i = 0; i < CubeVerticesTypes::cubeVerticesSideSize; i+=9) { //TODO memcpy?
         float ao = getAOValue(i/9, side->id, &cubeData[i], chunkProvider);
         verticesForBlockChunkMap[chunk.pos][block.getId()].emplace_back(glm::vec3{cubeData[i] + (float)posOffset.x, cubeData[i + 1] + (float)posOffset.y, cubeData[i + 2] + (float)posOffset.z},
                                                   glm::vec3{cubeData[i+3], cubeData[i+4], cubeData[i+5]},

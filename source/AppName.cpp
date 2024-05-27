@@ -125,6 +125,7 @@ void AppName::init() {
     terrainUpdateThread = std::thread([this] {
         while(shouldContinue) {
             this->world->updateTerrain();
+            this_thread::sleep_for(std::chrono::milliseconds(0));
         }
         std::cout << "shutting down logicThread\n";
     });
@@ -137,6 +138,7 @@ void AppName::init() {
         while(shouldContinue) {
             world->onUpdate(glfwGetTime() - lastLogicTime);
             lastLogicTime = glfwGetTime();
+            this_thread::sleep_for(std::chrono::milliseconds(0));
         }
         std::cout << "shutting down logicThread\n";
     });

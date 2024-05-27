@@ -8,10 +8,15 @@
 #include <unordered_map>
 #include "glm/glm.hpp"
 #include "render/Mesh.h"
-#include "world/Chunk.h"
-
 #include "util/Util.h"
-#include "world/ChunkProvider.h"
+
+
+class Chunk;
+class ChunkProvider;
+class WorldRenderer;
+
+class EnumFacing;
+class Block;
 
 struct ChunkVertexOffsetData{
     std::vector<uint16_t> blockIds;
@@ -20,11 +25,12 @@ struct ChunkVertexOffsetData{
 
 class CullMesher {
 public:
-
     CullMesher();
 
-    void generateMeshes(std::unordered_map<uint16_t, Mesh*>& terrainMeshes, ChunkProvider& chunkProvider);
-    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, std::unordered_map<uint16_t, Mesh *>& terrainMeshes, ChunkProvider& chunkProvider);
+    friend WorldRenderer;
+
+    void generateMeshes(terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider);
+    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider);
 
     void invalidateChunkCache(Chunk *chunk);
 
@@ -36,8 +42,7 @@ private:
     static Block& getAdjacentBlock(Chunk *chunk, glm::ivec3 pos, const EnumFacing* side, const ChunkProvider &provider);
     static float getAOValue(int vertexIndex, size_t side, float* vertexPos, ChunkProvider& chunkProvider);
 
-    std::unordered_map<uint16_t, std::vector<Vertex>> verticesForBlockMap;
-    std::unordered_map<glm::ivec3, std::unordered_map<uint16_t ,std::vector<Vertex>>, GlmVec3Functions, GlmVec3Functions> verticesForBlockChunkMap;
+    std::unordered_map<glm::ivec3, std::unordered_map<uint16_t, std::vector<Vertex>>, GlmVec3Functions, GlmVec3Functions> verticesForBlockChunkMap;
 
 };
 

@@ -15,7 +15,8 @@ public:
 
     bool firstMouse;
     glm::vec3 pos;
-    glm::vec3 lastPos;
+    glm::vec3 prevPos;
+    glm::vec3 lastMousePos;
     glm::vec3 front;
     glm::vec3 up;
     float yaw;

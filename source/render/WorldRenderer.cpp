@@ -21,11 +21,15 @@ WorldRenderer::WorldRenderer() {
 
 WorldRenderer::~WorldRenderer() {
     for (auto& it : terrainMeshes1){
-        delete it.second;
+        for (auto& it2 : it.second){
+            delete it2.second;
+        }
     }
     terrainMeshes1.clear();
     for (auto& it : terrainMeshes2){
-        delete it.second;
+        for (auto& it2 : it.second){
+            delete it2.second;
+        }
     }
     terrainMeshes2.clear();
 }
@@ -60,32 +64,33 @@ void WorldRenderer::renderScene() {
 }
 
 void WorldRenderer::renderTerrain() {
-    auto map = getTerrainMeshesReadMap();
-    std::vector<std::pair<const uint16_t, Mesh *>> transparentBlocks;
+    terrainMeshMap& map = getTerrainMeshesReadMap();
+    //std::vector<std::pair<const uint16_t, Mesh *>> transparentBlocks; //TODO
     for (auto& it : map){
-        Block& block = Blocks::getById(it.first);
-        Mesh* mesh = it.second;
-        if (block.isTransparent()){
-            transparentBlocks.emplace_back(block.id, mesh);
-        }
-        else {
-            renderBlockMesh(block, mesh);
+        for (auto& it2 : it.second) {
+            Block &block = Blocks::getById(it2.first);
+            Mesh *mesh = it2.second;
+            //if (block.isTransparent()) {
+                //transparentBlocks.emplace_back(block.getId(), mesh);
+            //} else {
+                renderBlockMesh(block, mesh);
+            //}
         }
     }
 
-    for (auto it : transparentBlocks){
+    /*for (auto it : transparentBlocks){
         Block& block = Blocks::getById(it.first);
         renderBlockMesh(block, it.second);
-    }
+    }*/
 }
 
 
-std::unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshesWriteMap() {
+terrainMeshMap& WorldRenderer::getTerrainMeshesWriteMap() {
     std::scoped_lock sl(swapMutex);
     return *terrainMeshesWriteMap;
 }
 
-std::unordered_map<uint16_t, Mesh *>& WorldRenderer::getTerrainMeshesReadMap() {
+terrainMeshMap& WorldRenderer::getTerrainMeshesReadMap() {
     std::scoped_lock sl(swapMutex);
     return *terrainMeshesReadMap;
 }
@@ -282,4 +287,8 @@ void WorldRenderer::swapMaps() {
         terrainMeshesReadMap =  &terrainMeshes2;
     }
     swapMutex.unlock();
+}
+
+void WorldRenderer::updateMeshes(std::vector<Chunk *> &chunksToRemove, ChunkProvider& chunkProvider) {
+    cullMesher.updateMeshes(chunksToRemove, getTerrainMeshesWriteMap(), chunkProvider);
 }

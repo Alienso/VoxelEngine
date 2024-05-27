@@ -9,6 +9,7 @@
 #include "render/buffer/FrameBuffer.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "CullMesher.h"
 #include <unordered_map>
 #include <mutex>
 
@@ -23,8 +24,10 @@ public:
     void renderTerrain();
     void renderShadows();
 
-    std::unordered_map<uint16_t, Mesh*>& getTerrainMeshesWriteMap();
-    std::unordered_map<uint16_t, Mesh*>& getTerrainMeshesReadMap();
+    void updateMeshes(std::vector<Chunk *>& chunksToRemove, ChunkProvider& chunkProvider);
+
+    terrainMeshMap& getTerrainMeshesWriteMap();
+    terrainMeshMap& getTerrainMeshesReadMap();
     void swapMaps();
 
 private:
@@ -35,19 +38,22 @@ private:
     void applyColorCorrection();
     void applyGammaCorrection();
 
+    CullMesher cullMesher;
+
     FrameBuffer depthBuffer{FRAME_BUFFER_SHADOW};
     FrameBuffer renderBuffer;
     FrameBuffer bloomBuffer;
     FrameBuffer toneMapperBuffer;
     Shader* shadowShader;
 
+    //bloom downscale buffers
     FrameBuffer mipLevels[8];
     FrameBuffer scaledImages[8];
 
-    std::unordered_map<uint16_t, Mesh*> terrainMeshes1;
-    std::unordered_map<uint16_t, Mesh*> terrainMeshes2;
-    std::unordered_map<uint16_t, Mesh*>* terrainMeshesWriteMap = &terrainMeshes1;
-    std::unordered_map<uint16_t, Mesh*>* terrainMeshesReadMap = &terrainMeshes2;
+    terrainMeshMap terrainMeshes1;
+    terrainMeshMap terrainMeshes2;
+    terrainMeshMap* terrainMeshesWriteMap = &terrainMeshes1;
+    terrainMeshMap* terrainMeshesReadMap = &terrainMeshes2;
     std::mutex swapMutex;
 
 };

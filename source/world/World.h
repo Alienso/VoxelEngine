@@ -10,7 +10,7 @@
 #include "entity/SunEntity.h"
 #include "render/Mesh.h"
 #include "world/gen/TerrainGen.h"
-#include "world/gen/CullMesher.h"
+#include "render/CullMesher.h"
 #include "render/buffer/FrameBuffer.h"
 #include "ChunkProvider.h"
 #include "render/WorldRenderer.h"
@@ -20,6 +20,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <queue>
+#include <atomic>
 
 struct BufferDataCommand{
     float* vertexData;
@@ -53,7 +54,6 @@ private:
     void handleCollision();
 
 private:
-    CullMesher cullMesher;
     ChunkProvider chunkProvider;
     WorldRenderer worldRenderer;
 
@@ -63,6 +63,9 @@ private:
     std::vector<BufferData*> renderBufferData; //TODO maybe make this non pointers for faster access?
 
     static int timeOfDay;
+
+    void checkIfPlayerSwitchedChunk(); //Temp
+    bool playerChangedChunk = false;
 };
 
 

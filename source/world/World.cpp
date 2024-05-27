@@ -42,6 +42,8 @@ void World::onUpdate(float deltaTime) {
         cullMesher.generateMeshes(worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
     }*/
 
+    checkIfPlayerSwitchedChunk();
+
     for(auto& e : entities)
         e->onUpdate(deltaTime);
 
@@ -79,19 +81,24 @@ void World::onImGuiRender() {
 
 void World::updateTerrain() {
 
-    chunkProvider.setBlockAtWorldPos(1,5,1,Blocks::STILL_WATER->getId());
+    //chunkProvider.setBlockAtWorldPos(1,5,1,Blocks::STILL_WATER->getId());
+
+    if (!playerChangedChunk){
+        return;
+    }
+    playerChangedChunk = false;
 
     bool newChunks = false;
     glm::ivec3 pos = Chunk::worldToChunkPos(Global::camera.pos.x, Global::camera.pos.y, Global::camera.pos.z);
     int renderDistance = GraphicsConfiguration::renderDistance;
-    std::vector<Chunk*> chunksToRemove;
-    std::vector<Chunk*> traversedChunks;
-    for (int x = pos.x - renderDistance; x<=pos.x + renderDistance; x++){
-        for (int z = pos.z - renderDistance; z<=pos.z + renderDistance; z++){
-            if ((x - pos.x)*(x - pos.x) + (z - pos.z)*(z - pos.z) <= renderDistance * renderDistance){
-                Chunk* chunk = chunkProvider.getChunkAt(x,0,z);
-                if (chunk == nullptr){
-                    chunk = chunkProvider.generateChunkAt(x,0,z);
+    std::vector<Chunk *> chunksToRemove;
+    std::vector<Chunk *> traversedChunks;
+    for (int x = pos.x - renderDistance; x <= pos.x + renderDistance; x++) {
+        for (int z = pos.z - renderDistance; z <= pos.z + renderDistance; z++) {
+            if ((x - pos.x) * (x - pos.x) + (z - pos.z) * (z - pos.z) <= renderDistance * renderDistance) {
+                Chunk *chunk = chunkProvider.getChunkAt(x, 0, z);
+                if (chunk == nullptr) {
+                    chunk = chunkProvider.generateChunkAt(x, 0, z);
                     newChunks = true;
                 }
                 traversedChunks.push_back(chunk);
@@ -114,14 +121,14 @@ void World::updateTerrain() {
         }
     }
 
-    if (!chunksToRemove.empty()){
-        cullMesher.updateMeshes(chunksToRemove, worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
+    if (!chunksToRemove.empty()) {
+        worldRenderer.updateMeshes(chunksToRemove, chunkProvider);
         worldRenderer.swapMaps();
     }
 }
 
 void World::handleCollision() {
-    glm::vec3 pos = Global::camera.pos;
+    /*glm::vec3 pos = Global::camera.pos;
     Chunk* chunk = chunkProvider.getChunkAtWorldPos(pos.x, pos.y, pos.z);
     if (chunk == nullptr)
         return;
@@ -129,7 +136,7 @@ void World::handleCollision() {
     int height = chunk->getHeightAt((int)posInChunk.x, (int)posInChunk.z);
     if ((int)pos.y - 3 < height){
         Global::camera.pos.y = (float)height + 3;
-    }
+    }*/
 }
 
 int World::getTimeOfDay() {
@@ -169,4 +176,15 @@ void World::updateBufferData() {
 
 void World::deleteBufferData(BufferData *bufferData) {
     renderBufferData.push_back(bufferData);
+}
+
+void World::checkIfPlayerSwitchedChunk() {
+    if ((int)Global::camera.pos.x % Chunk::CHUNK_SIZE != (int)Global::camera.prevPos.x % Chunk::CHUNK_SIZE){
+        playerChangedChunk = true;
+        return;
+    }
+    if ((int)Global::camera.pos.z % Chunk::CHUNK_SIZE != (int)Global::camera.prevPos.z % Chunk::CHUNK_SIZE){
+        playerChangedChunk = true;
+        return;
+    }
 }

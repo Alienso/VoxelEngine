@@ -2,7 +2,7 @@
 // Created by vladimira on 07/05/2024.
 //
 
-#include "CullMesher.h"
+#include "render/CullMesher.h"
 
 
 void getBlockOffsets(size_t side, int vertexIndex, glm::ivec3* offsets[3]){

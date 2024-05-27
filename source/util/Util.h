@@ -7,6 +7,7 @@
 
 #include "glm/glm.hpp"
 #include "render/Shader.h"
+#include "render/Mesh.h"
 
 #include <memory>
 #include <chrono>
@@ -21,6 +22,8 @@ struct GlmVec3Functions {
         return a.x == b.x && a.y == b.y && a.z == b.z;
     }
 };
+
+typedef std::unordered_map<glm::ivec3, std::unordered_map<uint16_t, Mesh*>, GlmVec3Functions, GlmVec3Functions> terrainMeshMap;
 
 class Util{
 public:

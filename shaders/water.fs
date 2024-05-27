@@ -18,6 +18,7 @@ uniform int shininess;
 
 void main(){
 
+    //transition from transparent on high camera angles to full specular/skybox on low angles
     //vec4 texColor = texture(texture1, TexCoord);
     vec4 texColor = vec4(0.1,0.3,0.8,0.25);
     FragColor = texColor;

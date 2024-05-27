@@ -59,7 +59,7 @@ add_executable(Voxel main.cpp
         source/InputHandler.cpp source/InputHandler.h
         source/render/Mesh.cpp source/render/Mesh.h
         source/world/gen/TerrainGen.cpp source/world/gen/TerrainGen.h
-        source/world/gen/CullMesher.cpp source/world/gen/CullMesher.h
+        source/render/CullMesher.cpp source/render/CullMesher.h
         source/world/gen/PerlinNoise.cpp source/world/gen/PerlinNoise.h
         source/util/Util.cpp source/util/Util.h
         source/entity/Skybox.cpp source/entity/Skybox.h
@@ -69,7 +69,7 @@ add_executable(Voxel main.cpp
         source/CubeVerticesTypes.h source/CubeVerticesTypes.cpp source/world/biome/Biome.cpp source/world/biome/Biome.h source/world/gen/PlantGenerator.cpp source/world/gen/PlantGenerator.h source/world/gen/TreeGenerator.cpp source/world/gen/TreeGenerator.h source/world/biome/BiomeDecorator.cpp source/world/biome/BiomeDecorator.h source/world/biome/Biomes.cpp source/world/biome/Biomes.h source/world/biome/BiomeProvider.cpp source/world/biome/BiomeProvider.h source/util/RayTrace.cpp source/util/RayTrace.h
         source/world/gen/ao.cpp
         source/util/ts_queue.h
-        source/world/gen/WaterGen.cpp source/world/gen/WaterGen.h)
+        source/world/gen/WaterGen.cpp source/world/gen/WaterGen.h source/entity/PlayerEntity.cpp source/entity/PlayerEntity.h)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)
