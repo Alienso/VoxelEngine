@@ -128,7 +128,7 @@ void World::updateTerrain() {
 }
 
 void World::handleCollision() {
-    /*glm::vec3 pos = Global::camera.pos;
+    glm::vec3 pos = Global::camera.pos;
     Chunk* chunk = chunkProvider.getChunkAtWorldPos(pos.x, pos.y, pos.z);
     if (chunk == nullptr)
         return;
@@ -136,7 +136,7 @@ void World::handleCollision() {
     int height = chunk->getHeightAt((int)posInChunk.x, (int)posInChunk.z);
     if ((int)pos.y - 3 < height){
         Global::camera.pos.y = (float)height + 3;
-    }*/
+    }
 }
 
 int World::getTimeOfDay() {

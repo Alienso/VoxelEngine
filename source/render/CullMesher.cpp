@@ -48,28 +48,16 @@ void CullMesher::generateMeshes(terrainMeshMap &terrainMeshes, ChunkProvider &ch
     //generatingVertices.stop();
     //Timer timer("Generating mesh");
 
-    /*for (auto newChunk : newChunks){
-        if (auto it = terrainMeshes.find(newChunk.pos); it == terrainMeshes.end()){
-            if (auto outerMapIt = verticesForBlockChunkMap.find(newChunk.pos); outerMapIt != verticesForBlockChunkMap.end()) {
-                if (auto innerMapIt = outerMapIt->second.find(newChunk.block); innerMapIt != outerMapIt->second.end()) {
-                    terrainMeshes.insert(std::make_pair(newChunk.pos, std::unordered_map<uint16_t, Mesh *>()));
-                    terrainMeshes[newChunk.pos].insert(std::make_pair(newChunk.block, Mesh::fromRawData((float*)(&(innerMapIt->second[0])), innerMapIt->second.size() * 9)));
-                }else
-                    continue;
-            }else
-                continue;
-        }else
-            continue;
-    }*/
-
-    //We can't iterate only over newChunks since we are swapping maps each load so some chunks will not persist in other map between switching
     for (auto &chunk : verticesForBlockChunkMap){
         for (auto &blockVertices : chunk.second) {
-            if (auto it = terrainMeshes.find(chunk.first); it == terrainMeshes.end()) {
-                //terrainMeshes.insert(std::make_pair(chunk.first, std::unordered_map<uint16_t, Mesh *>()));
-                terrainMeshes[chunk.first].insert(std::make_pair(blockVertices.first, Mesh::fromRawData((float *) (&(blockVertices.second[0])), blockVertices.second.size() * 9)));
-            } else
-                continue;
+            auto it = terrainMeshes.find(blockVertices.first);
+            if (it == terrainMeshes.end()){
+                terrainMeshes.insert(std::make_pair(blockVertices.first, std::unordered_map<glm::ivec3, Mesh*, GlmVec3Functions, GlmVec3Functions>()));
+            }
+            it = terrainMeshes.find(blockVertices.first);
+            if (it->second.find(chunk.first) == it->second.end()){
+                terrainMeshes[blockVertices.first].insert(std::make_pair(chunk.first, Mesh::fromRawData((float*) (&(blockVertices.second[0])), blockVertices.second.size() * 9)));
+            }
         }
     }
 
@@ -79,20 +67,20 @@ void CullMesher::generateMeshes(terrainMeshMap &terrainMeshes, ChunkProvider &ch
 
 void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider) {
 
-    /*for(Chunk* chunk : chunksToRemove){
+    for(Chunk* chunk : chunksToRemove){
         if (verticesForBlockChunkMap.find(chunk->pos) != verticesForBlockChunkMap.end()){
             verticesForBlockChunkMap.erase(chunk->pos);
-            auto it =  terrainMeshes.find(chunk->pos);
-            if (it == terrainMeshes.end()){
-                continue;
+            for (auto blockMesh : terrainMeshes) {
+                auto it = blockMesh.second.find(chunk->pos);
+                if (it == blockMesh.second.end()) {
+                    continue;
+                }
+                //delete it->second; //There is some issue that makes the current rendering VBO to be deleted
+                //blockMesh.second.clear();
             }
-            for (auto chunkMap : it->second){
-                delete chunkMap.second;
-            }
-            it->second.clear();
         }
         chunkProvider.deleteChunkAt(chunk->pos);
-    }*/
+    }
 
     generateMeshes(terrainMeshes, chunkProvider);
 }
@@ -163,5 +151,5 @@ Block& CullMesher::getAdjacentBlock(Chunk *chunk, glm::ivec3 posInChunk, const E
 }
 
 void CullMesher::invalidateChunkCache(Chunk *chunk) {
-    verticesForBlockChunkMap.erase(chunk->pos);
+    //verticesForBlockChunkMap.erase(chunk->pos); //TODO
 }

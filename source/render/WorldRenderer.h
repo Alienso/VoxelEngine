@@ -31,7 +31,7 @@ public:
     void swapMaps();
 
 private:
-    void renderBlockMesh(Block &block, Mesh *mesh);
+    void setupParamsForBlockMesh(Block &block);
     void renderFog();
     void applyBloom();
     void applyToneMapping();

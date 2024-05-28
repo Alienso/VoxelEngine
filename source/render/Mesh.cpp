@@ -62,5 +62,5 @@ size_t Mesh::getVerticesCount() const {
 }
 
 void Mesh::bindVertexArray() const {
-    this->bufferData->va->bind();
+    bufferData->va->bind();
 }

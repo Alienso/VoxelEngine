@@ -66,14 +66,20 @@ void WorldRenderer::renderScene() {
 void WorldRenderer::renderTerrain() {
     terrainMeshMap& map = getTerrainMeshesReadMap();
     //std::vector<std::pair<const uint16_t, Mesh *>> transparentBlocks; //TODO
+    //Try render all same blocks first for all chunks, then switch to another block, so we dont need to rebind textures/shaders every time
+    //map needs to be inverted : [pos][blockId] -> [blockId][pos]
     for (auto& it : map){
+        Block &block = Blocks::getById(it.first);
+        setupParamsForBlockMesh(block);
+
         for (auto& it2 : it.second) {
-            Block &block = Blocks::getById(it2.first);
             Mesh *mesh = it2.second;
+            mesh->bindVertexArray();
+            glDrawArrays(GL_TRIANGLES, 0, (int)mesh->getVerticesCount());
             //if (block.isTransparent()) {
                 //transparentBlocks.emplace_back(block.getId(), mesh);
             //} else {
-                renderBlockMesh(block, mesh);
+                //renderBlockMesh(block, mesh);
             //}
         }
     }
@@ -95,11 +101,10 @@ terrainMeshMap& WorldRenderer::getTerrainMeshesReadMap() {
     return *terrainMeshesReadMap;
 }
 
-void WorldRenderer::renderBlockMesh(Block &block, Mesh *mesh) {
+void WorldRenderer::setupParamsForBlockMesh(Block &block) {
     Shader& shader = block.getMaterial().shader;
     block.getMaterial().texture.bind();
     shader.use();
-    mesh->bindVertexArray();
 
     shader.setMat4("projection", Global::currentFrame.projection);
     shader.setMat4("view", Global::currentFrame.view);
@@ -113,8 +118,6 @@ void WorldRenderer::renderBlockMesh(Block &block, Mesh *mesh) {
     shader.setFloat("ambientStrength", block.getMaterial().ambientStrength);
     shader.setFloat("specularStrength", block.getMaterial().specularStrength);
     shader.setInt("shininess", block.getMaterial().shininess);
-
-    glDrawArrays(GL_TRIANGLES, 0, (int)mesh->getVerticesCount()); //@Danger
 }
 
 void WorldRenderer::applyBloom() {

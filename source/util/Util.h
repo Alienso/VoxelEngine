@@ -23,7 +23,7 @@ struct GlmVec3Functions {
     }
 };
 
-typedef std::unordered_map<glm::ivec3, std::unordered_map<uint16_t, Mesh*>, GlmVec3Functions, GlmVec3Functions> terrainMeshMap;
+typedef std::unordered_map<uint16_t, std::unordered_map<glm::ivec3, Mesh*, GlmVec3Functions, GlmVec3Functions>> terrainMeshMap;
 
 class Util{
 public:
