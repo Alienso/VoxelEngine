@@ -63,6 +63,10 @@ private:
     std::vector<BufferData*> renderBufferData; //TODO maybe make this non pointers for faster access?
 
     static int timeOfDay;
+
+    void checkIfPlayerSwitchedChunk(); //Temp
+    bool playerChangedChunk = true;
+
 };
 
 

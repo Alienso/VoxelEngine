@@ -7,6 +7,7 @@
 #include "VertexBufferLayout.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include "util/Util.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ BufferData::BufferData(float *vertices, size_t length) {
 }
 
 void BufferData::genAtLocation(BufferData* dest, const float* vertices, size_t length){
+    //Timer timer("Create Buffer Data");
     dest->vb = make_shared<VertexBuffer>(vertices, length * sizeof(float));
     dest->layout = make_shared<VertexBufferLayout>();
     dest->layout->push<float>(3);

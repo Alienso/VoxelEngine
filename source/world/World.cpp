@@ -42,6 +42,8 @@ void World::onUpdate(float deltaTime) {
         cullMesher.generateMeshes(worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
     }*/
 
+    checkIfPlayerSwitchedChunk();
+
     for(auto& e : entities)
         e->onUpdate(deltaTime);
 
@@ -78,6 +80,11 @@ void World::onImGuiRender() {
 }
 
 void World::updateTerrain() {
+
+    if (!playerChangedChunk){
+        return;
+    }
+    playerChangedChunk = false;
 
     chunkProvider.setBlockAtWorldPos(1,5,1,Blocks::STILL_WATER->getId());
 
@@ -169,4 +176,15 @@ void World::updateBufferData() {
 
 void World::deleteBufferData(BufferData *bufferData) {
     renderBufferData.push_back(bufferData);
+}
+
+void World::checkIfPlayerSwitchedChunk() {
+    if ((int)Global::camera.pos.x % Chunk::CHUNK_SIZE != (int)Global::camera.prevPos.x % Chunk::CHUNK_SIZE){
+        playerChangedChunk = true;
+        return;
+    }
+    if ((int)Global::camera.pos.z % Chunk::CHUNK_SIZE != (int)Global::camera.prevPos.z % Chunk::CHUNK_SIZE){
+        playerChangedChunk = true;
+        return;
+    }
 }
