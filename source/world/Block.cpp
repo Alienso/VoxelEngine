@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType, bool transparent, Shader* shader) : id(id), name(name), transparent(transparent) {
+Block::Block(const char *name, int id, BlockTextureRenderTypeEnum renderType, bool transparent, bool neverRenderSides, Shader* shader) : id(id), name(name), transparent(transparent), neverRenderSides(neverRenderSides) {
     string path = "textures/block/" + string(name) + ".png";
     Texture& texture = Global::textureManager.createAsset(name, path.data(), GL_RGBA);
     material = &(Global::materialManager.createAsset(name, *shader, texture));

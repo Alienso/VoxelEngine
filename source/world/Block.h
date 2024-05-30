@@ -21,7 +21,7 @@ enum BlockTextureRenderTypeEnum{
 
 class Block {
 public:
-    Block(const char* name, int id, BlockTextureRenderTypeEnum renderType, bool transparent = false, Shader* shader = Global::shaderManager.getAsset(Shaders::BASE));
+    Block(const char* name, int id, BlockTextureRenderTypeEnum renderType, bool transparent = false, bool neverRenderSides = true, Shader* shader = Global::shaderManager.getAsset(Shaders::BASE));
 
     [[nodiscard]] constexpr uint16_t getId() const{
         return id;
@@ -38,6 +38,9 @@ public:
     [[nodiscard]] bool isRegularBlock() const{
         return regularBlock;
     }
+    [[nodiscard]] bool shouldNeverRenderSides() const{
+        return neverRenderSides;
+    }
 
     friend WorldRenderer;
 
@@ -47,6 +50,7 @@ private:
     std::string name;
 
     bool transparent;
+    bool neverRenderSides;
     bool regularBlock;
 
     Material* material;

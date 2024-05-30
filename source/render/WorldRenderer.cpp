@@ -54,9 +54,10 @@ void WorldRenderer::renderScene() {
     //applyColorCorrection();
     //applyToneMapping();
     //applyGammaCorrection();
+    //Util::renderTexture(renderBuffer.getTextureId());
 
     //Util::renderTexture(depthBuffer.getTextureId());
-    //Util::renderTexture(renderBuffer.getTextureId());
+
 }
 
 void WorldRenderer::renderTerrain() {
