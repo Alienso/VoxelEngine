@@ -65,7 +65,7 @@ private:
     static int timeOfDay;
 
     void checkIfPlayerSwitchedChunk(); //Temp
-    bool playerChangedChunk = false;
+    bool playerChangedChunk;
 };
 
 

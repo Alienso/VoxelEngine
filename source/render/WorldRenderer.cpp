@@ -66,8 +66,7 @@ void WorldRenderer::renderScene() {
 void WorldRenderer::renderTerrain() {
     terrainMeshMap& map = getTerrainMeshesReadMap();
     //std::vector<std::pair<const uint16_t, Mesh *>> transparentBlocks; //TODO
-    //Try render all same blocks first for all chunks, then switch to another block, so we dont need to rebind textures/shaders every time
-    //map needs to be inverted : [pos][blockId] -> [blockId][pos]
+    //std::scoped_lock scopedLock(swapMutex);
     for (auto& it : map){
         Block &block = Blocks::getById(it.first);
         setupParamsForBlockMesh(block);
@@ -281,7 +280,7 @@ void WorldRenderer::renderShadows() {
 }
 
 void WorldRenderer::swapMaps() {
-     swapMutex.lock();
+    swapMutex.lock();
     if (terrainMeshesWriteMap == &terrainMeshes1){
         terrainMeshesWriteMap = &terrainMeshes2;
         terrainMeshesReadMap =  &terrainMeshes1;
@@ -292,6 +291,6 @@ void WorldRenderer::swapMaps() {
     swapMutex.unlock();
 }
 
-void WorldRenderer::updateMeshes(std::vector<Chunk *> &chunksToRemove, ChunkProvider& chunkProvider) {
-    cullMesher.updateMeshes(chunksToRemove, getTerrainMeshesWriteMap(), chunkProvider);
+bool WorldRenderer::updateMeshes(std::vector<Chunk *> &chunksToRemove, ChunkProvider& chunkProvider) {
+    return cullMesher.updateMeshes(chunksToRemove, getTerrainMeshesWriteMap(), chunkProvider);
 }

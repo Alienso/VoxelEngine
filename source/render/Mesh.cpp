@@ -25,13 +25,12 @@ Mesh *Mesh::fromRawData(float *vertexData, size_t length) {
     //mesh->bufferData = BufferData(vertexData, length);
     //memcpy((void*)&(mesh->vertices[0]), (void*)vertexData, length); //TODO alignment?
 
-    std::mutex mut;
-    std::unique_lock<std::mutex> lock(mut);
+    std::mutex mutex;
+    std::unique_lock<std::mutex> lock(mutex);
     std::condition_variable cv;
     mesh->bufferData = new BufferData();
     Global::world->genBufferData(vertexData, length, mesh->bufferData, cv);
     cv.wait(lock);
-    //mut.lock();
 
     return mesh;
 }

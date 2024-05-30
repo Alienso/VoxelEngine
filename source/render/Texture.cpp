@@ -30,7 +30,7 @@ Texture::Texture(const char *path, int type) : textureId(0), filePath(path), wid
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, GL_UNSIGNED_BYTE, data);
         glBindTexture(GL_TEXTURE_2D,0);
-        //glGenerateMipmap(GL_TEXTURE_2D);
+        glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(data);
     }
     else{

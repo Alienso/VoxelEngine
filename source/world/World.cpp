@@ -18,8 +18,8 @@ World::World() {
     //updateTerrain();
     //cullMesher.generateMeshes(worldRenderer.getTerrainMeshesWriteMap(), chunkProvider);
     //worldRenderer.swapMaps();
-
     entities.push_back(Global::sun);
+    playerChangedChunk = true;
 }
 
 void World::onRender() {
@@ -122,8 +122,8 @@ void World::updateTerrain() {
     }
 
     if (!chunksToRemove.empty()) {
-        worldRenderer.updateMeshes(chunksToRemove, chunkProvider);
-        worldRenderer.swapMaps();
+        bool success = worldRenderer.updateMeshes(chunksToRemove, chunkProvider);
+        if (success) worldRenderer.swapMaps();
     }
 }
 

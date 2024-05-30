@@ -24,7 +24,7 @@ public:
     void renderTerrain();
     void renderShadows();
 
-    void updateMeshes(std::vector<Chunk *>& chunksToRemove, ChunkProvider& chunkProvider);
+    bool updateMeshes(std::vector<Chunk *>& chunksToRemove, ChunkProvider& chunkProvider);
 
     terrainMeshMap& getTerrainMeshesWriteMap();
     terrainMeshMap& getTerrainMeshesReadMap();

@@ -19,7 +19,12 @@ struct genInfo{
 CullMesher::CullMesher() {}
 
 
-void CullMesher::generateMeshes(terrainMeshMap &terrainMeshes, ChunkProvider &chunkProvider) {
+bool CullMesher::generateMeshes(terrainMeshMap &terrainMeshes, ChunkProvider &chunkProvider) {
+
+    if (updatingMeshes){
+        return false;
+    }
+    updatingMeshes = true;
 
     /*std::cout << "verticesForBlockChunkMap size=" << verticesForBlockChunkMap.size() << '\n';
     std::cout << "Chunk size=" << chunkProvider.getChunks().size() << '\n';
@@ -61,28 +66,32 @@ void CullMesher::generateMeshes(terrainMeshMap &terrainMeshes, ChunkProvider &ch
         }
     }
 
+    updatingMeshes = false;
+    return true;
+
     //mapTransform.stop();
     //std::cout << "----------------------------------\n";
 }
 
-void CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider) {
+bool CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider) {
 
     for(Chunk* chunk : chunksToRemove){
         if (verticesForBlockChunkMap.find(chunk->pos) != verticesForBlockChunkMap.end()){
             verticesForBlockChunkMap.erase(chunk->pos);
-            for (auto blockMesh : terrainMeshes) {
-                auto it = blockMesh.second.find(chunk->pos);
-                if (it == blockMesh.second.end()) {
-                    continue;
-                }
-                //delete it->second; //There is some issue that makes the current rendering VBO to be deleted
-                //blockMesh.second.clear();
-            }
         }
         chunkProvider.deleteChunkAt(chunk->pos);
+
+        for (auto blockMesh : terrainMeshes) {
+            auto it = blockMesh.second.find(chunk->pos);
+            if (it == blockMesh.second.end()) {
+                continue;
+            }
+            delete it->second;
+            blockMesh.second.erase(it);
+        }
     }
 
-    generateMeshes(terrainMeshes, chunkProvider);
+    return generateMeshes(terrainMeshes, chunkProvider);
 }
 
 void CullMesher::generateVerticesForBlockChunk(const Chunk &chunk, const Block& block, const glm::ivec3 posInChunk, ChunkProvider& chunkProvider) {

@@ -29,8 +29,8 @@ public:
 
     friend WorldRenderer;
 
-    void generateMeshes(terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider);
-    void updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider);
+    bool generateMeshes(terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider);
+    bool updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrainMeshMap& terrainMeshes, ChunkProvider& chunkProvider);
 
     void invalidateChunkCache(Chunk *chunk);
 
@@ -44,6 +44,7 @@ private:
 
     std::unordered_map<glm::ivec3, std::unordered_map<uint16_t, std::vector<Vertex>>, GlmVec3Functions, GlmVec3Functions> verticesForBlockChunkMap;
 
+    static inline bool updatingMeshes = false;
 };
 
 
