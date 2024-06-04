@@ -81,14 +81,14 @@ bool CullMesher::updateMeshes(const std::vector<Chunk *> &chunksToRemove, terrai
         }
         chunkProvider.deleteChunkAt(chunk->pos);
 
-        for (auto blockMesh : terrainMeshes) {
+        /*for (auto &blockMesh : terrainMeshes) {
             auto it = blockMesh.second.find(chunk->pos);
             if (it == blockMesh.second.end()) {
                 continue;
             }
             delete it->second;
             blockMesh.second.erase(it);
-        }
+        }*/
     }
 
     return generateMeshes(terrainMeshes, chunkProvider);

@@ -1,0 +1,5 @@
+pack vertex data ->
+pos x,y,z -> pos in chunk [0,16] -> 4 bytes each
+pos offset can be set in model matrix for each chunk rendered since it's the same for each vertex
+since everything is cube, normals only have 6 different values, so we can send 3 bytes - But everything must be cube now
+texCoords can also be sent with 3 bytes (2 for x-axis, 1 for y-axis) - But textures must be of max size 4*2

@@ -123,7 +123,11 @@ void World::updateTerrain() {
 
     if (!chunksToRemove.empty()) {
         bool success = worldRenderer.updateMeshes(chunksToRemove, chunkProvider);
-        if (success) worldRenderer.swapMaps();
+        if (success) {
+            worldRenderer.swapMaps(); //when we swap maps we should copy existing read map to write map, so they are in sync
+            // don't delete all meshes since it would create stutters, only delete/add the diff
+            worldRenderer.getTerrainMeshesWriteMap().insert(worldRenderer.getTerrainMeshesReadMap().begin(), worldRenderer.getTerrainMeshesReadMap().end());
+        }
     }
 }
 
