@@ -3,8 +3,15 @@ project(Voxel)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-parameter -g -O0")
+if (WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-parameter -g -O0")
+endif(WIN32)
+if (UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-parameter -g -O0 -fsanitize=address")
+endif(UNIX)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 
+include_directories(${PROJECT_SOURCE_DIR}/source)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
@@ -22,31 +29,47 @@ add_executable(Voxel main.cpp
         include/stb_image.cpp include/stb_image.h
         include/glad.c include/glad.h
 
-        source/core/render/Shader.cpp source/core/render/Shader.h
-        source/core/render/buffer/VertexBuffer.cpp source/core/render/buffer/VertexBuffer.h
-        source/core/render/buffer/IndexBuffer.cpp source/core/render/buffer/IndexBuffer.h
-        source/core/render/buffer/VertexArray.cpp source/core/render/buffer/VertexArray.h
-        source/core/render/buffer/VertexBufferLayout.cpp source/core/render/buffer/VertexBufferLayout.h
-        source/core/render/Texture.cpp source/core/render/Texture.h
+        source/render/Shader.cpp source/render/Shader.h
+        source/render/buffer/VertexBuffer.cpp source/render/buffer/VertexBuffer.h
+        source/render/buffer/IndexBuffer.cpp source/render/buffer/IndexBuffer.h
+        source/render/buffer/VertexArray.cpp source/render/buffer/VertexArray.h
+        source/render/buffer/VertexBufferLayout.cpp source/render/buffer/VertexBufferLayout.h
+        source/render/Texture.cpp source/render/Texture.h
         source/Configuration.cpp source/Configuration.h
-        source/core/render/Camera.cpp source/core/render/Camera.h
-        source/core/render/buffer/UniformBuffer.cpp source/core/render/buffer/UniformBuffer.h
-        source/core/render/buffer/FrameBuffer.cpp source/core/render/buffer/FrameBuffer.h
-        source/core/render/buffer/ShaderStorageBuffer.cpp source/core/render/buffer/ShaderStorageBuffer.h
+        source/render/Camera.cpp source/render/Camera.h
+        source/render/buffer/UniformBuffer.cpp source/render/buffer/UniformBuffer.h
+        source/render/buffer/FrameBuffer.cpp source/render/buffer/FrameBuffer.h
+        source/render/buffer/ShaderStorageBuffer.cpp source/render/buffer/ShaderStorageBuffer.h
         source/util/Profiler.cpp source/util/Profiler.h
-        source/core/entity/Entity.cpp source/core/entity/Entity.h
+        source/entity/Entity.cpp source/entity/Entity.h
         source/util/AxisAlignedBB.cpp source/util/AxisAlignedBB.h
-        source/core/render/EntityRenderer.cpp source/core/render/EntityRenderer.h
-        source/core/render/Material.cpp source/core/render/Material.h
-        source/core/render/buffer/BufferData.h
+        source/render/EntityRenderer.cpp source/render/EntityRenderer.h
+        source/render/Material.cpp source/render/Material.h
+        source/render/buffer/BufferData.h
         source/Global.cpp source/Global.h
         source/AppName.cpp source/AppName.h
-        source/core/render/AssetManager.h
+        source/render/AssetManager.h
         source/Asset.h source/Asset.cpp
-        source/core/render/buffer/BufferData.cpp
-        source/core/world/World.cpp source/core/world/World.h
-        source/core/world/Chunk.cpp source/core/world/Chunk.h
-        source/core/world/Block.cpp source/core/world/Block.h source/core/world/Blocks.h source/core/entity/LightSource.cpp source/core/entity/LightSource.h source/InputHandler.cpp source/InputHandler.h source/core/render/Mesh.cpp source/core/render/Mesh.h source/core/world/Blocks.cpp)
+        source/render/buffer/BufferData.cpp
+        source/world/World.cpp source/world/World.h
+        source/world/Chunk.cpp source/world/Chunk.h
+        source/world/Block.cpp source/world/Block.h
+        source/world/Blocks.h source/world/Blocks.cpp
+        source/entity/SunEntity.cpp source/entity/SunEntity.h
+        source/InputHandler.cpp source/InputHandler.h
+        source/render/Mesh.cpp source/render/Mesh.h
+        source/world/gen/TerrainGen.cpp source/world/gen/TerrainGen.h
+        source/world/gen/CullMesher.cpp source/world/gen/CullMesher.h
+        source/world/gen/PerlinNoise.cpp source/world/gen/PerlinNoise.h
+        source/util/Util.cpp source/util/Util.h
+        source/entity/Skybox.cpp source/entity/Skybox.h
+        source/world/ChunkProvider.cpp source/world/ChunkProvider.h
+        source/EnumFacing.h source/EnumFacing.cpp
+        source/render/WorldRenderer.cpp source/render/WorldRenderer.h
+        source/CubeVerticesTypes.h source/CubeVerticesTypes.cpp source/world/biome/Biome.cpp source/world/biome/Biome.h source/world/gen/PlantGenerator.cpp source/world/gen/PlantGenerator.h source/world/gen/TreeGenerator.cpp source/world/gen/TreeGenerator.h source/world/biome/BiomeDecorator.cpp source/world/biome/BiomeDecorator.h source/world/biome/Biomes.cpp source/world/biome/Biomes.h source/world/biome/BiomeProvider.cpp source/world/biome/BiomeProvider.h source/util/RayTrace.cpp source/util/RayTrace.h
+        source/world/gen/ao.cpp
+        source/util/ts_queue.h
+        source/world/gen/WaterGen.cpp source/world/gen/WaterGen.h)
 
 if (WIN32)
     target_link_libraries(Voxel glfw3 gdi32 opengl32)

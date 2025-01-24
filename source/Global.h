@@ -5,16 +5,18 @@
 #ifndef INC_3DTEST_GLOBAL_H
 #define INC_3DTEST_GLOBAL_H
 
+#include "render/Camera.h"
 
-#include <GLFW/glfw3.h>
-#include "core/render/Camera.h"
-
-#include "core/render/AssetManager.h"
-#include "core/render/Texture.h"
-#include "core/render/Material.h"
-#include "core/entity/LightSource.h"
+#include "render/AssetManager.h"
+#include "render/Texture.h"
+#include "render/Material.h"
+#include "entity/SunEntity.h"
+#include "entity/Skybox.h"
 
 #include <vector>
+
+class World;
+class GLFWwindow;
 
 struct CurrentFrame{
     glm::mat4 model;
@@ -29,13 +31,13 @@ public:
     static GLFWwindow* window;
     static Camera camera;
     static CurrentFrame currentFrame;
-    static LightSource* sun;
+    static SunEntity* sun;
+    static Skybox* skybox;
+    static World* world;
 
     static AssetManager<Texture> textureManager;
     static AssetManager<Material> materialManager;
     static AssetManager<Shader> shaderManager;
-
-    static float cubeVertices[288];
 
 public:
     static void init();

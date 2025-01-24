@@ -5,11 +5,13 @@
 #ifndef VOXEL_INPUTHANDLER_H
 #define VOXEL_INPUTHANDLER_H
 
+#include "util/RayTrace.h"
 
 class InputHandler {
 public:
     static void processMouseInput();
     static void processKeyboardInput(float deltaTime);
+    static RayTraceResult processMouseClick();
 };
 
 

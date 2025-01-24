@@ -5,7 +5,8 @@
 #ifndef INC_3DTEST_APPNAME_H
 #define INC_3DTEST_APPNAME_H
 
-#include "core/world/World.h"
+#include <thread>
+#include "world/World.h"
 
 class AppName {
 public:
@@ -23,7 +24,14 @@ private:
 
     void renderImGui();
 
+    bool shouldContinue = true;
     World* world = nullptr;
+
+    std::thread logicThread;
+    std::thread terrainUpdateThread;
+
+    double lastLogicTime;
+    double lastMainTime;
 };
 
 

@@ -14,16 +14,18 @@
 #include "Global.h"
 #include "Configuration.h"
 #include "util/Profiler.h"
-#include "core/world/Blocks.h"
+#include "world/Blocks.h"
+#include "InputHandler.h"
+#include "stb_image.h"
 
 #include <iostream>
 
 void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
-    Configuration::fov -= (float)yoffset;
-    if (Configuration::fov < 1.0f)
-        Configuration::fov = 1.0f;
-    if (Configuration::fov > Configuration::fovMax)
-        Configuration::fov = Configuration::fovMax;
+    GraphicsConfiguration::fov -= (float)yoffset;
+    if (GraphicsConfiguration::fov < 1.0f)
+        GraphicsConfiguration::fov = 1.0f;
+    if (GraphicsConfiguration::fov > GraphicsConfiguration::fovMax)
+        GraphicsConfiguration::fov = GraphicsConfiguration::fovMax;
 }
 
 void GLAPIENTRY glErrorCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam ){
@@ -34,8 +36,8 @@ void GLAPIENTRY glErrorCallback( GLenum source, GLenum type, GLuint id, GLenum s
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
-    Configuration::wWidth = width;
-    Configuration::wHeight = height;
+    Configuration::windowWidth = width;
+    Configuration::windowHeight = height;
 }
 
 void AppName::initGlfw(){
@@ -44,7 +46,10 @@ void AppName::initGlfw(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    Global::window = glfwCreateWindow(Configuration::wWidth,Configuration::wHeight, "Test 3D", nullptr, nullptr);
+    //glfwWindowHint(GLFW_SAMPLES, 4);
+
+    //Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", glfwGetPrimaryMonitor(), nullptr);
+    Global::window = glfwCreateWindow(Configuration::windowWidth, Configuration::windowHeight, "Voxel", nullptr, nullptr);
     if (Global::window == nullptr){
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -54,13 +59,22 @@ void AppName::initGlfw(){
     glfwSetFramebufferSizeCallback(Global::window, framebuffer_size_callback);
     glfwSwapInterval(0);
 
+    GLFWimage images[1];
+    images[0].pixels = stbi_load("icon.png", &images[0].width, &images[0].height, nullptr, 4); //rgba channels
+    glfwSetWindowIcon(Global::window, 1, images);
+    stbi_image_free(images[0].pixels);
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         std::cout << "Failed to initialize GLAD" << std::endl;
         exit(-1);
     }
 
-    //glEnable(GL_CULL_FACE); TODO
+    glEnable(GL_BLEND);
+    //glEnable(GL_MULTISAMPLE);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glfwSetScrollCallback(Global::window, scrollCallback);
     glfwSetInputMode(Global::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
@@ -100,29 +114,66 @@ void AppName::init() {
     Blocks::init();
     Global::init();
     world = new World();
+
+    /*
+     * OpenGl context is on main thread, maybe it can be moved to another?
+     * Glfw polling must be done on main thread https://discourse.glfw.org/t/multithreading-glfw/573/2
+     * When updating terrain, and when mesh is being generated calls are being made to openGl when creating BufferData,
+     * so it currently breaks
+     */
+
+    terrainUpdateThread = std::thread([this] {
+        while(shouldContinue) {
+            this->world->updateTerrain();
+            this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+        std::cout << "shutting down logicThread\n";
+    });
+
+    this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    lastLogicTime = lastMainTime = glfwGetTime();
+
+    logicThread = std::thread([this] {
+        while(shouldContinue) {
+            world->onUpdate(glfwGetTime() - lastLogicTime);
+            lastLogicTime = glfwGetTime();
+            this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+        std::cout << "shutting down logicThread\n";
+    });
+
 }
 
 void AppName::mainLoop() {
 
-    double lastTime = glfwGetTime();
+    while (shouldContinue) {
 
-    while (!glfwWindowShouldClose(Global::window)) {
+        shouldContinue = !glfwWindowShouldClose(Global::window);
 
-        PROFILE_SCOPE("mainLoop");
+        //PROFILE_SCOPE("mainLoop");
         glfwPollEvents();
 
-        world->onUpdate(glfwGetTime() - lastTime);
-        lastTime = glfwGetTime();
+        InputHandler::processKeyboardInput(glfwGetTime() - lastMainTime);
+        InputHandler::processMouseInput();
+
+        lastMainTime = glfwGetTime();
+
+        world->updateBufferData();
 
         world->onRender();
-
         renderImGui();
-
         glfwSwapBuffers(Global::window);
     }
 }
 
 void AppName::cleanup() {
+
+    if (terrainUpdateThread.joinable())
+        terrainUpdateThread.join();
+    if (logicThread.joinable())
+        logicThread.join();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
